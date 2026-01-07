@@ -27,3 +27,8 @@ urlpatterns += tenant_patterns(
     # TENANT SCHEMA URLS
     path("", include("marketing.urls")),
 )
+
+urlpatterns = [
+    # PUBLIC SIGNUP URL
+    path("", include("marketing.urls")),
+]
