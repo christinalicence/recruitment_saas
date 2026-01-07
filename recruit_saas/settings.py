@@ -49,7 +49,7 @@ SHARED_APPS = (
 )
 
 TENANT_APPS = (
-    # apps that live inside each tenant schema
+    "cms",
 )
 
 INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
