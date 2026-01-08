@@ -14,21 +14,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
-from django_tenants.urlresolvers import tenant_patterns
+from django_tenants.utils import get_tenant_model
+from django_tenants.middleware import TenantMiddleware
+
 
 urlpatterns = [
-    # PUBLIC SCHEMA URLS
-    path("admin/", admin.site.urls),
+    # Public schema URL
+    path("signup/", include("marketing.urls")),  
 ]
 
-urlpatterns += tenant_patterns(
-    # TENANT SCHEMA URLS
-    path("", include("marketing.urls")),
-)
 
-urlpatterns = [
-    # PUBLIC SIGNUP URL
-    path("", include("marketing.urls")),
+# tenant dashboard URL
+urlpatterns += [
+    path("", include("marketing.urls")),  
 ]
