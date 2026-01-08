@@ -38,8 +38,6 @@ ALLOWED_HOSTS = [
 ]
 
 
-# Application definition
-
 SHARED_APPS = (
     "django_tenants",
     "customers",
@@ -79,6 +77,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'recruit_saas.urls'
+
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/login/"
 
 TEMPLATES = [
     {
