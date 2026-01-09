@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect
 from datetime import date, timedelta
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-
+from django.contrib.auth.hashers import make_password
 from django_tenants.utils import schema_context
-
 from customers.models import Client, Domain
 from .forms import TenantSignupForm, TenantLoginForm
 
@@ -37,10 +35,12 @@ def tenant_signup(request):
             )
 
             with schema_context(tenant.schema_name):
-                User.objects.create_superuser(
-                    username="admin",
+                user = User.objects.create(
+                    username=admin_email,   # use email as username
                     email=admin_email,
-                    password="password123",  # dev only
+                    is_staff=True,
+                    is_superuser=False,
+                    password=make_password(form.cleaned_data["password"]),
                 )
 
             return redirect(f"http://{subdomain}.localhost:8000/login/")
@@ -74,7 +74,7 @@ def tenant_dashboard(request):
     return render(
         request,
         "marketing/dashboard.html",
-        {"tenant_name": tenant.name},
+        {"tenant_name": request.tenant.name},
     )
 
 

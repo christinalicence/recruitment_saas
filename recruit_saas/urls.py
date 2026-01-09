@@ -19,15 +19,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django_tenants.utils import get_tenant_model
 from django_tenants.middleware import TenantMiddleware
+from django_tenants.urlresolvers import tenant_patterns
 
 
+# PUBLIC (no tenant)
 urlpatterns = [
-    # Public schema URL
-    path("signup/", include("marketing.urls")),  
+    path("", include("marketing.urls_public")),
+    path("admin/", admin.site.urls),
 ]
 
-
-# tenant dashboard URL
-urlpatterns += [
-    path("", include("marketing.urls")),  
-]
+# TENANT
+urlpatterns += tenant_patterns(
+    path("", include("marketing.urls_tenant")),
+)

@@ -1,12 +1,17 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+from django.contrib.auth.password_validation import validate_password
 
 
 class TenantSignupForm(forms.Form):
     company_name = forms.CharField(max_length=100)
     subdomain = forms.SlugField(max_length=50)
     admin_email = forms.EmailField()
+    password = forms.CharField(
+        widget=forms.PasswordInput,
+        validators=[validate_password],
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
