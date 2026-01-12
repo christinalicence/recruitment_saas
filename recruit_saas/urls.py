@@ -17,18 +17,8 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from django_tenants.utils import get_tenant_model
-from django_tenants.middleware import TenantMiddleware
-from django_tenants.urlresolvers import tenant_patterns
 
-
-# PUBLIC (no tenant)
 urlpatterns = [
-    path("", include("marketing.urls_public")),
     path("admin/", admin.site.urls),
+    path("", include("marketing.urls_public")),
 ]
-
-# TENANT
-urlpatterns += tenant_patterns(
-    path("", include("marketing.urls_tenant")),
-)

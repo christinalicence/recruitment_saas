@@ -1,8 +1,11 @@
+
 from django.urls import path
-from .views import tenant_dashboard, tenant_login, tenant_logout
+from marketing import views
+
+app_name = "marketing"
 
 urlpatterns = [
-    path("", tenant_dashboard, name="tenant_dashboard"),
-    path("login/", tenant_login, name="tenant_login"),
-    path("logout/", tenant_logout, name="tenant_logout"),
+    path("login/", views.tenant_login, name="tenant_login"),
+    path("dashboard/", views.tenant_dashboard, name="tenant_dashboard"),
+    path("logout/", views.tenant_logout, name="tenant_logout"),
 ]

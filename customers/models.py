@@ -1,19 +1,16 @@
 from django.db import models
 from django_tenants.models import TenantMixin, DomainMixin
-
-# Create your models here.
+from datetime import date
 
 class Client(TenantMixin):
     name = models.CharField(max_length=100)
+    auto_create_schema = True
+    on_trial = models.BooleanField(default=False)
     paid_until = models.DateField(null=True, blank=True)
-    on_trial = models.BooleanField(default=True)
-    created_on = models.DateField(auto_now_add=True)
-
-    auto_create_schema = True  # Automatically create schema when saving new tenant
+    created_on = models.DateField(default=date.today)
 
     def __str__(self):
         return self.name
-
 
 class Domain(DomainMixin):
     pass

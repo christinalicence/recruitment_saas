@@ -16,7 +16,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -31,10 +30,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# settings.py
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     ".localhost",
+    "0.0.0.0", # Add becasuse of repeated 404 errors on local testing
 ]
 
 
@@ -66,7 +68,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
-    "django_tenants.middleware.TenantMainMiddleware",
+    "django_tenants.middleware.main.TenantMainMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -79,7 +81,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'recruit_saas.urls'
 
 LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/login/"
 
 TEMPLATES = [
@@ -119,8 +121,15 @@ DATABASE_ROUTERS = (
     "django_tenants.routers.TenantSyncRouter",
 )
 
-TENANT_MODEL = "customers.Client"   
+TENANT_MODEL = "customers.Client"
 TENANT_DOMAIN_MODEL = "customers.Domain"
+TENANT_SUBDOMAIN_CHECK = True
+
+# URL directs 
+PUBLIC_SCHEMA_URLCONF = 'recruit_saas.urls'
+TENANT_URLCONF = 'marketing.urls_tenant'
+PUBLIC_SCHEMA_NAME = "public"
+REMOVE_URL_CONF_CACHE_ON_SETTINGS_CHANGE = True # Helps resolve 404 errors during development
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -157,6 +166,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "marketing" / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

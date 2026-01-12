@@ -1,0 +1,50 @@
+/* CSS variables */
+:root {
+    --brand-primary: #1a2a40; 
+    --brand-accent: #0056b3;
+    --brand-light: #f4f7f9;
+    --text-main: #333d47;
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: var(--brand-light);
+    border-bottom: 1px solid #e1e8ed;
+    padding: 120px 0;
+}
+
+.brand-title {
+    color: var(--brand-primary);
+    letter-spacing: -1px;
+    font-weight: 800;
+}
+
+/* Features Section */
+.feature-card {
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 40px 20px;
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.feature-card:hover {
+    border-color: var(--brand-accent);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.feature-label {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--brand-accent);
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Call to Action Section */
+.cta-section {
+    background-color: var(--brand-primary);
+    color: white;
+}
