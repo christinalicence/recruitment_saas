@@ -4,6 +4,7 @@ from datetime import date
 
 class Client(TenantMixin):
     name = models.CharField(max_length=100)
+    template_choice = models.CharField(max_length=50, default='modern')
     auto_create_schema = True
     on_trial = models.BooleanField(default=False)
     paid_until = models.DateField(null=True, blank=True)

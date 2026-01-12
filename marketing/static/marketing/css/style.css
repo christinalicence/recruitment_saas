@@ -4,6 +4,10 @@
     --brand-accent: #0056b3;
     --brand-light: #f4f7f9;
     --text-main: #333d47;
+    /* Template Specific colors */
+    --color-executive: var(--brand-primary);
+    --color-minimalist: #adb5bd;
+    --color-catalyst: #0d6efd;
 }
 
 /* Hero Section */
@@ -47,4 +51,59 @@
 .cta-section {
     background-color: var(--brand-primary);
     color: white;
+}
+
+/* Template Selection Specifics */
+
+.template-card {
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 2.5rem 1.5rem;
+    background: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.template-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+}
+
+/* The Executive Style */
+.theme-executive {
+    border-top: 6px solid var(--color-executive);
+}
+.theme-executive .feature-label {
+    color: var(--color-executive);
+}
+
+/* The Minimalist Style */
+.theme-minimalist {
+    border-top: 6px solid var(--color-minimalist);
+}
+.theme-minimalist .feature-label {
+    color: var(--color-minimalist);
+    font-family: "Georgia", serif;
+    font-style: italic;
+    text-transform: none; /* Boutique feel */
+}
+
+/* The Catalyst Style */
+.theme-catalyst {
+    border-top: 6px solid var(--color-catalyst);
+}
+.theme-catalyst .feature-label {
+    color: var(--color-catalyst);
+    font-weight: 900;
+}
+/* Buttons on Template Cards */
+.btn-primary {
+    background-color: var(--brand-accent);
+    border-color: var(--brand-accent);
+}
+
+.btn-dark {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
 }

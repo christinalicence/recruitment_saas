@@ -11,13 +11,20 @@ from .forms import TenantSignupForm, TenantLoginForm
 
 
 def tenant_signup(request):
+    # Handle tenant signup with template choice
+    template_id = request.GET.get('template', 'professional') 
+    
     form = TenantSignupForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
-        subdomain = form.cleaned_data["subdomain"]
-        company_name = form.cleaned_data["company_name"]
-        admin_email = form.cleaned_data["admin_email"]
-        password = form.cleaned_data["password"]
+        # ... your existing logic ...
+        tenant = Client.objects.create(
+            schema_name=subdomain,
+            name=company_name,
+            template_choice=template_id, # Save their design choice
+            paid_until=date.today() + timedelta(days=14),
+            on_trial=True,
+        )
 
         if Client.objects.filter(schema_name=subdomain).exists():
             form.add_error("subdomain", "This subdomain is already taken")
@@ -89,3 +96,11 @@ def tenant_logout(request):
 def landing_page(request):
     """Renders the Pillar & Post public landing page."""
     return render(request, "marketing/landing.html")
+
+def template_select(request):
+    templates = [
+        {'id': 'professional', 'name': 'The Executive', 'description': 'Clean, sharp, and corporate.'},
+        {'id': 'modern', 'name': 'The Startup', 'description': 'Bold colors and modern typography.'},
+        {'id': 'minimal', 'name': 'The Boutique', 'description': 'Elegant and focused on content.'},
+    ]
+    return render(request, "marketing/template_select.html", {'templates': templates})
