@@ -1,0 +1,23 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const companyInput = document.getElementById('companyNameInput');
+    const previewLinks = document.querySelectorAll('.preview-link');
+
+    if (companyInput) {
+        companyInput.addEventListener('input', function(e) {
+            const currentName = e.target.value.trim();
+            const encodedName = encodeURIComponent(currentName);
+
+            previewLinks.forEach(link => {
+                // Get the base URL (e.g., /preview/executive/)
+                const baseUrl = link.getAttribute('href').split('?')[0];
+                
+                // If there's a name, append it as a query param
+                if (currentName.length > 0) {
+                    link.setAttribute('href', `${baseUrl}?company_name=${encodedName}`);
+                } else {
+                    link.setAttribute('href', baseUrl);
+                }
+            });
+        });
+    }
+});

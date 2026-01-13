@@ -11,53 +11,45 @@ from .forms import TenantSignupForm, TenantLoginForm
 
 
 def tenant_signup(request):
-    # Handle tenant signup with template choice
+    # Catching pre-fill data from the Preview/Selection page
     template_id = request.GET.get('template', 'professional') 
-    
-    form = TenantSignupForm(request.POST or None)
-
+    initial_data = {
+        'company_name': request.GET.get('company_name', ''),
+    }
+    form = TenantSignupForm(request.POST or None, initial=initial_data)
     if request.method == "POST" and form.is_valid():
-        # ... your existing logic ...
-        tenant = Client.objects.create(
-            schema_name=subdomain,
-            name=company_name,
-            template_choice=template_id, # Save their design choice
-            paid_until=date.today() + timedelta(days=14),
-            on_trial=True,
-        )
-
+        company_name = form.cleaned_data["company_name"]
+        subdomain = form.cleaned_data["subdomain"]
+        admin_email = form.cleaned_data["admin_email"]
+        password = form.cleaned_data["password"]
         if Client.objects.filter(schema_name=subdomain).exists():
             form.add_error("subdomain", "This subdomain is already taken")
         else:
             tenant = Client.objects.create(
                 schema_name=subdomain,
                 name=company_name,
+                template_choice=template_id, 
                 paid_until=date.today() + timedelta(days=14),
                 on_trial=True,
             )
-
             Domain.objects.create(
                 domain=f"{subdomain}.localhost",
                 tenant=tenant,
                 is_primary=True,
             )
-
             with schema_context(tenant.schema_name):
                 User.objects.create_user(
                     username=admin_email,
                     email=admin_email,
                     password=password
                 )
-
             current_host = request.get_host()
             if ":" in current_host:
                 port = current_host.split(":")[-1]
                 redirect_url = f"http://{subdomain}.localhost:{port}/login/"
             else:
                 redirect_url = f"http://{subdomain}.localhost/login/"
-
             return redirect(redirect_url)
-
     return render(request, "marketing/signup.html", {"form": form})
 
 
@@ -104,3 +96,18 @@ def template_select(request):
         {'id': 'minimal', 'name': 'The Boutique', 'description': 'Elegant and focused on content.'},
     ]
     return render(request, "marketing/template_select.html", {'templates': templates})
+
+
+def template_preview(request, template_id):
+    # Renders a live preview of the selected template
+    # Get company name from query params for personalization
+    name = request.GET.get('company_name') or "Your Company"
+    context = {
+        'template_id': template_id,
+        'company_name': name,
+        'jobs': [
+            {'title': 'Senior Software Engineer', 'salary': '£80,000', 'location': 'London'},
+            {'title': 'Talent Acquisition Manager', 'salary': '£55,000', 'location': 'Manchester'},
+        ]
+    }
+    return render(request, "marketing/previews/preview_main.html", context)

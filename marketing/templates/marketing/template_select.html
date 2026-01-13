@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Select Your Design | Pillar & Post{% endblock %}
 
 {% block content %}
@@ -13,8 +13,9 @@
                 <div class="template-card theme-executive h-100">
                     <span class="feature-label">The Executive</span>
                     <h3 class="h5 fw-bold mt-2">Professional Search</h3>
-                    <p class="small text-muted mb-4">A high-contrast, sharp design for professional search firms and corporate recruiters.</p>
-                    <a href="{% url 'marketing:tenant_signup' %}?template=executive" class="btn btn-dark w-100">Select Design</a>
+                    <p class="small text-muted mb-4">A high-contrast, sharp design for professional search firms.</p>
+                    <a href="{% url 'marketing:template_preview' 'executive' %}" class="btn btn-dark w-100 mb-2 preview-link">Live Preview</a>
+                    <a href="{% url 'marketing:tenant_signup' %}?template=executive" class="small text-muted text-center d-block">Skip to Signup</a>
                 </div>
             </div>
 
@@ -38,4 +39,5 @@
         </div>
     </div>
 </section>
+<script src="{% static 'marketing/js/template-selector.js' %}"></script>
 {% endblock %}
