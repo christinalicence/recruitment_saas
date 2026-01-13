@@ -14,6 +14,7 @@ import os
 import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
+import sys
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -174,3 +175,32 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# For testing with django-tenants, create a separate test database configuration
+if "test" in sys.argv:
+    # Parse your existing DB_URL but use a different database name for tests
+    test_db_config = dj_database_url.parse(
+        os.environ["DB_URL"],
+        conn_max_age=600,
+        ssl_require=True,
+    )
+    # Change just the database name to a test database
+    test_db_config["NAME"] = "test_recruit_saas"
+    test_db_config["ENGINE"] = "django_tenants.postgresql_backend"
+    DATABASES = {
+        "default": {
+            **test_db_config,
+            "TEST": {
+                "NAME": "test_recruit_saas",
+            }
+        }
+    }
+    # Force close connections to avoid stalling
+    DATABASES["default"]["CONN_MAX_AGE"] = 0
+
+    # Remove tenant middleware during tests so URLs work normally
+    MIDDLEWARE = [
+        m for m in MIDDLEWARE 
+        if m != "django_tenants.middleware.main.TenantMainMiddleware"
+    ]
