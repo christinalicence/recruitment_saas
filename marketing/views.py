@@ -19,37 +19,41 @@ def tenant_signup(request):
     form = TenantSignupForm(request.POST or None, initial=initial_data)
     if request.method == "POST" and form.is_valid():
         company_name = form.cleaned_data["company_name"]
-        subdomain = form.cleaned_data["subdomain"]
         admin_email = form.cleaned_data["admin_email"]
         password = form.cleaned_data["password"]
-        if Client.objects.filter(schema_name=subdomain).exists():
-            form.add_error("subdomain", "This subdomain is already taken")
+        
+        # Create the tenant first - the model now generates schema_name
+        tenant = Client.objects.create(
+            name=company_name,
+            template_choice=template_id, 
+            paid_until=date.today() + timedelta(days=14),
+            on_trial=True,
+        )
+        
+        # Now retrieve the auto-generated slug to create the domain
+        subdomain = tenant.schema_name
+        
+        Domain.objects.create(
+            domain=f"{subdomain}.localhost",
+            tenant=tenant,
+            is_primary=True,
+        )
+        
+        with schema_context(tenant.schema_name):
+            User.objects.create_user(
+                username=admin_email,
+                email=admin_email,
+                password=password
+            )
+            
+        current_host = request.get_host()
+        if ":" in current_host:
+            port = current_host.split(":")[-1]
+            redirect_url = f"http://{subdomain}.localhost:{port}/login/"
         else:
-            tenant = Client.objects.create(
-                schema_name=subdomain,
-                name=company_name,
-                template_choice=template_id, 
-                paid_until=date.today() + timedelta(days=14),
-                on_trial=True,
-            )
-            Domain.objects.create(
-                domain=f"{subdomain}.localhost",
-                tenant=tenant,
-                is_primary=True,
-            )
-            with schema_context(tenant.schema_name):
-                User.objects.create_user(
-                    username=admin_email,
-                    email=admin_email,
-                    password=password
-                )
-            current_host = request.get_host()
-            if ":" in current_host:
-                port = current_host.split(":")[-1]
-                redirect_url = f"http://{subdomain}.localhost:{port}/login/"
-            else:
-                redirect_url = f"http://{subdomain}.localhost/login/"
-            return redirect(redirect_url)
+            redirect_url = f"http://{subdomain}.localhost/login/"
+        return redirect(redirect_url)
+        
     return render(request, "marketing/signup.html", {"form": form})
 
 

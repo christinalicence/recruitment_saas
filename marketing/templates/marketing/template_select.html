@@ -5,7 +5,7 @@
 {% block content %}
 <section class="py-5 bg-light">
     <div class="container text-center py-5">
-        <h2 class="brand-title mb-3">Choose your foundation</h2>
+        <h2 class="brand-title mb-3">Choose your next design</h2>
         <p class="text-muted mb-5">Select a professional starting point for your company. You can customise colors and logos later.</p>
         
         <div class="row g-4 justify-content-center">
@@ -19,24 +19,6 @@
                 </div>
             </div>
             {% endfor %}
-
-            <div class="col-md-4">
-                <div class="template-card theme-minimalist h-100">
-                    <span class="feature-label">The Minimalist</span>
-                    <h3 class="h5 fw-bold mt-2">Boutique Excellence</h3>
-                    <p class="small text-muted mb-4">Elegant typography and plenty of whitespace for specialized boutique companies.</p>
-                    <a href="{% url 'marketing:tenant_signup' %}?template=outline-secondary w-100">Select Design</a>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="template-card theme-catalyst h-100">
-                    <span class="feature-label">The Catalyst</span>
-                    <h3 class="h5 fw-bold mt-2">Growth & Delivery</h3>
-                    <p class="small text-muted mb-4">Bold, energetic layout designed for high-volume recruitment teams and fast-paced firms.</p>
-                    <a href="{% url 'marketing:tenant_signup' %}?template=catalyst" class="btn btn-primary w-100">Select Design</a>
-                </div>
-            </div>
         </div>
     </div>
 </section>
