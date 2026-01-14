@@ -93,11 +93,12 @@ def landing_page(request):
     """Renders the Pillar & Post public landing page."""
     return render(request, "marketing/landing.html")
 
+
 def template_select(request):
     templates = [
-        {'id': 'professional', 'name': 'The Executive', 'description': 'Clean, sharp, and corporate.'},
-        {'id': 'modern', 'name': 'The Startup', 'description': 'Bold colors and modern typography.'},
-        {'id': 'minimal', 'name': 'The Boutique', 'description': 'Elegant and focused on content.'},
+        {'id': 'executive', 'name': 'The Executive', 'description': 'Clean, sharp, and corporate.'},
+        {'id': 'startup', 'name': 'The Startup', 'description': 'Bold colors and modern typography.'},
+        {'id': 'boutique', 'name': 'The Boutique', 'description': 'Elegant and focused on content.'},
     ]
     return render(request, "marketing/template_select.html", {'templates': templates})
 

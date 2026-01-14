@@ -6,8 +6,8 @@
     --text-main: #333d47;
     /* Template Specific colors */
     --color-executive: var(--brand-primary);
-    --color-minimalist: #adb5bd;
-    --color-catalyst: #0d6efd;
+    --color-startup: #0d6efd;
+    --color-boutique: #adb5bd;
 }
 
 /* Hero Section */
@@ -78,25 +78,26 @@
     color: var(--color-executive);
 }
 
-/* The Minimalist Style */
-.theme-minimalist {
-    border-top: 6px solid var(--color-minimalist);
+/* The Startup Style */
+.theme-startup {
+    border-top: 6px solid var(--color-startup);
 }
-.theme-minimalist .feature-label {
-    color: var(--color-minimalist);
-    font-family: "Georgia", serif;
-    font-style: italic;
-    text-transform: none; /* Boutique feel */
-}
-
-/* The Catalyst Style */
-.theme-catalyst {
-    border-top: 6px solid var(--color-catalyst);
-}
-.theme-catalyst .feature-label {
-    color: var(--color-catalyst);
+.theme-startup .feature-label {
+    color: var(--color-startup);
     font-weight: 900;
 }
+
+/* The Boutique Style */
+.theme-boutique {
+    border-top: 6px solid var(--color-boutique);
+}
+.theme-boutique .feature-label {
+    color: var(--color-boutique);
+    font-family: "Georgia", serif;
+    font-style: italic;
+    text-transform: none;
+}
+
 /* Buttons on Template Cards */
 .btn-primary {
     background-color: var(--brand-accent);
