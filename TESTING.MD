@@ -29,3 +29,11 @@ if "test" in sys.argv:
     }
     # Force close connections to avoid stalling
     DATABASES["default"]["CONN_MAX_AGE"] = 0
+
+tests are quite slow because a whole test db and schemas are created
+
+Automated tests -
+ - Onboarding - tests that a client is created during sign in (vital for app to function for new clients)
+ - Isolation - very important for gdpr and security. Means one tenant can never accidentally access another tenant's info.
+
+Test Files are structured so that they are all in the app they are testing. Some code (for creating, deleting and editing test databases) is stored in a seperate file (customers/tests/__init__.py) and called when needed. This is to make it easier to isolate the correct tests.

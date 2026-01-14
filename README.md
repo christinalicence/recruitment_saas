@@ -9,4 +9,15 @@ Each tenant has a dashboard and no access to django admin to keep things secure 
 
 Crispy forms, using Bootstrap 5, used for ease.
 
+User Flow (not signed up)
+- Landing Page
+- Choose a template
+- Preview (to draw them in)
+- Sign Up (enter info to generate site)
+- See site
+- Dashboard
+
+User Flow (signed up)
+- Landing Page
+- Dashboard
 
