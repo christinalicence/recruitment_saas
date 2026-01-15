@@ -32,14 +32,27 @@
                         <p class="text-muted small">{{ job.summary }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="small fw-bold">{{ job.location }} | {{ job.salary }}</span>
-                            <a href="{% url 'marketing:tenant_signup' %}?template={{ template_id }}" class="btn btn-primary btn-sm">
-                                Apply Now
-                            </a>
+                            <span class="btn btn-primary btn-sm">Apply Now</span>
                         </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
+        </div>
+    </div>
+
+    <div class="preview-cta-bar">
+        <div class="container">
+            <div class="cta-flex-container">
+                <div class="cta-text">
+                    <span class="cta-label">Design: {{ template_id|title }}</span>
+                    <p class="cta-subtext">Previewing as: <strong>{{ company_name }}</strong></p>
+                </div>
+                <a href="{% url 'marketing:tenant_signup' %}?template={{ template_id }}&company_name={{ company_name|urlencode }}" 
+                   class="btn btn-primary cta-btn">
+                    Claim this Design & Continue →
+                </a>
+            </div>
         </div>
     </div>
 </div>

@@ -8,6 +8,11 @@
     --brand-light: #f4f7f9;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .hero-section {
     background-color: var(--brand-light);
     padding: 80px 0;
@@ -18,23 +23,39 @@
     font-weight: 800;
 }
 
-/* ---WEBSITE THEME DEFINITIONS --- */
+/* --- WEBSITE THEME DEFINITIONS --- */
+/* Executive: Corporate, Sharp, Traditional */
 .theme-executive {
-    --theme-p: #1a2a40; --theme-acc: #c9a961; 
-    --theme-font: 'Inter', sans-serif; --theme-radius: 0px;
+    --theme-p: #1a2a40; 
+    --theme-acc: #c9a961; 
+    --theme-font: 'Inter', sans-serif; 
+    --theme-radius: 0px;
+    --theme-bg: #ffffff;
 }
+
+/* Startup: Bold, Rounded, Modern */
 .theme-startup {
-    --theme-p: #0d6efd; --theme-acc: #ffca28; 
-    --theme-font: 'Lexend', sans-serif; --theme-radius: 50px;
+    --theme-p: #0d6efd; 
+    --theme-acc: #ffca28; 
+    --theme-font: 'Lexend', sans-serif; 
+    --theme-radius: 50px;
+    --theme-bg: #f0f7ff;
 }
+
+/* Boutique: Minimal, High-Contrast, Spacious */
 .theme-boutique {
-    --theme-p: #000000; --theme-acc: #333; 
-    --theme-font: 'Space Grotesk', sans-serif; --theme-radius: 0px;
+    --theme-p: #000000; 
+    --theme-acc: #333; 
+    --theme-font: 'Space Grotesk', sans-serif; 
+    --theme-radius: 0px;
+    --theme-ls: 2px; /* Native spacing for the boutique look */
+    --theme-bg: #fafafa;
 }
 
 /* --- THEME-AWARE COMPONENTS --- */
 .template-card, .preview-frame {
     font-family: var(--theme-font);
+    background-color: var(--theme-bg);
 }
 
 .template-card {
@@ -56,13 +77,13 @@
     text-transform: uppercase;
     font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: var(--theme-ls, 1.5px);
     color: var(--theme-p);
     display: block;
     margin-bottom: 15px;
 }
 
-/* Theme-Aware Buttons */
+/* Theme-Aware Buttons (Selection & Preview) */
 .theme-executive .btn-primary, 
 .theme-startup .btn-primary, 
 .theme-boutique .btn-primary {
@@ -71,9 +92,14 @@
     border: none;
     padding: 10px 20px;
     font-weight: 600;
+    color: white;
 }
 
-/* Preview Hero Area */
+/* --- PREVIEW SPECIFIC LAYOUT --- */
+.preview-frame {
+    padding-bottom: 120px; /* Space for the fixed CTA footer */
+}
+
 .hero-area {
     background-color: var(--theme-p);
     color: white;
@@ -81,8 +107,59 @@
     border-bottom: 4px solid var(--theme-acc);
 }
 
+/* Boutique Hero adjustment: Light & Airy */
+.theme-boutique .hero-area {
+    background-color: #ffffff;
+    color: #000000;
+    border-bottom: 1px solid #000000;
+}
+
+.theme-boutique .hero-area .h2, 
+.theme-boutique .hero-area h1 {
+    letter-spacing: var(--theme-ls);
+    text-transform: uppercase;
+}
+
 .hero-area .h2 {
-    color: white;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+/* --- CONVERSION CTA BAR (Sticky Footer) --- */
+.preview-cta-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-top: 1px solid #eeeeee;
+    padding: 1.25rem 0;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+    z-index: 1050;
+}
+
+.cta-flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cta-label {
+    display: block;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: var(--theme-p);
+    letter-spacing: var(--theme-ls, 1px);
+}
+
+.cta-subtext {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.cta-btn {
+    padding: 0.75rem 2.5rem !important;
+    font-size: 1.1rem !important;
 }

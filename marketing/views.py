@@ -11,49 +11,39 @@ from .forms import TenantSignupForm, TenantLoginForm
 
 
 def tenant_signup(request):
-    # Catching pre-fill data from the Preview/Selection page
-    template_id = request.GET.get('template', 'professional')
-    initial_data = {
-        'company_name': request.GET.get('company_name', ''),
-    }
+    template_id = request.GET.get('template', 'executive')
+    initial_data = {'company_name': request.GET.get('company_name', '')}
     form = TenantSignupForm(request.POST or None, initial=initial_data)
+
     if request.method == "POST" and form.is_valid():
-        company_name = form.cleaned_data["company_name"]
-        admin_email = form.cleaned_data["admin_email"]
-        password = form.cleaned_data["password"]
-        
-        # Create the tenant first - the model now generates schema_name
+        # 1. Create Tenant (Model handles slugification)
         tenant = Client.objects.create(
-            name=company_name,
-            template_choice=template_id, 
-            paid_until=date.today() + timedelta(days=14),
+            name=form.cleaned_data["company_name"],
+            template_choice=template_id,
             on_trial=True,
+            paid_until=date.today() + timedelta(days=14)
         )
         
-        # Now retrieve the auto-generated slug to create the domain
-        subdomain = tenant.schema_name
-        
+        # 2. Create Domain
         Domain.objects.create(
-            domain=f"{subdomain}.localhost",
+            domain=f"{tenant.schema_name}.localhost",
             tenant=tenant,
-            is_primary=True,
+            is_primary=True
         )
-        
+
+        # 3. Create Admin User in the new schema
         with schema_context(tenant.schema_name):
-            User.objects.create_user(
-                username=admin_email,
-                email=admin_email,
-                password=password
+            User.objects.create_superuser(
+                username=form.cleaned_data["admin_email"],
+                email=form.cleaned_data["admin_email"],
+                password=form.cleaned_data["password"]
             )
-            
-        current_host = request.get_host()
-        if ":" in current_host:
-            port = current_host.split(":")[-1]
-            redirect_url = f"http://{subdomain}.localhost:{port}/login/"
-        else:
-            redirect_url = f"http://{subdomain}.localhost/login/"
-        return redirect(redirect_url)
-        
+
+        # 4. Critical: Redirect to the new SUBDOMAIN dashboard
+        protocol = "http"  # Change to https in production
+        domain = f"{tenant.schema_name}.localhost:8000"
+        return redirect(f"{protocol}://{domain}/dashboard/setup/")
+
     return render(request, "marketing/signup.html", {"form": form})
 
 
