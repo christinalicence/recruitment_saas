@@ -12,7 +12,7 @@ from .forms import TenantSignupForm, TenantLoginForm
 
 def tenant_signup(request):
     # Catching pre-fill data from the Preview/Selection page
-    template_id = request.GET.get('template', 'professional') 
+    template_id = request.GET.get('template', 'professional')
     initial_data = {
         'company_name': request.GET.get('company_name', ''),
     }
@@ -104,15 +104,23 @@ def template_select(request):
 
 
 def template_preview(request, template_id):
-    # Renders a live preview of the selected template
-    # Get company name from query params for personalization
     name = request.GET.get('company_name') or "Your Company"
     context = {
         'template_id': template_id,
         'company_name': name,
         'jobs': [
-            {'title': 'Senior Software Engineer', 'salary': '£80,000', 'location': 'London'},
-            {'title': 'Talent Acquisition Manager', 'salary': '£55,000', 'location': 'Manchester'},
+            {
+                'title': 'Senior Software Engineer', 
+                'salary': '£80,000', 
+                'location': 'London',
+                'summary': 'Join a high-growth fintech team building scalable microservices.' # Added text
+            },
+            {
+                'title': 'Talent Acquisition Manager', 
+                'salary': '£55,000', 
+                'location': 'Manchester',
+                'summary': 'Lead the end-to-end recruitment lifecycle for our creative agency.' # Added text
+            },
         ]
     }
     return render(request, "marketing/previews/preview_main.html", context)

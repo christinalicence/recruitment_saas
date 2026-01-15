@@ -1,22 +1,23 @@
+/* to add a co name to the preview links dynamically */
 document.addEventListener('DOMContentLoaded', function() {
     const companyInput = document.getElementById('companyNameInput');
-    const previewLinks = document.querySelectorAll('.preview-link');
+    const links = document.querySelectorAll('.dynamic-link');
 
     if (companyInput) {
         companyInput.addEventListener('input', function(e) {
             const currentName = e.target.value.trim();
             const encodedName = encodeURIComponent(currentName);
 
-            previewLinks.forEach(link => {
-                // Get the base URL (e.g., /preview/executive/)
-                const baseUrl = link.getAttribute('href').split('?')[0];
+            links.forEach(link => {
+                const url = new URL(link.href, window.location.origin);
                 
-                // If there's a name, append it as a query param
                 if (currentName.length > 0) {
-                    link.setAttribute('href', `${baseUrl}?company_name=${encodedName}`);
+                    url.searchParams.set('company_name', currentName);
                 } else {
-                    link.setAttribute('href', baseUrl);
+                    url.searchParams.delete('company_name');
                 }
+                
+                link.href = url.toString();
             });
         });
     }

@@ -1,66 +1,48 @@
-/* CSS variables */
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap');
+
+/* --- GLOBAL BRAND STYLES --- */
 :root {
     --brand-primary: #1a2a40; 
     --brand-accent: #0056b3;
     --brand-light: #f4f7f9;
-    --text-main: #333d47;
-    /* Template Specific colors */
-    --color-executive: var(--brand-primary);
-    --color-startup: #0d6efd;
-    --color-boutique: #adb5bd;
 }
 
-/* Hero Section */
 .hero-section {
     background-color: var(--brand-light);
-    border-bottom: 1px solid #e1e8ed;
-    padding: 120px 0;
+    padding: 80px 0;
 }
 
 .brand-title {
     color: var(--brand-primary);
-    letter-spacing: -1px;
     font-weight: 800;
 }
 
-/* Features Section */
-.feature-card {
-    border: 1px solid #e1e8ed;
-    border-radius: 8px;
-    padding: 40px 20px;
-    transition: all 0.3s ease;
-    background: #fff;
+/* ---WEBSITE THEME DEFINITIONS --- */
+.theme-executive {
+    --theme-p: #1a2a40; --theme-acc: #c9a961; 
+    --theme-font: 'Inter', sans-serif; --theme-radius: 0px;
+}
+.theme-startup {
+    --theme-p: #0d6efd; --theme-acc: #ffca28; 
+    --theme-font: 'Lexend', sans-serif; --theme-radius: 50px;
+}
+.theme-boutique {
+    --theme-p: #000000; --theme-acc: #333; 
+    --theme-font: 'Space Grotesk', sans-serif; --theme-radius: 0px;
 }
 
-.feature-card:hover {
-    border-color: var(--brand-accent);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+/* --- THEME-AWARE COMPONENTS --- */
+.template-card, .preview-frame {
+    font-family: var(--theme-font);
 }
-
-.feature-label {
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: var(--brand-accent);
-    display: block;
-    margin-bottom: 15px;
-}
-
-/* Call to Action Section */
-.cta-section {
-    background-color: var(--brand-primary);
-    color: white;
-}
-
-/* Template Selection Specifics */
 
 .template-card {
     border: 1px solid #e1e8ed;
-    border-radius: 8px;
+    border-top: 6px solid var(--theme-p);
     padding: 2.5rem 1.5rem;
     background: #fff;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease;
     display: flex;
     flex-direction: column;
 }
@@ -70,42 +52,37 @@
     box-shadow: 0 12px 24px rgba(0,0,0,0.08);
 }
 
-/* The Executive Style */
-.theme-executive {
-    border-top: 6px solid var(--color-executive);
-}
-.theme-executive .feature-label {
-    color: var(--color-executive);
-}
-
-/* The Startup Style */
-.theme-startup {
-    border-top: 6px solid var(--color-startup);
-}
-.theme-startup .feature-label {
-    color: var(--color-startup);
-    font-weight: 900;
+.feature-label {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--theme-p);
+    display: block;
+    margin-bottom: 15px;
 }
 
-/* The Boutique Style */
-.theme-boutique {
-    border-top: 6px solid var(--color-boutique);
-}
-.theme-boutique .feature-label {
-    color: var(--color-boutique);
-    font-family: "Georgia", serif;
-    font-style: italic;
-    text-transform: none;
-}
-
-/* Buttons on Template Cards */
-.btn-primary {
-    background-color: var(--brand-accent);
-    border-color: var(--brand-accent);
+/* Theme-Aware Buttons */
+.theme-executive .btn-primary, 
+.theme-startup .btn-primary, 
+.theme-boutique .btn-primary {
+    background-color: var(--theme-p) !important;
+    border-radius: var(--theme-radius) !important;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
 }
 
-.btn-dark {
-    background-color: var(--brand-primary);
-    border-color: var(--brand-primary);
+/* Preview Hero Area */
+.hero-area {
+    background-color: var(--theme-p);
+    color: white;
+    padding: 80px 0;
+    border-bottom: 4px solid var(--theme-acc);
 }
 
+.hero-area .h2 {
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

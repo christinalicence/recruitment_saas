@@ -5,8 +5,15 @@
 {% block content %}
 <section class="py-5 bg-light">
     <div class="container text-center py-5">
-        <h2 class="brand-title mb-3">Choose your next design</h2>
-        <p class="text-muted mb-5">Select a professional starting point for your company. You can customise colors and logos later.</p>
+        <h2 class="brand-title mb-3">Choose your design</h2>
+        <p class="text-muted mb-4">Select a professional starting point for your company.</p>
+        
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-6">
+                <label for="companyNameInput" class="form-label small text-muted">Preview with your company name</label>
+                <input type="text" class="form-control form-control-lg text-center" id="companyNameInput" placeholder="e.g., Acme Recruitment" maxlength="50">
+            </div>
+        </div>
         
         <div class="row g-4 justify-content-center">
             {% for template in templates %}
@@ -14,8 +21,10 @@
                 <div class="template-card theme-{{ template.id }} h-100">
                     <span class="feature-label">{{ template.name }}</span>
                     <p class="small text-muted mb-4">{{ template.description }}</p>
-                    <a href="{% url 'marketing:template_preview' template.id %}" class="btn btn-dark w-100 mb-2 preview-link">Live Preview</a>
-                    <a href="{% url 'marketing:tenant_signup' %}?template={{ template.id }}" class="small text-muted text-center d-block">Skip to Signup</a>
+                    
+                    <a href="{% url 'marketing:template_preview' template.id %}" class="btn btn-primary w-100 mb-2 dynamic-link">Live Preview</a>
+                    
+                    <a href="{% url 'marketing:tenant_signup' %}?template={{ template.id }}" class="small text-muted text-center d-block dynamic-link">Skip to Signup</a>
                 </div>
             </div>
             {% endfor %}
