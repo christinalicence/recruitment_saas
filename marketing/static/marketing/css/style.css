@@ -1,5 +1,5 @@
 /* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lexend:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
 
 /* --- GLOBAL BRAND STYLES --- */
 :root {
@@ -11,51 +11,37 @@
 body {
     margin: 0;
     padding: 0;
+    -webkit-font-smoothing: antialiased;
 }
 
-.hero-section {
-    background-color: var(--brand-light);
-    padding: 80px 0;
-}
-
-.brand-title {
-    color: var(--brand-primary);
-    font-weight: 800;
-}
-
-/* --- WEBSITE THEME DEFINITIONS --- */
-/* Executive: Corporate, Sharp, Traditional */
+/* --- THEME DEFINITIONS --- */
 .theme-executive {
     --theme-p: #1a2a40; 
     --theme-acc: #c9a961; 
     --theme-font: 'Inter', sans-serif; 
     --theme-radius: 0px;
-    --theme-bg: #ffffff;
+    --theme-ls: 0px;
 }
 
-/* Startup: Bold, Rounded, Modern */
 .theme-startup {
     --theme-p: #0d6efd; 
     --theme-acc: #ffca28; 
     --theme-font: 'Lexend', sans-serif; 
     --theme-radius: 50px;
-    --theme-bg: #f0f7ff;
+    --theme-ls: -0.5px;
 }
 
-/* Boutique: Minimal, High-Contrast, Spacious */
 .theme-boutique {
     --theme-p: #000000; 
     --theme-acc: #333; 
     --theme-font: 'Space Grotesk', sans-serif; 
     --theme-radius: 0px;
-    --theme-ls: 2px; /* Native spacing for the boutique look */
-    --theme-bg: #fafafa;
+    --theme-ls: 2px; /* Native Boutique Spacing */
 }
 
-/* --- THEME-AWARE COMPONENTS --- */
+/* --- SHARED COMPONENT LOGIC --- */
 .template-card, .preview-frame {
     font-family: var(--theme-font);
-    background-color: var(--theme-bg);
 }
 
 .template-card {
@@ -83,49 +69,48 @@ body {
     margin-bottom: 15px;
 }
 
-/* Theme-Aware Buttons (Selection & Preview) */
+/* Theme-Aware Buttons */
 .theme-executive .btn-primary, 
 .theme-startup .btn-primary, 
-.theme-boutique .btn-primary {
+.theme-boutique .btn-primary,
+.cta-btn {
     background-color: var(--theme-p) !important;
     border-radius: var(--theme-radius) !important;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 24px;
     font-weight: 600;
-    color: white;
+    color: white !important;
 }
 
-/* --- PREVIEW SPECIFIC LAYOUT --- */
+/* --- PREVIEW UI --- */
 .preview-frame {
-    padding-bottom: 120px; /* Space for the fixed CTA footer */
+    padding-bottom: 120px;
+    min-height: 100vh;
 }
 
 .hero-area {
     background-color: var(--theme-p);
     color: white;
-    padding: 80px 0;
+    padding: 100px 0;
     border-bottom: 4px solid var(--theme-acc);
 }
 
-/* Boutique Hero adjustment: Light & Airy */
+.hero-area .h2, .hero-area h1 {
+    letter-spacing: var(--theme-ls);
+}
+
 .theme-boutique .hero-area {
     background-color: #ffffff;
     color: #000000;
     border-bottom: 1px solid #000000;
 }
 
-.theme-boutique .hero-area .h2, 
-.theme-boutique .hero-area h1 {
-    letter-spacing: var(--theme-ls);
-    text-transform: uppercase;
+.theme-boutique .card {
+    border: 1px solid #000;
+    border-radius: 0;
 }
 
-.hero-area .h2 {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* --- CONVERSION CTA BAR (Sticky Footer) --- */
+/* --- CONVERSION CTA BAR for preview --- */
 .preview-cta-bar {
     position: fixed;
     bottom: 0;
@@ -133,8 +118,8 @@ body {
     right: 0;
     background: #ffffff;
     border-top: 1px solid #eeeeee;
-    padding: 1.25rem 0;
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+    padding: 1.5rem 0;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
     z-index: 1050;
 }
 
@@ -156,10 +141,153 @@ body {
 .cta-subtext {
     margin: 0;
     color: #6c757d;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
-.cta-btn {
-    padding: 0.75rem 2.5rem !important;
-    font-size: 1.1rem !important;
+/* --- SIGNUP PAGE LAYOUT --- */
+.signup-page-wrapper {
+    background-color: var(--brand-light);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--theme-font);
+}
+
+.signup-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+}
+
+.signup-card {
+    background: #ffffff;
+    padding: 3rem;
+    border-radius: 8px;
+    border-top: 6px solid var(--theme-p);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+/* Typography matching the theme */
+.signup-title {
+    font-weight: 800;
+    color: var(--theme-p);
+    margin-bottom: 0.5rem;
+    letter-spacing: var(--theme-ls, 0px);
+}
+
+.signup-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.signup-subtitle {
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+/* Form Spacing */
+.signup-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.signup-action {
+    margin-top: 2rem;
+}
+
+/* Boutique Override: High contrast, no shadows */
+.theme-boutique .signup-card {
+    border: 2px solid #000;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.theme-boutique .signup-page-wrapper {
+    background-color: #ffffff;
+}
+
+/* --- DASHBOARD SETUP PAGE --- */
+.setup-wrapper {
+    background-color: var(--brand-light);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--theme-font); /* Respects theme font */
+}
+
+.setup-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+}
+
+.setup-card {
+    background: #ffffff;
+    padding: 3rem;
+    border-top: 6px solid var(--theme-p); /* Uses theme primary color */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.setup-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.setup-label {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--theme-p);
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.setup-title {
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.setup-url {
+    display: block;
+    font-weight: 700;
+    color: var(--brand-primary);
+    margin-top: 5px;
+}
+
+.checklist-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #6c757d;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.checklist-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.checklist-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    color: #495057;
+}
+
+.checklist-item.done {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.setup-footer .btn-primary {
+    width: 100%;
+    padding: 12px;
+}
+
+/* Boutique-Specific Refinement (High Contrast) */
+.theme-boutique .setup-card {
+    border: 2px solid #000;
+    box-shadow: none;
+    border-radius: 0;
 }

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard Setup | Pillar & Post{% endblock %}
+{% block content %}
+<div class="setup-wrapper theme-{{ template_id }}">
+    <div class="setup-container">
+        <div class="setup-card">
+            <header class="setup-header">
+                <span class="setup-label">Welcome, {{ tenant.name }}</span>
+                <h1 class="setup-title">Your site is ready!</h1>
+                <p class="setup-subtitle">
+                    Your professional recruitment site is live at:
+                    <span class="setup-url">{{ request.get_host }}</span>
+                </p>
+            </header>
+
+            <section class="setup-checklist">
+                <h2 class="checklist-title">Next steps to launch:</h2>
+                <ul class="checklist-list">
+                    <li class="checklist-item done">Design: {{ template_id|title }}</li>
+                    <li class="checklist-item">Upload your company logo</li>
+                    <li class="checklist-item">Post your first job opening</li>
+                </ul>
+            </section>
+
+            <footer class="setup-footer">
+                <a href="{% url 'marketing:tenant_dashboard' %}" class="btn btn-primary">
+                    Go to Main Dashboard
+                </a>
+            </footer>
+        </div>
+    </div>
+</div>
+{% endblock %}

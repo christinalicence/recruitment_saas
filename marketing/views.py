@@ -39,21 +39,23 @@ def tenant_signup(request):
                 password=form.cleaned_data["password"]
             )
 
-        # 4. Critical: Redirect to the new SUBDOMAIN dashboard
-        protocol = "http"  # Change to https in production
-        domain = f"{tenant.schema_name}.localhost:8000"
-        return redirect(f"{protocol}://{domain}/dashboard/setup/")
+        # 4.Absolute URL with Port Handling
+        subdomain = tenant.schema_name
+        # Splitting host and port to handle local development vs production
+        host_parts = request.get_host().split(':')
+        host = host_parts[0]
+        port = host_parts[1] if len(host_parts) > 1 else None
+
+        if port:
+            # Local development environment (e.g., http://slug.localhost:8000)
+            redirect_url = f"http://{subdomain}.{host}:{port}/dashboard/setup/"
+        else:
+            # Production environment (e.g., https://slug.pillarandpost.com)
+            redirect_url = f"https://{subdomain}.{host}/dashboard/setup/"
+
+        return redirect(redirect_url)
 
     return render(request, "marketing/signup.html", {"form": form})
-
-
-@login_required
-def tenant_dashboard(request):
-    return render(
-        request, 
-        "marketing/dashboard.html",
-        {"tenant_name": request.tenant.name}
-    )
 
 
 def tenant_login(request):

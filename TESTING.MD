@@ -37,3 +37,8 @@ Automated tests -
  - Isolation - very important for gdpr and security. Means one tenant can never accidentally access another tenant's info.
 
 Test Files are structured so that they are all in the app they are testing. Some code (for creating, deleting and editing test databases) is stored in a seperate file (customers/tests/__init__.py) and called when needed. This is to make it easier to isolate the correct tests.
+
+To run the site locally with the subdomains they need to be added using these commands (on mac)
+sudo nano /etc/hosts
+127.0.0.1 sterling-search.localhost (testing one)
+127.0.0.1 test-co.localhost

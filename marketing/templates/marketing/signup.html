@@ -1,16 +1,28 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}Sign up{% endblock %}
+{% block title %}Claim your Design | Pillar & Post{% endblock %}
 
 {% block content %}
-<h1>Create your account</h1>
+<div class="signup-page-wrapper theme-{{ request.GET.template|default:'executive' }}">
+    <div class="signup-container">
+        <div class="signup-card">
+            <div class="signup-header">
+                <span class="feature-label">Almost there</span>
+                <h1 class="signup-title">Set up your dashboard</h1>
+                <p class="signup-subtitle">
+                    You're claiming the <strong>{{ request.GET.template|title }}</strong> design.
+                </p>
+            </div>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form|crispy }}
-  <button class="btn btn-primary">Sign up</button>
-</form>
-
-
+            <form method="post" class="signup-form">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="signup-action">
+                    <button class="btn btn-primary w-100">Create My Site →</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
