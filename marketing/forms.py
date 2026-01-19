@@ -23,7 +23,7 @@ class TenantSignupForm(forms.Form):
 
 
 class TenantLoginForm(forms.Form):
-    username = forms.CharField(max_length=150)
+    email = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):

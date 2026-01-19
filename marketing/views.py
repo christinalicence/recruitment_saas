@@ -67,12 +67,12 @@ def tenant_login(request):
     if request.method == "POST" and form.is_valid():
         user = authenticate(
             request,
-            username=form.cleaned_data["username"],
+            username=form.cleaned_data["email"],
             password=form.cleaned_data["password"],
         )
         if user:
             login(request, user)
-            return redirect("marketing:dashboard_setup")
+            return redirect("dashboard_setup")
         else:
             messages.error(request, "Invalid username or password")
 
@@ -81,7 +81,7 @@ def tenant_login(request):
 
 def tenant_logout(request):
     logout(request)
-    return redirect("marketing:tenant_login")
+    return redirect("tenant_login")
 
 
 def landing_page(request):

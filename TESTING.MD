@@ -38,7 +38,11 @@ Automated tests -
 
 Test Files are structured so that they are all in the app they are testing. Some code (for creating, deleting and editing test databases) is stored in a seperate file (customers/tests/__init__.py) and called when needed. This is to make it easier to isolate the correct tests.
 
-To run the site locally with the subdomains they need to be added using these commands (on mac)
-sudo nano /etc/hosts
-127.0.0.1 sterling-search.localhost (testing one)
-127.0.0.1 test-co.localhost
+To test locally you need to specify the port so that django can create the subdomains for new tenants. The correct command is 
+python3 manage.py runserver localhost:8000
+
+Main Landing Page	http://localhost:8000
+Tenant Login Page	http://test-co.localhost:8000/login/
+Tenant Dashboard	http://test-co.localhost:8000/dashboard/
+
+These are test links when run locally.
