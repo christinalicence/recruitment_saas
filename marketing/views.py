@@ -1,4 +1,3 @@
-# marketing/views.py
 from django.shortcuts import render, redirect
 from datetime import date, timedelta
 from django.contrib.auth import authenticate, login, logout
@@ -16,51 +15,55 @@ def tenant_signup(request):
     form = TenantSignupForm(request.POST or None, initial=initial_data)
 
     if request.method == "POST" and form.is_valid():
-        # 1. Create Tenant (Model handles slugification)
-        tenant = Client.objects.create(
-            name=form.cleaned_data["company_name"],
-            template_choice=template_id,
-            on_trial=True,
-            paid_until=date.today() + timedelta(days=14)
+        company_name = form.cleaned_data["company_name"]
+        admin_email = form.cleaned_data["admin_email"]
+        password = form.cleaned_data["password"]
+        # make tenant
+        tenant, created = Client.objects.get_or_create(
+            name=company_name,
+            defaults={'template_choice': template_id, 'on_trial': True}
         )
-        
-        # 2. Create Domain
-        Domain.objects.create(
-            domain=f"{tenant.schema_name}.localhost",
-            tenant=tenant,
-            is_primary=True
+        # make domain
+        host_full = request.get_host()  # e.g. "localhost:8000"
+        # ensure port is not included in the domain stored in DB
+        base_domain_no_port = host_full.split(':')[0] 
+        full_domain_db = f"{tenant.schema_name}.{base_domain_no_port}"
+        Domain.objects.get_or_create(
+            domain=full_domain_db,
+            defaults={'tenant': tenant, 'is_primary': True}
         )
-
-        # 3. Create Admin User in the new schema
+        # create superuser in tenant schema
         with schema_context(tenant.schema_name):
-            User.objects.create_superuser(
-                username=form.cleaned_data["admin_email"],
-                email=form.cleaned_data["admin_email"],
-                password=form.cleaned_data["password"]
-            )
-
-        # 4.Absolute URL with Port Handling
-        subdomain = tenant.schema_name
-        # Splitting host and port to handle local development vs production
-        host_parts = request.get_host().split(':')
-        host = host_parts[0]
-        port = host_parts[1] if len(host_parts) > 1 else None
-
-        if port:
-            # Local development environment (e.g., http://slug.localhost:8000)
-            redirect_url = f"http://{subdomain}.{host}:{port}/dashboard/setup/"
-        else:
-            # Production environment (e.g., https://slug.pillarandpost.com)
-            redirect_url = f"https://{subdomain}.{host}/dashboard/setup/"
-
+            if not User.objects.filter(username=admin_email).exists():
+                User.objects.create_superuser(
+                    username=admin_email,
+                    email=admin_email,
+                    password=password
+                )
+        # redirect to tenant subdomain login
+        is_local = "localhost" in host_full or "127.0.0.1" in host_full
+        protocol = "http" if is_local else "https"
+        # We use host_full here so the browser includes the port (e.g., :8000)
+        redirect_url = f"{protocol}://{tenant.schema_name}.{host_full}/login/"
         return redirect(redirect_url)
 
-    return render(request, "marketing/signup.html", {"form": form})
+    return render(request, "marketing/signup.html", {"form": form, "template_id": template_id})
+
+
+@login_required
+def dashboard_setup(request):
+    """The landing page immediately after signup."""
+    # This view only works if the user is logged in to their new subdomain
+    return render(request, "marketing/dashboard_setup.html", {
+        "tenant": request.tenant,
+        "template_id": request.tenant.template_choice,
+    })
 
 
 def tenant_login(request):
+    print(f"DEBUG: Current URLConf is {request.urlconf}")
     form = TenantLoginForm(request.POST or None)
-    
+
     if request.method == "POST" and form.is_valid():
         user = authenticate(
             request,
@@ -69,7 +72,7 @@ def tenant_login(request):
         )
         if user:
             login(request, user)
-            return redirect("marketing:tenant_dashboard")
+            return redirect("marketing:dashboard_setup")
         else:
             messages.error(request, "Invalid username or password")
 
@@ -82,7 +85,9 @@ def tenant_logout(request):
 
 
 def landing_page(request):
-    """Renders the Pillar & Post public landing page."""
+    # CURRENTLY FOR DEBUGGING PURPOSES ONLY
+    print(f"DEBUG: Host is {request.get_host()}")
+    print(f"DEBUG: Tenant is {getattr(request, 'tenant', 'No Tenant Found')}")
     return render(request, "marketing/landing.html")
 
 
@@ -105,13 +110,13 @@ def template_preview(request, template_id):
                 'title': 'Senior Software Engineer', 
                 'salary': '£80,000', 
                 'location': 'London',
-                'summary': 'Join a high-growth fintech team building scalable microservices.' # Added text
+                'summary': 'Join a high-growth fintech team building scalable microservices.' 
             },
             {
                 'title': 'Talent Acquisition Manager', 
                 'salary': '£55,000', 
                 'location': 'Manchester',
-                'summary': 'Lead the end-to-end recruitment lifecycle for our creative agency.' # Added text
+                'summary': 'Lead the end-to-end recruitment lifecycle for our creative agency.' 
             },
         ]
     }

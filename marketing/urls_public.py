@@ -1,7 +1,7 @@
 from django.urls import path
 from marketing import views
 
-app_name = "marketing"
+app_name = "public_marketing"
 
 urlpatterns = [
     path("", views.landing_page, name="landing"),

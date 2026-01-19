@@ -22,9 +22,9 @@
                     <span class="feature-label">{{ template.name }}</span>
                     <p class="small text-muted mb-4">{{ template.description }}</p>
                     
-                    <a href="{% url 'marketing:template_preview' template.id %}" class="btn btn-primary w-100 mb-2 dynamic-link">Live Preview</a>
+                    <a href="{% url 'public_marketing:template_preview' template.id %}" class="btn btn-primary w-100 mb-2 dynamic-link">Live Preview</a>
                     
-                    <a href="{% url 'marketing:tenant_signup' %}?template={{ template.id }}" class="small text-muted text-center d-block dynamic-link">Skip to Signup</a>
+                    <a href="{% url 'public_marketing:tenant_signup' %}?template={{ template.id }}" class="small text-muted text-center d-block dynamic-link">Skip to Signup</a>
                 </div>
             </div>
             {% endfor %}

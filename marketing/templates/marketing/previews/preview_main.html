@@ -48,7 +48,7 @@
                     <span class="cta-label">Design: {{ template_id|title }}</span>
                     <p class="cta-subtext">Previewing as: <strong>{{ company_name }}</strong></p>
                 </div>
-                <a href="{% url 'marketing:tenant_signup' %}?template={{ template_id }}&company_name={{ company_name|urlencode }}" 
+                <a href="{% url 'public_marketing:tenant_signup' %}?template={{ template_id }}&company_name={{ company_name|urlencode }}" 
                    class="btn btn-primary cta-btn">
                     Claim this Design & Continue →
                 </a>

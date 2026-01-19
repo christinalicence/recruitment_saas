@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 import sys
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# loading environment variables from .env file compatible with django-tenants
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -25,21 +25,16 @@ load_dotenv(BASE_DIR / ".env")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# settings.py
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    ".localhost",
-    "0.0.0.0", # Add becasuse of repeated 404 errors on local testing
+    '.localhost',
+    '127.0.0.1',
+    'localhost',
 ]
-
 
 SHARED_APPS = (
     "django_tenants",
@@ -69,7 +64,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
-    "django_tenants.middleware.main.TenantMainMiddleware",
+   "recruit_saas.debug_middleware.CustomTenantMiddleware", 
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -78,7 +73,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
 ROOT_URLCONF = 'recruit_saas.urls'
 
 LOGIN_URL = "/login/"
@@ -108,10 +102,9 @@ WSGI_APPLICATION = 'recruit_saas.wsgi.application'
 
 DATABASES = {
     "default": {
-        **dj_database_url.parse(
-            os.environ["DB_URL"],
+        **dj_database_url.config(
+            default=os.getenv("DB_URL"),
             conn_max_age=600,
-            ssl_require=True,
         ),
         "ENGINE": "django_tenants.postgresql_backend",
     }
@@ -126,11 +119,15 @@ TENANT_MODEL = "customers.Client"
 TENANT_DOMAIN_MODEL = "customers.Domain"
 TENANT_SUBDOMAIN_CHECK = True
 
+# This is for tenant limit set calls optimization
+TENANT_LIMIT_SET_CALLS = False
+TENANT_REMOVE_WWW = False
+
 # URL directs 
 PUBLIC_SCHEMA_URLCONF = 'recruit_saas.urls'
 TENANT_URLCONF = 'marketing.urls_tenant'
 PUBLIC_SCHEMA_NAME = "public"
-REMOVE_URL_CONF_CACHE_ON_SETTINGS_CHANGE = True # Helps resolve 404 errors during development
+REMOVE_URL_CONF_CACHE_ON_SETTINGS_CHANGE = True
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -175,32 +172,3 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-# For testing with django-tenants, create a separate test database configuration
-if "test" in sys.argv:
-    # Parse your existing DB_URL but use a different database name for tests
-    test_db_config = dj_database_url.parse(
-        os.environ["DB_URL"],
-        conn_max_age=600,
-        ssl_require=True,
-    )
-    # Change just the database name to a test database
-    test_db_config["NAME"] = "test_recruit_saas"
-    test_db_config["ENGINE"] = "django_tenants.postgresql_backend"
-    DATABASES = {
-        "default": {
-            **test_db_config,
-            "TEST": {
-                "NAME": "test_recruit_saas",
-            }
-        }
-    }
-    # Force close connections to avoid stalling
-    DATABASES["default"]["CONN_MAX_AGE"] = 0
-
-    # Remove tenant middleware during tests so URLs work normally
-    MIDDLEWARE = [
-        m for m in MIDDLEWARE 
-        if m != "django_tenants.middleware.main.TenantMainMiddleware"
-    ]

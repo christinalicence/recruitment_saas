@@ -13,7 +13,7 @@ User Flow (not signed up)
 - Landing Page
 - Choose a template
 - Preview (to draw them in)
-- Sign Up (enter info to generate site)
+- Sign Up (enter info to generate site, the form is in the style of the chosen template)
 - See site
 - Dashboard
 
@@ -21,3 +21,5 @@ User Flow (signed up)
 - Landing Page
 - Dashboard
 
+Persistant Bug
+Getting a 404 error when trying to hit a subdomain, because django's middleware didn't use the correct url file (it kept hitting the one at the root rather than the one in the marketing app)

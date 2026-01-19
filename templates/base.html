@@ -16,7 +16,11 @@
   <div class="container">
     <a class="navbar-brand fw-bold" href="/">Pillar & Post</a>
     <div class="ms-auto">
-      <a href="{% url 'marketing:template_select' %}" class="btn btn-primary">Start Free Trial</a>
+    {% if not request.tenant.schema_name or request.tenant.schema_name == 'public' %}
+        <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary">Start Free Trial</a>
+    {% else %}
+        <a href="{% url 'tenant_login' %}" class="btn btn-outline-primary">My Account</a>
+    {% endif %}
     </div>
   </div>
 </nav>
