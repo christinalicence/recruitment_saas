@@ -50,18 +50,7 @@ def tenant_signup(request):
     return render(request, "marketing/signup.html", {"form": form, "template_id": template_id})
 
 
-@login_required
-def dashboard_setup(request):
-    """The landing page immediately after signup."""
-    # This view only works if the user is logged in to their new subdomain
-    return render(request, "marketing/dashboard_setup.html", {
-        "tenant": request.tenant,
-        "template_id": request.tenant.template_choice,
-    })
-
-
 def tenant_login(request):
-    print(f"DEBUG: Current URLConf is {request.urlconf}")
     form = TenantLoginForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
@@ -72,9 +61,10 @@ def tenant_login(request):
         )
         if user:
             login(request, user)
-            return redirect("dashboard_setup")
+            return redirect("cms:setup") 
         else:
-            messages.error(request, "Invalid username or password")
+            # error message for invalid login
+            messages.error(request, "Invalid email or password. Please try again.")
 
     return render(request, "marketing/login.html", {"form": form})
 

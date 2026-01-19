@@ -1,6 +1,28 @@
 from django.db import models
 
 
+class CompanyProfile(models.Model):
+    # Company brand
+    display_name = models.CharField(max_length=255)
+    logo = models.ImageField(upload_to='logos/', null=True, blank=True)
+    primary_color = models.CharField(max_length=7, default="#007bff")
+    secondary_color = models.CharField(max_length=7, default="#6c757d")
+    # Page 1: Landing Page (Hero Section)
+    hero_title = models.CharField(max_length=200, default="Great Careers Await")
+    hero_text = models.TextField(blank=True, help_text="The main pitch to candidates")
+    hero_image = models.ImageField(upload_to='hero/', null=True, blank=True)
+    # Page 2: About Us
+    about_title = models.CharField(max_length=200, default="Our Story")
+    team_photo = models.ImageField(upload_to='team/', null=True, blank=True)
+    about_content = models.TextField(blank=True)
+    # Page 3: Jobs Page
+    # Text above job listings
+    jobs_header_text = models.TextField(blank=True, default="Explore our current openings.")
+
+    def __str__(self):
+        return self.display_name
+
+
 class Page(models.Model):
     # Basic CMS Page model
     title = models.CharField(max_length=255)

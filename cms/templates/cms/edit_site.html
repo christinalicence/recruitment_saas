@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="setup-wrapper theme-{{ tenant.template_id|default:'executive' }}">
+    <div class="setup-container max-width-800"> {% if is_first_setup %}
+        <div class="setup-header">
+            <span class="setup-label">Welcome, {{ tenant.name }}</span>
+            <h1 class="setup-title">Let's build your site</h1>
+            <p class="setup-subtitle">Your site is live at <span class="setup-url">{{ request.get_host }}</span></p>
+        </div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" class="editor-card">
+            {% csrf_token %}
+            
+            <ul class="nav nav-tabs mb-4" id="editorTabs" role="tablist">
+                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#branding" type="button">1. Branding</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#landing" type="button">2. Landing Page</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#about" type="button">3. About Us</button></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="branding">
+                    <div class="row">
+                        <div class="col-12">{{ form.display_name|as_crispy_field }}</div>
+                        <div class="col-md-6">{{ form.logo|as_crispy_field }}</div>
+                        <div class="col-md-3">{{ form.primary_color|as_crispy_field }}</div>
+                        <div class="col-md-3">{{ form.secondary_color|as_crispy_field }}</div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="landing">
+                    {{ form.hero_title|as_crispy_field }}
+                    {{ form.hero_text|as_crispy_field }}
+                    {{ form.hero_image|as_crispy_field }}
+                </div>
+
+                <div class="tab-pane fade" id="about">
+                    {{ form.about_title|as_crispy_field }}
+                    {{ form.about_content|as_crispy_field }}
+                    {{ form.team_photo|as_crispy_field }}
+                </div>
+            </div>
+
+            <div class="setup-footer mt-4">
+                <button type="submit" class="btn btn-primary w-100">Save and Launch Site</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
