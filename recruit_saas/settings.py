@@ -104,6 +104,7 @@ DATABASES = {
     "default": {
         **dj_database_url.config(
             default=os.getenv("DB_URL"),
+            engine='django_tenants.postgresql_backend',
             conn_max_age=600,
         ),
         "ENGINE": "django_tenants.postgresql_backend",

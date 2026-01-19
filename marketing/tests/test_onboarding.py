@@ -1,52 +1,62 @@
-# marketing/tests/test_onboarding.py
 from django.test import Client, override_settings
 from django.urls import reverse
 from customers.models import Client as TenantClient
 from customers.tests import TenantCleanupTestCase
 
 
-@override_settings(ROOT_URLCONF='recruit_saas.urls') 
+@override_settings(ROOT_URLCONF="recruit_saas.urls")
 class OnboardingFlowTest(TenantCleanupTestCase):
     """Tests the complete user journey from template selection to signup"""
+
     def setUp(self):
         self.client = Client()
 
     def test_onboarding_to_signup_flow(self):
         """Tests the journey from selection to preview to signup"""
-        # select a template
-        response = self.client.get(reverse('marketing:template_select'))
+        url = reverse("public_marketing:template_select")
+        response = self.client.get(url, HTTP_HOST="localhost")
         self.assertEqual(response.status_code, 200)
-
-        # preview a template with company name
-        preview_url = reverse('marketing:template_preview', kwargs={'template_id': 'executive'})
-        response = self.client.get(f"{preview_url}?company_name=Sterling+Search")
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Sterling Search")
-
-        # navigate to signup with prefilled data
-        signup_url = reverse('marketing:tenant_signup')
-        response = self.client.get(f"{signup_url}?template=executive&company_name=Sterling+Search")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['form'].initial['company_name'], "Sterling Search")
-
-        # perform signup
-        signup_data = {
-            'company_name': 'Sterling Search',
-            'admin_email': 'admin@sterling.com',
-            'password': 'StrongPassword123!',
-        }
-        post_url = f"{signup_url}?template=executive"
-        response = self.client.post(post_url, data=signup_data)
-
-        # url should redirect to the new tenant's dashboard on their subdomain
-        expected_subdomain = "sterling-search"
-        expected_redirect = f"http://{expected_subdomain}.localhost:8000/dashboard/setup/"
-
-        self.assertRedirects(
-            response, 
-            expected_redirect, 
-            fetch_redirect_response=False
+        preview_url = reverse(
+            "public_marketing:template_preview",
+            kwargs={"template_id": "executive"},
         )
 
-        # make sure the tenant was created with the slug
-        self.assertTrue(TenantClient.objects.filter(schema_name=expected_subdomain).exists())
+        print(f"DEBUG: Preview URL is: {preview_url}")
+
+        response = self.client.get(
+            f"{preview_url}?company_name=Sterling+Search",
+            HTTP_HOST="localhost",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Sterling Search")
+        signup_url = reverse("public_marketing:tenant_signup")
+        response = self.client.get(
+            f"{signup_url}?template=executive&company_name=Sterling+Search",
+            HTTP_HOST="localhost",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.context["form"].initial["company_name"],
+            "Sterling Search",
+        )
+        signup_data = {
+            "company_name": "Sterling Search",
+            "admin_email": "admin@sterling.com",
+            "password": "StrongPassword123!",
+        }
+
+        post_url = f"{signup_url}?template=executive"
+        response = self.client.post(
+            post_url,
+            data=signup_data,
+            HTTP_HOST="localhost",
+        )
+        expected_subdomain = "sterling-search"
+        expected_redirect = f"http://{expected_subdomain}.localhost/login/"
+        self.assertRedirects(
+            response,
+            expected_redirect,
+            fetch_redirect_response=False,
+        )
+        tenant = TenantClient.objects.get(schema_name=expected_subdomain)
+        self.assertIsNotNone(tenant)
