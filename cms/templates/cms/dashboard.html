@@ -1,16 +1,44 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
-
-{% block title %}Hello, Your dashboard{% endblock %}
+{% block title %}Dashboard | {{ request.tenant.name }}{% endblock %}
 
 {% block content %}
-<h1>Welcome to your dashboard</h1>
-<p>This is your central hub for managing your account and accessing all the features we offer. From here, you can:</p>
-<ul>
-  <li>View and update your profile information</li>
-  <li>Manage your subscriptions and billing details</li>
-  <li>Access exclusive resources and tools</li>
-  <li>Get support and contact our team</li>
-</ul>
-<p>We're excited to have you on board! Explore the dashboard and make the most of your experience with us.</p>
+<div class="theme-{{ request.tenant.template_choice|default:'executive' }} py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <span class="feature-label">Welcome Back</span>
+                <h1 class="display-5 fw-bold">{{ request.tenant.name }}</h1>
+            </div>
+            <a href="{% url 'cms:edit_site' %}" class="btn btn-primary">Edit Site Design</a>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card-brand h-100">
+                    <h3 class="h5">Your Live Site</h3>
+                    <p class="text-muted small">View your site as your candidates see it.</p>
+                    <a href="/" target="_blank" class="btn btn-outline-primary btn-sm">Visit Site &rarr;</a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-brand h-100">
+                    <h3 class="h5">Active Jobs</h3>
+                    <p class="display-6 fw-bold">0</p>
+                    <a href="#" class="btn btn-outline-primary btn-sm">Post a Job</a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-brand h-100">
+                    <h3 class="h5">Branding</h3>
+                    <p class="text-muted small">Your brand color is: <code>{{ profile.primary_color }}</code></p>
+                    <div class="progress" style="height: 5px;">
+                        <div class="progress-bar bg-primary" style="width: 70%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

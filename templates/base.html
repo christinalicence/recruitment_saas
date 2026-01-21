@@ -5,20 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Pillar & Post{% endblock %}</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="{% static 'marketing/css/style.css' %}">
+
+    {% if not request.tenant.schema_name == 'public' %}
+    <style>
+        :root {
+            {% if profile.primary_color %}--brand-primary: {{ profile.primary_color }};{% endif %}
+            {% if profile.secondary_color %}--brand-accent: {{ profile.secondary_color }};{% endif %}
+            {% if profile.logo %}--brand-logo: url("{{ profile.logo.url }}");{% endif %}
+        }
+    </style>
+    {% endif %}
 </head>
-<body>
+
+<body class="{% if profile.logo %}has-logo{% endif %}">
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="/">Pillar & Post</a>
+    <a class="navbar-brand fw-bold" href="/">
+        <span class="navbar-brand-img"></span>
+        <span class="navbar-brand-text">Pillar & Post</span>
+    </a>
+    
     <div class="ms-auto d-flex align-items-center">
     {% if request.tenant.schema_name == 'public' %}
-        <a href="{% url 'public_marketing:template_select' %}\" class="btn btn-primary">Start Free Trial</a>
+        <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary">Start Free Trial</a>
     {% else %}
         {% if user.is_authenticated %}
-            <span class="me-3 text-muted d-none d-md-inline">Hi, {{ user.email }}</span>
+            <span class="me-3 text-muted d-none d-md-inline small">Hi, {{ user.email }}</span>
             <a href="{% url 'cms:dashboard' %}" class="btn btn-primary btn-sm me-2">Dashboard</a>
             <a href="{% url 'tenant_logout' %}" class="btn btn-outline-danger btn-sm">Logout</a>
         {% else %}
@@ -32,16 +49,24 @@
 <div class="container mt-3">
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} shadow-sm">{{ message }}</div>
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         {% endfor %}
     {% endif %}
 </div>
 
-{% block content %}{% endblock %}
+<main>
+    {% block content %}{% endblock %}
+</main>
 
 <footer class="py-5 mt-5 border-top bg-light">
     <div class="container text-center">
-        <p class="text-muted mb-0">&copy; {% now "Y" %} Pillar & Post Recruitment Software.</p>
+        <p class="text-muted mb-1">&copy; {% now "Y" %} Pillar & Post</p>
+        {% if not request.tenant.schema_name == 'public' %}
+            <p class="small text-muted">{{ request.tenant.name }} Portal</p>
+        {% endif %}
     </div>
 </footer>
 

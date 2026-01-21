@@ -1,6 +1,8 @@
-/* --- 1. FONTS & RESETS --- */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lexend:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
 
+
+/* ROOT VARIABLES */
 :root {
     /* Default fallback colors */
     --brand-primary: #1a2a40;
@@ -21,7 +23,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* --- 2. THEME OVERRIDES --- */
+/* THEME OVERRIDES*/
 /* These change the "root" variables based on a parent class */
 
 .theme-executive {
@@ -46,7 +48,7 @@ body {
     --brand-border: 2px solid #000;
 }
 
-/* --- 3. TYPOGRAPHY --- */
+/* HEADERS */
 h1, h2, h3, h4, .brand-title {
     font-family: var(--brand-font);
     font-weight: 700;
@@ -63,7 +65,7 @@ h1, h2, h3, h4, .brand-title {
     margin-bottom: 0.5rem;
 }
 
-/* --- 4. GLOBAL COMPONENTS --- */
+/* GLOBAL COMPONENTS  */
 
 /* Buttons */
 .btn-primary {
@@ -97,7 +99,7 @@ h1, h2, h3, h4, .brand-title {
     transform: translateY(-5px);
 }
 
-/* --- 5. MARKETING & LANDING PAGE --- */
+/*  MARKETING & LANDING PAGE*/
 .hero-section {
     padding: 100px 0;
     background: linear-gradient(180deg, #f4f7f9 0%, #ffffff 100%);
@@ -111,7 +113,7 @@ h1, h2, h3, h4, .brand-title {
     transition: all 0.3s ease;
 }
 
-/* --- 6. ONBOARDING & SIGNUP --- */
+/* ONBOARDING & SIGNUP */
 .signup-page-wrapper {
     min-height: 100vh;
     display: flex;
@@ -133,7 +135,7 @@ h1, h2, h3, h4, .brand-title {
     margin: 0 auto;
 }
 
-/* --- 7. DASHBOARD LAYOUT (CMS) --- */
+/* DASHBOARD LAYOUT (CMS)*/
 .dashboard-wrapper {
     display: flex;
     min-height: 100vh;
@@ -159,7 +161,7 @@ h1, h2, h3, h4, .brand-title {
     color: white;
 }
 
-/* --- 8. PREVIEW FRAME --- */
+/*PREVIEW FRAME */
 /* The sticky bar at the bottom of the preview page */
 .preview-cta-bar {
     position: fixed;
@@ -182,3 +184,28 @@ h1, h2, h3, h4, .brand-title {
 /* Utility */
 .text-balance { text-wrap: balance; }
 .py-section { padding: 80px 0; }
+
+
+/* Branding that adapts to tenant settings */
+
+/* Logo Placeholder */
+.navbar-brand-img {
+    display: inline-block;
+    width: 180px;
+    height: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-image: var(--brand-logo, none);
+}
+
+/* Hide text if logo exists */
+.has-logo .navbar-brand-text {
+    display: none;
+}
+
+/* Background transition for smooth color changes */
+body {
+    background-color: var(--brand-bg, #ffffff);
+    transition: background-color 0.3s ease;
+}

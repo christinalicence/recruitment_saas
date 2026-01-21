@@ -33,12 +33,16 @@ def dashboard_setup_editor(request):
 @login_required
 def dashboard(request):
     """The main dashboard for the tenant."""
-    # SECURITY CHECK: Ensure the user belongs to this tenant
-    # This assumes your User model has a relationship to the Client model
+    # Ensure the user belongs to this tenant
     if hasattr(request.user, 'tenant') and request.user.tenant != request.tenant:
-        raise PermissionDenied # This will return the 403 your test expects
-        
-    return render(request, 'cms/dashboard.html')
+        raise PermissionDenied 
+    # Get or create the profile so we have the branding colors
+    profile, _ = CompanyProfile.objects.get_or_create(
+        id=1, 
+        defaults={'display_name': request.tenant.name}
+    )
+    return render(request, 'cms/dashboard.html', {'profile': profile})
+
 
 @login_required
 def job_list(request):
