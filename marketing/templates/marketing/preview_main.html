@@ -1,39 +1,29 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Template Preview | Pillar & Post{% endblock %}
+{% block title %}Template Preview | Pillar & Post{% endblock % %}
 
 {% block content %}
-<div class="preview-frame theme-{{ template_id }}">
-    <div class="hero-area">
+<div class="theme-{{ template_id }}">
+    <div class="hero-section text-center">
         <div class="container">
-            <header class="d-flex justify-content-between align-items-center mb-5 pb-3">
-                <h2 class="h2">{{ company_name }}</h2>
-                <nav class="d-none d-md-block">
-                    <span class="mx-2 small">JOBS</span>
-                    <span class="mx-2 small">ABOUT</span>
-                </nav>
-            </header>
-
-            <div class="text-center py-5">
-                <h1 class="display-4 fw-bold mb-3">Connecting Talent with Great Opportunities</h1>
-                <p class="lead opacity-75">High quality specialist recruiters.</p>
-            </div>
+            <span class="feature-label">Welcome to</span>
+            <h1 class="display-4 mb-3">{{ company_name }}</h1>
+            <p class="lead text-muted mx-auto" style="max-width: 600px;">Connecting Talent with Great Opportunities. High quality specialist recruiters.</p>
         </div>
     </div>
 
     <div class="container py-5">
         <div class="row">
-            <h3 class="h5 mb-4">Latest Roles</h3>
+            <h3 class="h4 mb-4">Latest Roles</h3>
             {% for job in jobs %}
-            <div class="col-12 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="fw-bold">{{ job.title }}</h5>
-                        <p class="text-muted small">{{ job.summary }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="small fw-bold">{{ job.location }} | {{ job.salary }}</span>
-                            <span class="btn btn-primary btn-sm">Apply Now</span>
-                        </div>
+            <div class="col-md-6 mb-4">
+                <div class="card-brand">
+                    <span class="feature-label">{{ job.location }}</span>
+                    <h5 class="fw-bold">{{ job.title }}</h5>
+                    <p class="text-muted small">{{ job.summary }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="fw-bold">{{ job.salary }}</span>
+                        <span class="btn btn-primary btn-sm">Apply Now</span>
                     </div>
                 </div>
             </div>
@@ -44,12 +34,12 @@
     <div class="preview-cta-bar">
         <div class="container">
             <div class="cta-flex-container">
-                <div class="cta-text">
-                    <span class="cta-label">Design: {{ template_id|title }}</span>
-                    <p class="cta-subtext">Previewing as: <strong>{{ company_name }}</strong></p>
+                <div>
+                    <span class="badge bg-dark mb-1">Previewing: {{ template_id|title }}</span>
+                    <p class="mb-0 small text-muted">Ready to make this yours?</p>
                 </div>
                 <a href="{% url 'public_marketing:tenant_signup' %}?template={{ template_id }}&company_name={{ company_name|urlencode }}" 
-                   class="btn btn-primary cta-btn">
+                   class="btn btn-primary">
                     Claim this Design & Continue →
                 </a>
             </div>

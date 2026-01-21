@@ -1,126 +1,176 @@
-/* Import Google Fonts */
+/* --- 1. FONTS & RESETS --- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lexend:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
 
-/* --- GLOBAL BRAND STYLES --- */
 :root {
-    --brand-primary: #1a2a40; 
+    /* Default fallback colors */
+    --brand-primary: #1a2a40;
     --brand-accent: #0056b3;
-    --brand-light: #f4f7f9;
+    --brand-bg-light: #f8f9fa;
+    --brand-text: #212529;
+    --brand-font: 'Inter', sans-serif;
+    --brand-radius: 8px;
+    --brand-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 body {
     margin: 0;
     padding: 0;
+    font-family: var(--brand-font);
+    color: var(--brand-text);
+    background-color: #ffffff;
     -webkit-font-smoothing: antialiased;
 }
 
-/* --- THEME DEFINITIONS --- */
+/* --- 2. THEME OVERRIDES --- */
+/* These change the "root" variables based on a parent class */
+
 .theme-executive {
-    --theme-p: #1a2a40; 
-    --theme-acc: #c9a961; 
-    --theme-font: 'Inter', sans-serif; 
-    --theme-radius: 0px;
-    --theme-ls: 0px;
+    --brand-primary: #1a2a40; 
+    --brand-accent: #c9a961; 
+    --brand-font: 'Inter', sans-serif; 
+    --brand-radius: 0px;
 }
 
 .theme-startup {
-    --theme-p: #0d6efd; 
-    --theme-acc: #ffca28; 
-    --theme-font: 'Lexend', sans-serif; 
-    --theme-radius: 50px;
-    --theme-ls: -0.5px;
+    --brand-primary: #0d6efd; 
+    --brand-accent: #ffca28; 
+    --brand-font: 'Lexend', sans-serif; 
+    --brand-radius: 50px;
 }
 
 .theme-boutique {
-    --theme-p: #000000; 
-    --theme-acc: #333; 
-    --theme-font: 'Space Grotesk', sans-serif; 
-    --theme-radius: 0px;
-    --theme-ls: 2px; /* Native Boutique Spacing */
+    --brand-primary: #000000; 
+    --brand-accent: #333333; 
+    --brand-font: 'Space Grotesk', sans-serif; 
+    --brand-radius: 4px;
+    --brand-border: 2px solid #000;
 }
 
-/* --- SHARED COMPONENT LOGIC --- */
-.template-card, .preview-frame {
-    font-family: var(--theme-font);
-}
-
-.template-card {
-    border: 1px solid #e1e8ed;
-    border-top: 6px solid var(--theme-p);
-    padding: 2.5rem 1.5rem;
-    background: #fff;
-    transition: transform 0.2s ease;
-    display: flex;
-    flex-direction: column;
-}
-
-.template-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+/* --- 3. TYPOGRAPHY --- */
+h1, h2, h3, h4, .brand-title {
+    font-family: var(--brand-font);
+    font-weight: 700;
+    color: var(--brand-primary);
 }
 
 .feature-label {
+    display: inline-block;
+    color: var(--brand-primary);
     text-transform: uppercase;
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: var(--theme-ls, 1.5px);
-    color: var(--theme-p);
-    display: block;
-    margin-bottom: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
 }
 
-/* Theme-Aware Buttons */
-.theme-executive .btn-primary, 
-.theme-startup .btn-primary, 
-.theme-boutique .btn-primary,
-.cta-btn {
-    background-color: var(--theme-p) !important;
-    border-radius: var(--theme-radius) !important;
-    border: none;
-    padding: 10px 24px;
+/* --- 4. GLOBAL COMPONENTS --- */
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--brand-primary) !important;
+    border-color: var(--brand-primary) !important;
+    font-family: var(--brand-font);
+    border-radius: var(--brand-radius) !important;
+    padding: 12px 28px;
     font-weight: 600;
-    color: white !important;
+    transition: all 0.3s ease;
+    border: var(--brand-border, none);
 }
 
-/* --- PREVIEW UI --- */
-.preview-frame {
-    padding-bottom: 120px;
+.btn-primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Cards */
+.card-brand {
+    background: #fff;
+    border-radius: var(--brand-radius);
+    padding: 2rem;
+    border: var(--brand-border, 1px solid #eee);
+    box-shadow: var(--brand-shadow);
+    transition: transform 0.3s ease;
+}
+
+.card-brand:hover {
+    transform: translateY(-5px);
+}
+
+/* --- 5. MARKETING & LANDING PAGE --- */
+.hero-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, #f4f7f9 0%, #ffffff 100%);
+}
+
+.feature-card {
+    padding: 2.5rem;
+    border-radius: 16px;
+    background: white;
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+/* --- 6. ONBOARDING & SIGNUP --- */
+.signup-page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background-color: var(--brand-bg-light);
+}
+
+.signup-container {
+    width: 100%;
+}
+
+.signup-card {
+    background: white;
+    padding: 3rem;
+    border-radius: var(--brand-radius);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    border: var(--brand-border, none);
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+/* --- 7. DASHBOARD LAYOUT (CMS) --- */
+.dashboard-wrapper {
+    display: flex;
     min-height: 100vh;
 }
 
-.hero-area {
-    background-color: var(--theme-p);
+.sidebar {
+    width: 280px;
+    background-color: var(--brand-primary);
     color: white;
-    padding: 100px 0;
-    border-bottom: 4px solid var(--theme-acc);
+    padding: 2rem;
 }
 
-.hero-area .h2, .hero-area h1 {
-    letter-spacing: var(--theme-ls);
+.sidebar .nav-link {
+    color: rgba(255,255,255,0.7);
+    padding: 12px 15px;
+    border-radius: var(--brand-radius);
+    margin-bottom: 5px;
+    transition: all 0.2s;
 }
 
-.theme-boutique .hero-area {
-    background-color: #ffffff;
-    color: #000000;
-    border-bottom: 1px solid #000000;
+.sidebar .nav-link:hover, .sidebar .nav-link.active {
+    background: rgba(255,255,255,0.1);
+    color: white;
 }
 
-.theme-boutique .card {
-    border: 1px solid #000;
-    border-radius: 0;
-}
-
-/* --- CONVERSION CTA BAR for preview --- */
+/* --- 8. PREVIEW FRAME --- */
+/* The sticky bar at the bottom of the preview page */
 .preview-cta-bar {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background: #ffffff;
-    border-top: 1px solid #eeeeee;
+    background: white;
     padding: 1.5rem 0;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
-    z-index: 1050;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+    z-index: 1000;
 }
 
 .cta-flex-container {
@@ -129,202 +179,6 @@ body {
     align-items: center;
 }
 
-.cta-label {
-    display: block;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    color: var(--theme-p);
-    letter-spacing: var(--theme-ls, 1px);
-}
-
-.cta-subtext {
-    margin: 0;
-    color: #6c757d;
-    font-size: 0.9rem;
-}
-
-/* --- SIGNUP PAGE LAYOUT --- */
-.signup-page-wrapper {
-    background-color: var(--brand-light);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--theme-font);
-}
-
-.signup-container {
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-}
-
-.signup-card {
-    background: #ffffff;
-    padding: 3rem;
-    border-radius: 8px;
-    border-top: 6px solid var(--theme-p);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-}
-
-/* Typography matching the theme */
-.signup-title {
-    font-weight: 800;
-    color: var(--theme-p);
-    margin-bottom: 0.5rem;
-    letter-spacing: var(--theme-ls, 0px);
-}
-
-.signup-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.signup-subtitle {
-    color: #6c757d;
-    font-size: 0.95rem;
-}
-
-/* Form Spacing */
-.signup-form .form-group {
-    margin-bottom: 1.25rem;
-}
-
-.signup-action {
-    margin-top: 2rem;
-}
-
-/* Boutique Override: High contrast, no shadows */
-.theme-boutique .signup-card {
-    border: 2px solid #000;
-    box-shadow: none;
-    border-radius: 0;
-}
-
-.theme-boutique .signup-page-wrapper {
-    background-color: #ffffff;
-}
-
-/* --- DASHBOARD SETUP PAGE --- */
-.setup-wrapper {
-    background-color: var(--brand-light);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--theme-font); /* Respects theme font */
-}
-
-.setup-container {
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-}
-
-.setup-card {
-    background: #ffffff;
-    padding: 3rem;
-    border-top: 6px solid var(--theme-p); /* Uses theme primary color */
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-}
-
-.setup-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.setup-label {
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--theme-p);
-    display: block;
-    margin-bottom: 1rem;
-}
-
-.setup-title {
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-}
-
-.setup-url {
-    display: block;
-    font-weight: 700;
-    color: var(--brand-primary);
-    margin-top: 5px;
-}
-
-.checklist-title {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #6c757d;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-}
-
-.checklist-list {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 2rem;
-}
-
-.checklist-item {
-    padding: 10px 0;
-    border-bottom: 1px solid #f0f0f0;
-    color: #495057;
-}
-
-.checklist-item.done {
-    color: #28a745;
-    font-weight: 600;
-}
-
-.setup-footer .btn-primary {
-    width: 100%;
-    padding: 12px;
-}
-
-/* Boutique-Specific Refinement (High Contrast) */
-.theme-boutique .setup-card {
-    border: 2px solid #000;
-    box-shadow: none;
-    border-radius: 0;
-}
-
-/* Tab Styling for the Editor */
-.nav-tabs .nav-link {
-    color: #6c757d;
-    font-weight: 600;
-    border: none;
-    border-bottom: 2px solid transparent;
-}
-
-.nav-tabs .nav-link.active {
-    color: var(--theme-p);
-    border-bottom: 2px solid var(--theme-p);
-    background: none;
-}
-
-/* Color Picker Styling */
-.form-control-color {
-    width: 100%;
-    height: 45px;
-    padding: 5px;
-    cursor: pointer;
-}
-
-/* Reusable Editor Card */
-.editor-card {
-    background: #ffffff;
-    padding: 2.5rem;
-    border-radius: var(--theme-radius, 8px);
-    border-top: 6px solid var(--theme-p);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-}
-
-/* Boutique Override (Existing logic preserved) */
-.theme-boutique .editor-card {
-    border: 2px solid #000;
-    box-shadow: none;
-}
+/* Utility */
+.text-balance { text-wrap: balance; }
+.py-section { padding: 80px 0; }

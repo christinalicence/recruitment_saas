@@ -30,3 +30,7 @@ For cleaning up db
 from customers.models import Client
 # Delete all clients except the one named 'public'
 Client.objects.exclude(schema_name='public').delete()
+
+# List the clients in the db
+for tenant in Client.objects.all():
+    print(f"Name: {tenant.name} | Schema: {tenant.schema_name}")

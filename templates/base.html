@@ -15,11 +15,11 @@
     <a class="navbar-brand fw-bold" href="/">Pillar & Post</a>
     <div class="ms-auto d-flex align-items-center">
     {% if request.tenant.schema_name == 'public' %}
-        <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary">Start Free Trial</a>
+        <a href="{% url 'public_marketing:template_select' %}\" class="btn btn-primary">Start Free Trial</a>
     {% else %}
         {% if user.is_authenticated %}
-            <span class="me-3 text-muted">Hi, {{ user.email }}</span>
-            <a href="{% url 'cms:dashboard' %}" class="btn btn-outline-primary btn-sm me-2">Dashboard</a>
+            <span class="me-3 text-muted d-none d-md-inline">Hi, {{ user.email }}</span>
+            <a href="{% url 'cms:dashboard' %}" class="btn btn-primary btn-sm me-2">Dashboard</a>
             <a href="{% url 'tenant_logout' %}" class="btn btn-outline-danger btn-sm">Logout</a>
         {% else %}
             <a href="{% url 'tenant_login' %}" class="btn btn-primary btn-sm">Login</a>
@@ -32,16 +32,16 @@
 <div class="container mt-3">
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            <div class="alert alert-{{ message.tags }} shadow-sm">{{ message }}</div>
         {% endfor %}
     {% endif %}
 </div>
 
 {% block content %}{% endblock %}
 
-<footer class="py-4 mt-5 footer-custom border-top">
+<footer class="py-5 mt-5 border-top bg-light">
     <div class="container text-center">
-        <p class="text-muted mb-0">&copy; 2026 Pillar & Post. Smart, Professional, Easy to Use, Low-Cost.</p>
+        <p class="text-muted mb-0">&copy; {% now "Y" %} Pillar & Post Recruitment Software.</p>
     </div>
 </footer>
 
