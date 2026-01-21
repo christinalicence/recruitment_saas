@@ -40,6 +40,7 @@ SHARED_APPS = (
     "django_tenants",
     "customers",
     "marketing",
+    "cms",
     "crispy_forms",
     "crispy_bootstrap5",
     "django.contrib.admin",
@@ -64,7 +65,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
-   "recruit_saas.debug_middleware.CustomTenantMiddleware", 
+    "recruit_saas.debug_middleware.CustomTenantMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -126,7 +127,7 @@ TENANT_REMOVE_WWW = False
 
 # URL directs 
 PUBLIC_SCHEMA_URLCONF = 'recruit_saas.urls'
-TENANT_URLCONF = 'marketing.urls_tenant'
+TENANT_URLCONF = 'recruit_saas.urls_tenant'
 PUBLIC_SCHEMA_NAME = "public"
 REMOVE_URL_CONF_CACHE_ON_SETTINGS_CHANGE = True
 
@@ -173,7 +174,4 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#

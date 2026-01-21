@@ -22,4 +22,19 @@ User Flow (signed up)
 - Dashboard
 
 Persistant Bug
-Getting a 404 error when trying to hit a subdomain, because django's middleware didn't use the correct url file (it kept hitting the one at the root rather than the one in the marketing app)
+Getting a 404 error when trying to hit a subdomain, because django's middleware didn't use the correct url file (it kept hitting the one at the root rather than the one in the marketing app). Solved locally through adapting some bespoke middleware code. This is likely to need more attention during deployment.
+
+Migrations
+
+Need to be applied to tenant or public egs of commands
+python3 manage.py makemigrations cms
+python3 manage.py migrate_schemas --tenants
+python3 manage.py migrate_schemas --shared
+
+
+Credits 
+
+https://testdriven.io/blog/django-multi-tenant/
+https://django-tenants.readthedocs.io/en/latest/install.html 
+https://github.com/django-tenants/django-tenants/issues/28 
+https://pypi.org/project/Django-Subdomain-Middleware/

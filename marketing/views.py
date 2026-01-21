@@ -18,20 +18,32 @@ def tenant_signup(request):
         company_name = form.cleaned_data["company_name"]
         admin_email = form.cleaned_data["admin_email"]
         password = form.cleaned_data["password"]
+        
         # make tenant
         tenant, created = Client.objects.get_or_create(
             name=company_name,
             defaults={'template_choice': template_id, 'on_trial': True}
         )
+        
         # make domain
         host_full = request.get_host()  # e.g. "localhost:8000"
-        # ensure port is not included in the domain stored in DB
-        base_domain_no_port = host_full.split(':')[0] 
-        full_domain_db = f"{tenant.schema_name}.{base_domain_no_port}"
+        base_domain_no_port = host_full.split(':')[0]
+        
+        # Store domain WITHOUT port (for production)
+        full_domain_no_port = f"{tenant.schema_name}.{base_domain_no_port}"
         Domain.objects.get_or_create(
-            domain=full_domain_db,
+            domain=full_domain_no_port,
             defaults={'tenant': tenant, 'is_primary': True}
         )
+        
+        # ALSO store domain WITH port (for local development)
+        if ':' in host_full:
+            full_domain_with_port = f"{tenant.schema_name}.{host_full}"
+            Domain.objects.get_or_create(
+                domain=full_domain_with_port,
+                defaults={'tenant': tenant, 'is_primary': False}
+            )
+        
         # create superuser in tenant schema
         with schema_context(tenant.schema_name):
             if not User.objects.filter(username=admin_email).exists():
@@ -40,11 +52,12 @@ def tenant_signup(request):
                     email=admin_email,
                     password=password
                 )
+        
         # redirect to tenant subdomain login
         is_local = "localhost" in host_full or "127.0.0.1" in host_full
         protocol = "http" if is_local else "https"
-        # We use host_full here so the browser includes the port (e.g., :8000)
         redirect_url = f"{protocol}://{tenant.schema_name}.{host_full}/login/"
+        
         return redirect(redirect_url)
 
     return render(request, "marketing/signup.html", {"form": form, "template_id": template_id})
