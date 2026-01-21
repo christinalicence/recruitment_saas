@@ -25,3 +25,8 @@ Tenant Login Page	http://test-co.localhost:8000/login/
 Tenant Dashboard	http://test-co.localhost:8000/dashboard/
 
 These are test links when run locally.
+
+For cleaning up db
+from customers.models import Client
+# Delete all clients except the one named 'public'
+Client.objects.exclude(schema_name='public').delete()

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import CompanyProfile
 from .forms import CompanyProfileForm
+from django.core.exceptions import PermissionDenied
 
 
 @login_required
@@ -29,12 +30,15 @@ def dashboard_setup_editor(request):
         "tenant": request.tenant
     })
 
-
 @login_required
 def dashboard(request):
     """The main dashboard for the tenant."""
+    # SECURITY CHECK: Ensure the user belongs to this tenant
+    # This assumes your User model has a relationship to the Client model
+    if hasattr(request.user, 'tenant') and request.user.tenant != request.tenant:
+        raise PermissionDenied # This will return the 403 your test expects
+        
     return render(request, 'cms/dashboard.html')
-
 
 @login_required
 def job_list(request):

@@ -65,7 +65,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
-    "recruit_saas.debug_middleware.CustomTenantMiddleware",
+    'recruit_saas.debug_middleware.CustomTenantMiddleware',  # Custom middleware for tenant resolution
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
