@@ -1,55 +1,68 @@
 {% extends "base.html" %}
-{% load static %}
-
-{% block title %}Pillar & Post | Professional Recruitment Software{% endblock %}
+{% block title %}Pillar & Post | Professional Recruitment Websites{% endblock %}
 
 {% block content %}
-<section class="hero-section">
-  <div class="container text-center">
-    <h1 class="display-3 brand-title mb-3">Pillar & Post</h1>
-    <p class="lead mb-5 text-muted mx-auto" style="max-width: 700px;">
-      Smart, professional recruitment sites that are easy to use, while still being low cost. Built for modern companies who value substance over complexity.
-    </p>
-    <div class="d-flex justify-content-center gap-3">
-      <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary btn-lg px-5">Start Your Free Trial</a>
-      <a href="#about" class="btn btn-link text-decoration-none text-dark fw-bold">Learn more &rarr;</a>
+<section class="py-5 text-center bg-white">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold brand-title mb-4">Your Recruitment Company, <br>Beautifully Branded.</h1>
+                <p class="lead text-muted mb-5">Create a stunning, professional job board and website in minutes. No coding required.</p>
+                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                    <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary btn-lg px-5">Build Your Site</a>
+                    <a href="{% url 'public_marketing:template_select' %}" class="btn btn-light btn-lg px-5 border">View Templates</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div class="col d-flex align-items-start">
+                <div>
+                    <h3 class="fw-bold mb-3">Instant Setup</h3>
+                    <p>Launch your website immediately. Just choose a template, add your logo, and you're live.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <div>
+                    <h3 class="fw-bold mb-3">Job Management</h3>
+                    <p>Easy-to-use dashboard to post jobs, manage applications, and track your recruitment pipeline.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <div>
+                    <h3 class="fw-bold mb-3">Custom Domains</h3>
+                    <p>Every company gets their own dedicated subdomain or can connect a custom professional domain.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white border-top border-bottom">
+  <div class="container py-4">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h2 class="fw-bold mb-3">Already a member?</h2>
+        <p class="text-muted mb-0">Access your recruitment dashboard to manage jobs and customise your site.</p>
+      </div>
+      <div class="col-lg-6 text-lg-end mt-4 mt-lg-0">
+        <a href="{% url 'public_marketing:tenant_login' %}" class="btn btn-outline-dark btn-lg px-5">
+            Log in to your Account
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="about" class="py-5">
-  <div class="container py-5">
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="feature-card h-100">
-          <span class="feature-label">Efficiency</span>
-          <h3 class="h5 fw-bold">Ease and Simplicity</h3>
-          <p class="text-muted mb-0">Manage your online posting quickly and easily.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="feature-card h-100">
-          <span class="feature-label">Identity</span>
-          <h3 class="h5 fw-bold">Professional Design</h3>
-          <p class="text-muted mb-0">Establish immediate authority with clean, high-performance templates designed specifically for recruitment consultants.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="feature-card h-100">
-          <span class="feature-label">Value</span>
-          <h3 class="h5 fw-bold">Accessible Pricing</h3>
-          <p class="text-muted mb-0">Bespoke-level software without the enterprise price tag. Simple, predictable monthly costs for growing teams.</p>
-        </div>
-      </div>
+<section class="py-5 text-center">
+    <div class="container py-5">
+        <h2 class="fw-bold mb-4">Ready to take your company to the next level?</h2>
+        <p class="mb-5 text-muted">Design and make your website with us.</p>
+        <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary btn-lg px-5">Start Your Free Trial</a>
     </div>
-  </div>
-</section>
-
-<section class="cta-section py-5">
-  <div class="container py-4 text-center">
-    <h2 class="fw-bold mb-4">Ready to launch your recruitment site?</h2>
-    <p class="mb-4 opacity-75">Join the growing list of agencies using Pillar & Post. No credit card required for your 14-day trial.</p>
-    <a href="{% url 'public_marketing:template_select' %}" class="btn btn-light btn-lg px-5 text-primary fw-bold">Get Started Now</a>
-  </div>
 </section>
 {% endblock %}
