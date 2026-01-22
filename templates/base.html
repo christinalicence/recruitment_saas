@@ -1,4 +1,5 @@
 {% load static %}
+{% load tenant_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,9 +19,9 @@
       {% if profile.logo %}data-logo-url="{{ profile.logo.url }}"{% endif %}
       {% endif %}>
 
-<nav class="navbar navbar-expand-lg navbar-light sticky-top" id="main-navbar">
+<nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/">
+        <a class="navbar-brand fw-bold" href="{% if request.tenant.schema_name == 'public' %}{% url 'public_marketing:landing' %}{% else %}/{% endif %}">
             <span class="navbar-brand-img"></span>
             <span class="navbar-brand-text">Pillar & Post</span>
         </a>
@@ -31,13 +32,12 @@
         
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
-                
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="{% if request.tenant.schema_name == 'public' %}{% url 'public_marketing:landing' %}{% else %}/{% endif %}">Home</a>
                 </li>
           
                 <li class="nav-item">
-                    <a class="nav-link" href="/about/">About Pillar & Post</a>
+                    <a class="nav-link" href="{% public_url 'about' %}" {% if request.tenant.schema_name != 'public' %}target="_blank"{% endif %}>About Pillar & Post</a>
                 </li>
 
                 {% if user.is_authenticated and request.tenant.schema_name != 'public' %}

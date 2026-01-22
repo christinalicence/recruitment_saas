@@ -10,6 +10,11 @@
     --brand-font: 'Inter', sans-serif;
     --brand-radius: 8px;
     --brand-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    
+    /* Navbar uses background color with high contrast text */
+    --navbar-bg: var(--brand-bg, #ffffff);
+    --navbar-text: var(--brand-text);
+    --navbar-border: rgba(0, 0, 0, 0.1);
 }
 
 /* DYNAMIC BRANDING */
@@ -71,15 +76,20 @@ h1, h2, h3, h4, .brand-title {
     margin-bottom: 0.5rem;
 }
 
-/* NAVBAR */
+/* NAVBAR - Uses CSS variables set by dynamic-branding.js */
 .navbar {
-    background-color: #ffffff;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: var(--navbar-bg);
+    border-bottom: 1px solid var(--navbar-border);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    transition: background-color 0.3s ease;
+}
+
+.navbar-brand {
+    color: var(--navbar-text) !important;
 }
 
 .navbar .nav-link {
-    color: var(--brand-text);
+    color: var(--navbar-text);
     font-weight: 500;
     padding: 0.5rem 1rem;
     transition: color 0.2s ease;
@@ -89,14 +99,22 @@ h1, h2, h3, h4, .brand-title {
     color: var(--brand-primary);
 }
 
-/* Navbar buttons stay themed */
-.navbar .btn-primary {
-    padding: 8px 20px;
+.navbar .dropdown-toggle {
+    color: var(--navbar-text);
+}
+
+/* Navbar toggler for mobile */
+.navbar-toggler {
+    border-color: var(--navbar-border);
+}
+
+.navbar-toggler-icon {
+    filter: var(--toggler-filter, none);
 }
 
 /* Dropdown menu styling */
 .dropdown-menu {
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--navbar-border);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
@@ -110,6 +128,8 @@ h1, h2, h3, h4, .brand-title {
     background-color: var(--brand-bg-light);
     color: var(--brand-primary);
 }
+
+/* GLOBAL COMPONENTS */
 
 /* Buttons */
 .btn-primary {
@@ -127,6 +147,11 @@ h1, h2, h3, h4, .brand-title {
     filter: brightness(1.1);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Navbar-specific button sizing */
+.navbar .btn-primary {
+    padding: 8px 20px;
 }
 
 /* Cards */
