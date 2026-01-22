@@ -49,3 +49,34 @@ def job_list(request):
     """The list of jobs for the tenant."""
     # Placeholder implementation
     return render(request, 'cms/job_list.html')
+
+
+# cms/views.py
+
+def home(request):
+    """
+    The Public Homepage for a Tenant's site.
+    This is what candidates see.
+    """
+    # Get the branding profile
+    profile, _ = CompanyProfile.objects.get_or_create(
+        id=1, 
+        defaults={'display_name': request.tenant.name}
+    )
+    # Grab the latest jobs to show on the landing page
+    from .models import Job
+    latest_jobs = Job.objects.all().order_by('-id')[:3]
+
+    return render(request, "cms/home.html", {
+        "profile": profile,
+        "latest_jobs": latest_jobs,
+    })
+
+
+def about(request):
+    """The Public About Us page."""
+    profile, _ = CompanyProfile.objects.get_or_create(
+        id=1, 
+        defaults={'display_name': request.tenant.name}
+    )
+    return render(request, "cms/about.html", {"profile": profile})

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}About Us | {{ profile.display_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-4" style="color: var(--brand-primary);">
+            {{ profile.about_title|default:"Our Story" }}
+        </h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="lead">
+                    {{ profile.about_content|linebreaks }}
+                </div>
+            </div>
+            {% if profile.team_photo %}
+            <div class="col-md-6">
+                <img src="{{ profile.team_photo.url }}" class="img-fluid rounded shadow" alt="Our Team">
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

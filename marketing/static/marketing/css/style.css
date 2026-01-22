@@ -71,7 +71,45 @@ h1, h2, h3, h4, .brand-title {
     margin-bottom: 0.5rem;
 }
 
-/* GLOBAL COMPONENTS */
+/* NAVBAR */
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.navbar .nav-link {
+    color: var(--brand-text);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: color 0.2s ease;
+}
+
+.navbar .nav-link:hover {
+    color: var(--brand-primary);
+}
+
+/* Navbar buttons stay themed */
+.navbar .btn-primary {
+    padding: 8px 20px;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+}
+
+.dropdown-item:hover {
+    background-color: var(--brand-bg-light);
+    color: var(--brand-primary);
+}
 
 /* Buttons */
 .btn-primary {
