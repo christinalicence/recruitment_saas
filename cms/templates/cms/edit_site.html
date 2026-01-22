@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
 <div class="theme-{{ tenant.template_choice|default:'executive' }} py-5 bg-light">
@@ -11,28 +12,55 @@
 
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                
+
                 <ul class="nav nav-tabs mb-4" id="editorTabs" role="tablist">
                     <li class="nav-item">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#branding">1. Identity</button>
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#branding" type="button">1. Identity</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#landing">2. Content</button>
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#landing" type="button">2. Content</button>
                     </li>
                 </ul>
 
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="branding">
+                <div class="tab-content" id="editorTabsContent">
+                    <div class="tab-pane fade show active" id="branding" role="tabpanel">
                         <div class="row g-3">
-                            <div class="col-12">{{ form.display_name|as_crispy_field }}</div>
-                            <div class="col-md-6">{{ form.logo|as_crispy_field }}</div>
-                            <div class="col-md-6">{{ form.primary_color|as_crispy_field }}</div>
+                            <div class="col-12">
+                                {{ form.display_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-12">
+                                {{ form.logo|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.primary_color|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.secondary_color|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.background_color|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div id="contrast-warning" class="alert alert-warning mt-3 d-none border-start border-4 border-warning">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <strong>Low Contrast Detected</strong><br>
+                                    <small>Your primary color might be hard to read against the background. Try a darker brand color or a lighter background.</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="tab-pane fade" id="landing">
-                        {{ form.hero_title|as_crispy_field }}
-                        {{ form.hero_text|as_crispy_field }}
+
+                    <div class="tab-pane fade" id="landing" role="tabpanel">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                {{ form.hero_title|as_crispy_field }}
+                            </div>
+                            <div class="col-12">
+                                {{ form.hero_text|as_crispy_field }}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -43,4 +71,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'cms/js/contrast-checker.js' %}"></script>
 {% endblock %}

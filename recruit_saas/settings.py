@@ -40,7 +40,6 @@ SHARED_APPS = (
     "django_tenants",
     "customers",
     "marketing",
-    "cms",
     "crispy_forms",
     "crispy_bootstrap5",
     "django.contrib.admin",

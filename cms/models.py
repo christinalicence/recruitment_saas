@@ -7,6 +7,7 @@ class CompanyProfile(models.Model):
     logo = models.ImageField(upload_to='logos/', null=True, blank=True)
     primary_color = models.CharField(max_length=7, default="#007bff")
     secondary_color = models.CharField(max_length=7, default="#6c757d")
+    background_color = models.CharField(max_length=7, default="#ffffff")
     # Page 1: Landing Page (Hero Section)
     hero_title = models.CharField(max_length=200, default="Great Careers Await")
     hero_text = models.TextField(blank=True, help_text="The main pitch to candidates")
