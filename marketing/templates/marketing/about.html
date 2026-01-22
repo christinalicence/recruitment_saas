@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}About Pillar & Post{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container" style="max-width: 800px;">
+        <h1 class="brand-title mb-4">About Pillar & Post</h1>
+        
+        <p class="lead">Pillar & Post helps recruitment agencies and companies create beautiful, branded websites in minutes.</p>
+        
+        <h2 class="h4 mt-5 mb-3">Features</h2>
+        <ul>
+            <li>Instant branded job boards</li>
+            <li>Multiple design themes</li>
+            <li>Custom colors and logos</li>
+            <li>Easy job management</li>
+        </ul>
+        
+        <div class="mt-5 pt-4 border-top">
+            <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary">Get Started Free</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

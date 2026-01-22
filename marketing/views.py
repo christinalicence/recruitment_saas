@@ -108,3 +108,6 @@ def tenant_login(request):
 def tenant_logout(request):
     logout(request)
     return redirect('public_marketing:landing')
+
+def about_page(request):
+    return render(request, "marketing/about.html")
