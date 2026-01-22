@@ -2,6 +2,8 @@
 
 Django tenants - keeps data seperate, tidy. Must use PostgreSQL, set up using Neon. Built using subdomains on tenants because it keeps cookies and data completely seperate, rather than folders which is an option. 
 
+Using 1 shared db, but seperate schema's per client. This is GDPR compliant
+
 User is created on signup with 14 day trial
         (need to improve password for new users)
 
@@ -31,6 +33,10 @@ python3 manage.py makemigrations cms
 python3 manage.py migrate_schemas --tenants
 python3 manage.py migrate_schemas --shared
 
+Dynamic CSS
+- context processor acceses the settings in different html files, 
+and dynamic branding js file needed to get this working with different browsers
+
 
 Credits 
 
@@ -38,3 +44,4 @@ https://testdriven.io/blog/django-multi-tenant/
 https://django-tenants.readthedocs.io/en/latest/install.html 
 https://github.com/django-tenants/django-tenants/issues/28 
 https://pypi.org/project/Django-Subdomain-Middleware/
+https://lincolnloop.com/blog/user-generated-themes-django-css/
