@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lexend:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
 
-/* ROOT VARIABLES */
+/* 1. ROOT VARIABLES - The Master Defaults (P&P Colors) */
 :root {
-    /* Default fallback colors */
     --brand-primary: #1a2a40;
     --brand-accent: #0056b3;
     --brand-bg-light: #f8f9fa;
@@ -11,83 +10,77 @@
     --brand-radius: 8px;
     --brand-shadow: 0 4px 12px rgba(0,0,0,0.08);
     
-    /* Navbar uses background color with high contrast text */
-    --navbar-bg: var(--brand-bg, #ffffff);
+    --navbar-bg: #ffffff;
     --navbar-text: var(--brand-text);
     --navbar-border: rgba(0, 0, 0, 0.1);
 }
 
-/* DYNAMIC BRANDING */
-/* Note: Dynamic colors, backgrounds, and logos are applied via dynamic-branding.js */
-/* This is because CSS attr() function has limited browser support for custom properties */
+/* 2. BRANDING LOGIC - This controls the context */
 
+/* Force P&P Branding on the main marketing site */
+body.marketing-site {
+    --brand-primary: #1a2a40 !important;
+    --brand-accent: #0056b3 !important;
+    --brand-radius: 8px !important;
+    --brand-font: 'Inter', sans-serif !important;
+}
+
+/* Agency Site: Values are injected by dynamic-branding.js */
+body.agency-site {
+    background-color: var(--brand-bg, #ffffff);
+}
+
+/* 3. THEME DEFINITIONS - Controls the "Vibe" */
+.theme-executive {
+    --brand-font: 'Inter', sans-serif;
+    --brand-radius: 0px; /* Sharp corners */
+}
+
+.theme-startup {
+    --brand-font: 'Lexend', sans-serif;
+    --brand-radius: 50px; /* Very rounded */
+}
+
+.theme-boutique {
+    --brand-font: 'Space Grotesk', sans-serif;
+    --brand-radius: 4px; /* Soft corners */
+}
+
+/* 4. COMPONENT STYLES - Using the variables above */
 body {
     margin: 0;
     padding: 0;
     font-family: var(--brand-font);
     color: var(--brand-text);
-    background-color: #ffffff;
     -webkit-font-smoothing: antialiased;
-    transition: background-color 0.3s ease;
 }
 
-/* Hide brand text when logo is present */
-body.has-logo .navbar-brand-text {
-    display: none;
+.btn-primary {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+    border-radius: var(--brand-radius);
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    transition: filter 0.2s;
 }
 
-/* THEME OVERRIDES */
-.theme-executive {
-    --brand-primary: #1a2a40; 
-    --brand-accent: #c9a961; 
-    --brand-font: 'Inter', sans-serif; 
-    --brand-radius: 0px;
+.btn-primary:hover {
+    filter: brightness(90%); /* Automatically creates a darker hover state */
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
 }
 
-.theme-startup {
-    --brand-primary: #0d6efd; 
-    --brand-accent: #ffca28; 
-    --brand-font: 'Lexend', sans-serif; 
-    --brand-radius: 50px;
-}
-
-.theme-boutique {
-    --brand-primary: #000000; 
-    --brand-accent: #333333; 
-    --brand-font: 'Space Grotesk', sans-serif; 
-    --brand-radius: 4px;
-    --brand-border: 2px solid #000;
-}
-
-/* HEADERS */
-h1, h2, h3, h4, .brand-title {
-    font-family: var(--brand-font);
-    font-weight: 700;
-    color: var(--brand-primary);
-}
-
-.feature-label {
-    display: inline-block;
-    color: var(--brand-primary);
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 1px;
-    margin-bottom: 0.5rem;
-}
-
-/* NAVBAR - Uses CSS variables set by dynamic-branding.js */
 .navbar {
     background-color: var(--navbar-bg);
     border-bottom: 1px solid var(--navbar-border);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-    transition: background-color 0.3s ease;
 }
 
 .navbar-brand {
-    color: var(--navbar-text) !important;
+    color: var(--brand-primary) !important;
+    font-weight: 800;
 }
 
+/* ... Keep the rest of your card and footer styles below ... */
 .navbar .nav-link {
     color: var(--navbar-text);
     font-weight: 500;
@@ -147,6 +140,16 @@ h1, h2, h3, h4, .brand-title {
     filter: brightness(1.1);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: #fff;
+}
+
+.navbar-brand {
+    color: var(--brand-primary) !important;
 }
 
 /* Navbar-specific button sizing */

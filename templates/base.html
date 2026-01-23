@@ -6,63 +6,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Pillar & Post{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --brand-primary: #2c3e50;
-            --brand-accent: #e74c3c;
-        }
-        body { font-family: 'Inter', sans-serif; color: #333; }
-        .brand-title { font-family: 'Playfair Display', serif; color: var(--brand-primary); }
-        .navbar-brand { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.5rem; }
-        .btn-primary { background-color: var(--brand-primary); border-color: var(--brand-primary); }
-        .btn-primary:hover { background-color: #1a252f; border-color: #1a252f; }
-    </style>
-    {% block extra_css %}{% endblock %}
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'marketing/css/style.css' %}">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+
+<body class="{% if request.tenant.schema_name == 'public' %}marketing-site{% else %}agency-site theme-{{ request.tenant.template_choice|default:'executive' }}{% endif %}"
+      {% if profile and request.tenant.schema_name != 'public' %}
+      data-primary-color="{{ profile.primary_color }}"
+      data-secondary-color="{{ profile.secondary_color }}"
+      data-bg-color="{{ profile.background_color }}"
+      {% endif %}>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{% if request.tenant.schema_name == 'public' %}{% url 'public_marketing:landing' %}{% else %}/{% endif %}">
                 Pillar & Post
             </a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
                         <a class="nav-link" href="{% if request.tenant.schema_name == 'public' %}{% url 'public_marketing:landing' %}{% else %}/{% endif %}">Home</a>
                     </li>
-              
                     <li class="nav-item">
-                        <a class="nav-link" href="{% public_url 'about' %}" {% if request.tenant.schema_name != 'public' %}target="_blank"{% endif %}>About Pillar & Post</a>
+                        <a class="nav-link" href="{% public_url 'about' %}" {% if request.tenant.schema_name != 'public' %}target="_blank"{% endif %}>About</a>
                     </li>
-
-                    {% if user.is_authenticated and request.tenant.schema_name != 'public' %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'cms:dashboard' %}">Dashboard</a>
-                        </li>
-                    {% endif %}
 
                     {% if request.tenant.schema_name == 'public' %}
                         <li class="nav-item ms-lg-3">
-                            <a href="{% url 'public_marketing:tenant_login' %}" class="btn btn-outline-primary btn-sm px-4">Existing User Login</a>
+                            <a href="{% url 'public_marketing:tenant_login' %}" class="btn btn-outline-primary btn-sm px-4">Agency Login</a>
                         </li>
                         <li class="nav-item ms-2">
-                            <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary btn-sm px-4">Start Your Free Trial</a>
+                            <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary btn-sm px-4">Start Free</a>
                         </li>
                     {% else %}
                         {% if user.is_authenticated %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'tenant_logout' %}">Logout</a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'cms:dashboard' %}">Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'tenant_logout' %}">Logout</a></li>
                         {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'tenant_login' %}">Login</a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'tenant_login' %}" class="btn btn-primary btn-sm px-3">Login</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -74,20 +61,28 @@
         {% if messages %}
             <div class="container mt-3">
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
                 {% endfor %}
             </div>
         {% endif %}
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="bg-light py-5 mt-5 border-top">
-        <div class="container text-center">
-            <p class="text-muted mb-0">&copy; 2025 Pillar & Post Recruitment SaaS. All rights reserved.</p>
+    <footer class="py-5 mt-5 border-top bg-light text-center">
+        <div class="container">
+            {% if request.tenant.schema_name != 'public' %}
+                <p class="small text-muted mb-0">Powered by <a href="{% public_url 'landing' %}" class="text-decoration-none">Pillar & Post</a></p>
+            {% else %}
+                <p class="text-muted mb-0">&copy; {% now "Y" %} Pillar & Post. All rights reserved.</p>
+            {% endif %}
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'marketing/js/dynamic-branding.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
