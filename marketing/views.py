@@ -59,8 +59,10 @@ def tenant_signup(request):
 
     return render(request, "marketing/signup.html", {"form": form})
 
+
 def landing_page(request):
     return render(request, "marketing/landing.html")
+
 
 def template_select(request):
     templates = [
@@ -69,6 +71,7 @@ def template_select(request):
         {'id': 'boutique', 'name': 'The Boutique', 'description': 'Elegant and focused on content.'},
     ]
     return render(request, "marketing/template_select.html", {'templates': templates})
+
 
 def template_preview(request, template_id):
     name = request.GET.get('company_name') or "Your Company"
@@ -92,6 +95,7 @@ def template_preview(request, template_id):
     }
     return render(request, "marketing/preview_main.html", context)
 
+
 def tenant_login(request):
     form = TenantLoginForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
@@ -105,9 +109,11 @@ def tenant_login(request):
             messages.error(request, "Invalid credentials")
     return render(request, "marketing/login.html", {"form": form})
 
+
 def tenant_logout(request):
     logout(request)
     return redirect('public_marketing:landing')
+
 
 def about_page(request):
     return render(request, "marketing/about.html")

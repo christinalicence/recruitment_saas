@@ -36,6 +36,7 @@ python3 manage.py migrate_schemas --shared
 Dynamic CSS
 - context processor acceses the settings in different html files, 
 and dynamic branding js file needed to get this working with different browsers
+marketing/templatetags - to help navbar links when inside tenants
 
 
 Credits 

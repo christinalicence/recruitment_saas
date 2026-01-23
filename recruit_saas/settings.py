@@ -36,6 +36,12 @@ ALLOWED_HOSTS = [
     'localhost',
 ]
 
+# This allows the login session to be shared across your subdomains (test-co.localhost)
+SESSION_COOKIE_DOMAIN = ".localhost"
+CSRF_COOKIE_DOMAIN = ".localhost"
+# Prevents the browser from blocking the iframe content
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 SHARED_APPS = (
     "django_tenants",
     "customers",

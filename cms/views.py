@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.clickjacking import xframe_options_exempt
 from .models import CompanyProfile
 from .forms import CompanyProfileForm
 from django.core.exceptions import PermissionDenied
 
 
 @login_required
-def dashboard_setup_editor(request):
+def edit_site(request):
     """
     Handles initial site personalization immediately after login.
     """
@@ -30,6 +31,7 @@ def dashboard_setup_editor(request):
         "tenant": request.tenant
     })
 
+
 @login_required
 def dashboard(request):
     """The main dashboard for the tenant."""
@@ -50,8 +52,6 @@ def job_list(request):
     # Placeholder implementation
     return render(request, 'cms/job_list.html')
 
-
-# cms/views.py
 
 def home(request):
     """
@@ -80,3 +80,49 @@ def about(request):
         defaults={'display_name': request.tenant.name}
     )
     return render(request, "cms/about.html", {"profile": profile})
+
+
+def template_preview(request, template_id):
+    """
+    The 'Wrapper' view. This renders the frame, the top bar, 
+    and the iframe that points to the actual content.
+    """
+    company_name = request.GET.get('company_name', "Your Company")
+    
+    context = {
+        'template_id': template_id,
+        'company_name': company_name,
+    }
+    return render(request, "marketing/preview_wrapper.html", context)
+
+
+def template_preview_content(request, template_id):
+    """
+    The 'Content' view. This renders ONLY the website template 
+    itself to be displayed inside the iframe.
+    """
+    name = request.GET.get('company_name') or "Your Company"
+    context = {
+        'template_id': template_id,
+        'company_name': name,
+        'jobs': [
+            {'title': 'Senior Software Engineer', 'salary': '£80,000', 'location': 'London', 'summary': '...'},
+            {'title': 'Talent Acquisition Manager', 'salary': '£55,000', 'location': 'Manchester', 'summary': '...'},
+        ]
+    }
+    # This renders the actual agency-style template
+    return render(request, f"marketing/previews/{template_id}.html", context)
+
+
+@login_required
+@xframe_options_exempt  # Allow iframe embedding
+def live_preview(request):
+    """
+    Renders the actual home page content but specifically for the iframe 
+    preview in the editor.
+    """
+    profile, _ = CompanyProfile.objects.get_or_create(id=1)
+    return render(request, "cms/home.html", {
+        "profile": profile,
+        "is_preview": True, # Useful if you want to hide the nav in the preview
+    })

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<script>document.body.classList.add('frame-mode');</script>
+
+<div class="preview-cta-bar d-flex justify-content-between align-items-center bg-dark text-white p-3">
+    <div class="d-flex align-items-center">
+        <a href="{% url 'public_marketing:template_select' %}" class="btn btn-outline-light btn-sm me-3">&larr; Back</a>
+        <span class="fw-bold">Preview: <span class="text-info">{{ template_id|title }}</span></span>
+    </div>
+    
+    <div class="d-flex gap-2">
+        <a href="{% url 'public_marketing:tenant_signup' %}?template={{ template_id }}&company_name={{ company_name|urlencode }}" 
+           class="btn btn-primary btn-sm px-4">
+            Use This Template
+        </a>
+    </div>
+</div>
+
+<div class="preview-window">
+    <iframe 
+        src="{% url 'public_marketing:template_preview_content' template_id %}?company_name={{ company_name|urlencode }}" 
+        class="preview-iframe">
+    </iframe>
+</div>
+{% endblock %}

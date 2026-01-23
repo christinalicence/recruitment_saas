@@ -3,76 +3,58 @@
 {% load static %}
 
 {% block content %}
-<div class="theme-{{ tenant.template_choice|default:'executive' }} py-5 bg-light">
-    <div class="container" style="max-width: 800px;">
-        <div class="card-brand p-5 bg-white">
-            <span class="feature-label">Site Personalization</span>
-            <h1 class="mb-1">Design your site</h1>
-            <p class="text-muted mb-4">Your site is live at: <strong>{{ request.get_host }}</strong></p>
-
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <ul class="nav nav-tabs mb-4" id="editorTabs" role="tablist">
-                    <li class="nav-item">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#branding" type="button">1. Identity</button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#landing" type="button">2. Content</button>
-                    </li>
-                </ul>
-
-                <div class="tab-content" id="editorTabsContent">
-                    <div class="tab-pane fade show active" id="branding" role="tabpanel">
-                        <div class="row g-3">
-                            <div class="col-12">
-                                {{ form.display_name|as_crispy_field }}
-                            </div>
-                            <div class="col-md-12">
-                                {{ form.logo|as_crispy_field }}
-                            </div>
-                            <div class="col-md-4">
-                                {{ form.primary_color|as_crispy_field }}
-                            </div>
-                            <div class="col-md-4">
-                                {{ form.secondary_color|as_crispy_field }}
-                            </div>
-                            <div class="col-md-4">
-                                {{ form.background_color|as_crispy_field }}
-                            </div>
-                        </div>
-
-                        <div id="contrast-warning" class="alert alert-warning mt-3 d-none border-start border-4 border-warning">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <strong>Low Contrast Detected</strong><br>
-                                    <small>Your primary color might be hard to read against the background. Try a darker brand color or a lighter background.</small>
-                                </div>
-                            </div>
-                        </div>
+<div class="theme-{{ tenant.template_choice|default:'executive' }} py-4 bg-light">
+    <div class="container-fluid px-4">
+        <div class="row g-4">
+            
+            <div class="col-lg-5 col-xl-4">
+                <div class="card-brand p-4 bg-white shadow-sm sticky-top" style="top: 20px;">
+                    <div class="mb-4">
+                        <a href="{% url 'cms:dashboard' %}" class="text-decoration-none small text-muted">&larr; Back to Dashboard</a>
+                        <h1 class="h3 mt-2">Edit Site Design</h1>
+                        <p class="text-muted small">Update your brand and landing page content below.</p>
                     </div>
 
-                    <div class="tab-pane fade" id="landing" role="tabpanel">
-                        <div class="row g-3">
-                            <div class="col-12">
-                                {{ form.hero_title|as_crispy_field }}
-                            </div>
-                            <div class="col-12">
-                                {{ form.hero_text|as_crispy_field }}
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="editor-scroll-area" style="max-height: 60vh; overflow-y: auto; padding-right: 10px;">
+                            {{ form|crispy }}
+                
+                            <div id="contrast-warning" class="alert alert-warning mt-3 d-none border-start border-4 border-warning">
+                                <strong>Low Contrast Detected</strong><br>
+                                <small>Your primary color might be hard to read against the background.</small>
                             </div>
                         </div>
+
+                        <div class="mt-4 pt-3 border-top">
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Save All Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-7 col-xl-8">
+                <div class="preview-container sticky-top" style="top: 20px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0 text-muted small text-uppercase fw-bold">Live Preview</h5>
+                        <div class="d-flex gap-2">
+                            <span class="badge bg-light text-dark border">Auto-updating</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ratio ratio-16x9 shadow rounded bg-white overflow-hidden border">
+                        <iframe src="{% url 'cms:live_preview' %}" id="preview-frame" title="Site Preview"></iframe>
                     </div>
                 </div>
+            </div>
 
-                <div class="mt-4 pt-3 border-top">
-                    <button type="submit" class="btn btn-primary w-100">Save Changes & View Dashboard</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'cms/js/contrast-checker.js' %}"></script>
+    <script src="{% static 'cms/js/contrast-checker.js' %}"></script>
+    <script src="{% static 'cms/js/preview-manager.js' %}"></script>
 {% endblock %}
