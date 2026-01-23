@@ -30,13 +30,6 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% if request.tenant.schema_name == 'public' %}{% url 'public_marketing:landing' %}{% else %}/{% endif %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% public_url 'about' %}" {% if request.tenant.schema_name != 'public' %}target="_blank"{% endif %}>About</a>
-                    </li>
-
                     {% if request.tenant.schema_name == 'public' %}
                         <li class="nav-item ms-lg-3">
                             <a href="{% url 'public_marketing:tenant_login' %}" class="btn btn-outline-primary btn-sm px-4">Agency Login</a>
@@ -46,10 +39,16 @@
                         </li>
                     {% else %}
                         {% if user.is_authenticated %}
-                            <li class="nav-item"><a class="nav-link" href="{% url 'cms:dashboard' %}">Dashboard</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'tenant_logout' %}">Logout</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/dashboard/">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'tenant_logout' %}">Logout</a>
+                            </li>
                         {% else %}
-                            <li class="nav-item"><a class="nav-link" href="{% url 'tenant_login' %}" class="btn btn-primary btn-sm px-3">Login</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-primary btn-sm px-3" href="{% url 'tenant_login' %}">Login</a>
+                            </li>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -83,6 +82,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'marketing/js/dynamic-branding.js' %}"></script>
-    {% block extra_js %}{% endblock %}
 </body>
 </html>
