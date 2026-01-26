@@ -46,3 +46,4 @@ https://django-tenants.readthedocs.io/en/latest/install.html
 https://github.com/django-tenants/django-tenants/issues/28 
 https://pypi.org/project/Django-Subdomain-Middleware/
 https://lincolnloop.com/blog/user-generated-themes-django-css/
+https://www.youtube.com/watch?v=_wefsc8X5VQ

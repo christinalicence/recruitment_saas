@@ -6,81 +6,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Pillar & Post{% endblock %}</title>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'marketing/css/style.css' %}">
 </head>
-
-<body class="{% if request.tenant.schema_name == 'public' %}marketing-site{% else %}agency-site theme-{{ request.tenant.template_choice|default:'executive' }}{% endif %}"
-      {% if profile and request.tenant.schema_name != 'public' %}
-      data-primary-color="{{ profile.primary_color }}"
-      data-secondary-color="{{ profile.secondary_color }}"
-      data-bg-color="{{ profile.background_color }}"
-      {% endif %}>
-
-    <nav class="navbar navbar-expand-lg sticky-top">
+<body class="marketing-site"> 
+    <nav class="navbar navbar-expand-lg sticky-top border-bottom bg-white">
         <div class="container">
-            <a class="navbar-brand" href="{% if request.tenant.schema_name == 'public' %}{% url 'public_marketing:landing' %}{% else %}/{% endif %}">
+            <a class="navbar-brand fw-bold" href="{% url 'public_marketing:landing' %}">
                 Pillar & Post
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    {% if request.tenant.schema_name == 'public' %}
-                        <li class="nav-item ms-lg-3">
-                            <a href="{% url 'public_marketing:tenant_login' %}" class="btn btn-outline-primary btn-sm px-4">Agency Login</a>
-                        </li>
-                        <li class="nav-item ms-2">
-                            <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary btn-sm px-4">Start Free</a>
-                        </li>
-                    {% else %}
-                        {% if user.is_authenticated %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/dashboard/">Dashboard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'tenant_logout' %}">Logout</a>
-                            </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'public_marketing:template_select' %}">Templates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'public_marketing:about' %}">About</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        {% if request.tenant.schema_name == 'public' %}
+                            {# On public site: point them to the Portal Finder to find their company link #}
+                            <a class="btn btn-primary btn-sm px-4" href="{% url 'public_marketing:portal_finder' %}">Login</a>
                         {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-primary btn-sm px-3" href="{% url 'tenant_login' %}">Login</a>
-                            </li>
+                            {# On a tenant subdomain: point them to the direct login page #}
+                            <a class="btn btn-primary btn-sm px-4" href="{% url 'public_marketing:tenant_login' %}">Login</a>
                         {% endif %}
-                    {% endif %}
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <main>
-        {% if messages %}
-            <div class="container mt-3">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
         {% block content %}{% endblock %}
     </main>
 
     <footer class="py-5 mt-5 border-top bg-light text-center">
         <div class="container">
-            {% if request.tenant.schema_name != 'public' %}
-                <p class="small text-muted mb-0">Powered by <a href="{% public_url 'landing' %}" class="text-decoration-none">Pillar & Post</a></p>
-            {% else %}
-                <p class="text-muted mb-0">&copy; {% now "Y" %} Pillar & Post. All rights reserved.</p>
-            {% endif %}
+            <p class="text-muted mb-0">&copy; {% now "Y" %} Pillar & Post. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'marketing/js/dynamic-branding.js' %}"></script>
 </body>
 </html>

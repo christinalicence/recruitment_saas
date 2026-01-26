@@ -1,18 +1,18 @@
 from django_tenants.middleware.main import TenantMainMiddleware
 from django.conf import settings
+from django.utils.cache import patch_vary_headers
 
 class CustomTenantMiddleware(TenantMainMiddleware):
     """
-    Custom tenant middleware that handles hostname with ports
-    and provides debug information about tenant resolution.
+    Custom middleware to handle tenant switching, hostname port-stripping,
+    and CSRF/Cookie fixes for subdomains.
     """
     
     def get_tenant(self, domain_model, hostname):
         """
-        Override to strip port from hostname before lookup.
-        This ensures 'localhost:8000' matches 'localhost' in the database.
+        Strip the port (e.g., :8000) from the hostname before the database lookup
+        so that 'vf.localhost:8000' matches 'vf.localhost' in the records.
         """
-        # Strip port if it exists
         hostname_no_port = hostname.split(':')[0]
         
         try:
@@ -20,20 +20,21 @@ class CustomTenantMiddleware(TenantMainMiddleware):
                 domain=hostname_no_port
             ).tenant
         except domain_model.DoesNotExist:
-            # Fallback to parent class logic
+            # Fallback to the default django-tenants behavior
             return super().get_tenant(domain_model, hostname)
 
-    def process_request(self, request):
+    def process_response(self, request, response):
         """
-        Process the request and add debug logging.
+        1. Fixes CSRF issues by telling the browser the response varies by Host.
+        2. Provides clean debug logging in the console.
         """
-        # Let the parent class handle tenant detection and schema switching
-        response = super().process_request(request)
-        
-        # Debug logging (only in DEBUG mode)
-        if settings.DEBUG:
-            tenant_name = getattr(request.tenant, 'name', 'Unknown')
-            schema_name = getattr(request.tenant, 'schema_name', 'Unknown')
-            print(f"DEBUG MIDDLEWARE: Host={request.get_host()} | Tenant={tenant_name} | Schema={schema_name}")
+        # CSRF FIX: Vital for switching between localhost and subdomains
+        patch_vary_headers(response, ('Host',))
+
+        # DEBUG LOGGING: Shows you exactly which schema is active for every request
+        if settings.DEBUG and hasattr(request, 'tenant'):
+            tenant_name = getattr(request.tenant, 'name', 'Public')
+            schema_name = getattr(request.tenant, 'schema_name', 'public')
+            print(f"DEBUG: Host={request.get_host()} | Tenant={tenant_name} | Schema={schema_name}")
         
         return response

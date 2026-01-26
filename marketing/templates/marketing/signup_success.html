@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Success! | Pillar & Post{% endblock %}
+
+{% block content %}
+<div class="signup-page-wrapper">
+    <div class="container">
+        <div class="signup-card text-center">
+            <div class="mb-4">
+                <div class="display-1 text-success mb-3">✓</div>
+                <span class="feature-label">Account Created</span>
+                <h1 class="h3 brand-title mt-2">Welcome to Pillar & Post!</h1>
+                <p class="text-muted">Your company portal is ready, {{ company_name }}.</p>
+            </div>
+
+            <div class="alert alert-info text-start mb-4">
+                <p class="mb-2 fw-bold">Your Login Details:</p>
+                <p class="mb-1">Email: <code class="text-dark">{{ email }}</code></p>
+                <p class="small text-muted mb-0">Please save your password securely.</p>
+            </div>
+
+            <a href="{{ login_url }}" class="btn btn-primary w-100 mb-3">
+                Go to Your Dashboard →
+            </a>
+
+            <div class="mt-4 pt-3 border-top">
+                <p class="small text-muted mb-0">
+                    Bookmark this URL for future access:
+                </p>
+                <p class="mb-0">
+                    <code class="text-dark">{{ login_url }}</code>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

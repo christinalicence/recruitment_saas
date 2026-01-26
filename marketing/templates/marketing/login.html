@@ -5,8 +5,8 @@
 
 {% block content %}
 <div class="signup-page-wrapper theme-{{ request.tenant.template_choice|default:'executive' }}">
-    <div class="container">
-        <div class="signup-card">
+    <div class="container py-5">
+        <div class="signup-card mx-auto" style="max-width: 500px;">
             <div class="text-center mb-4">
                 <span class="feature-label">Client Portal</span>
                 <h1 class="h3 fw-bold mt-2">Welcome Back</h1>
@@ -15,14 +15,19 @@
 
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} py-2 small">{{ message }}</div>
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} py-2 small">
+                        {{ message }}
+                    </div>
                 {% endfor %}
             {% endif %}
 
             <form method="post">
                 {% csrf_token %}
+                <div class="mb-3">
+                    <label for="company_name" class="form-label">Company Name</label>
+                    <input type="text" name="company_name" id="company_name" class="form-control" placeholder="e.g. Test Co" required>
+                </div>
                 {{ form|crispy }}
-                
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary w-100">
                         Sign In →

@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django_tenants.utils import schema_context
 from customers.models import Client, Domain
 from .forms import TenantSignupForm, TenantLoginForm
 
+
 def tenant_signup(request):
+    """Public signup - creates tenant and shows success page."""
     template_id = request.GET.get('template', 'executive')
     initial_data = {'company_name': request.GET.get('company_name', '')}
     form = TenantSignupForm(request.POST or None, initial=initial_data)
@@ -17,47 +18,122 @@ def tenant_signup(request):
         admin_email = form.cleaned_data["admin_email"]
         password = form.cleaned_data["password"]
         
-        # 1. Create the Tenant (Schema)
+        # 1. Create Tenant
         tenant, created = Client.objects.get_or_create(
             name=company_name,
             defaults={'template_choice': template_id, 'on_trial': True}
         )
         
-        # 2. Create the Domain
-        host_full = request.get_host() 
+        # 2. Create Domain
+        host_full = request.get_host()
         base_domain = host_full.split(':')[0]
-        
-        # Ensure subdomains work locally
-        if base_domain == "127.0.0.1" or base_domain == "localhost":
+        if base_domain in ["127.0.0.1", "localhost"]:
             base_domain = "localhost"
             
-        full_domain_no_port = f"{tenant.schema_name}.{base_domain}"
-        
+        full_domain = f"{tenant.schema_name}.{base_domain}"
         Domain.objects.get_or_create(
-            domain=full_domain_no_port,
+            domain=full_domain,
             defaults={'tenant': tenant, 'is_primary': True}
         )
         
-        # 3. Create the admin user in the new tenant's schema
+        # 3. Create user AND profile inside the Tenant Schema
         with schema_context(tenant.schema_name):
-            if not User.objects.filter(email=admin_email).exists():
-                User.objects.create_superuser(
-                    username=admin_email,
-                    email=admin_email,
-                    password=password
-                )
-        
-        # 4. Construct Redirect URL
-        port = f":{host_full.split(':')[1]}" if ":" in host_full else ""
-        
-        if base_domain == "localhost":
-            redirect_url = f"http://{tenant.schema_name}.localhost{port}/login/"
-        else:
-            redirect_url = f"https://{tenant.schema_name}.{base_domain}/login/"
+            tenant_user, t_created = User.objects.get_or_create(
+                username=admin_email,
+                defaults={
+                    'email': admin_email, 
+                    'is_staff': True,
+                    'is_superuser': True
+                }
+            )
+            tenant_user.set_password(password)
+            tenant_user.save()
             
-        return redirect(redirect_url)
+            # Create CompanyProfile
+            from cms.models import CompanyProfile
+            CompanyProfile.objects.get_or_create(
+                id=1,
+                defaults={
+                    'display_name': company_name,
+                    'primary_color': '#2c3e50',
+                    'secondary_color': '#e74c3c',
+                    'background_color': '#ffffff'
+                }
+            )
+        
+        # 4. Show success page instead of redirecting
+        port = f":{host_full.split(':')[1]}" if ":" in host_full else ""
+        login_url = f"http://{full_domain}{port}/login/"
+        
+        return render(request, "marketing/signup_success.html", {
+            "login_url": login_url,
+            "company_name": company_name,
+            "email": admin_email
+        })
 
     return render(request, "marketing/signup.html", {"form": form})
+
+
+def portal_finder(request):
+    """Help users find their portal by email address."""
+    if request.method == "POST":
+        email = request.POST.get('email', '').strip()
+        
+        if not email:
+            messages.error(request, "Please enter your email address")
+            return render(request, "marketing/portal_finder.html")
+        
+        # Search for tenants where this user exists
+        found_tenants = []
+        
+        for tenant in Client.objects.exclude(schema_name='public'):
+            with schema_context(tenant.schema_name):
+                if User.objects.filter(email=email).exists():
+                    domain = tenant.domains.first()
+                    if domain:
+                        host_full = request.get_host()
+                        port = f":{host_full.split(':')[1]}" if ":" in host_full else ""
+                        login_url = f"http://{domain.domain}{port}/login/"
+                        
+                        found_tenants.append({
+                            'name': tenant.name,
+                            'login_url': login_url
+                        })
+        
+        if found_tenants:
+            return render(request, "marketing/portal_finder.html", {
+                'found_tenants': found_tenants,
+                'email': email
+            })
+        else:
+            messages.error(request, f"No portals found for {email}. Please check your email or sign up.")
+            return render(request, "marketing/portal_finder.html")
+    
+    return render(request, "marketing/portal_finder.html")
+
+
+def tenant_login(request):
+    """Login for tenant subdomains - simple email/password."""
+    form = TenantLoginForm(request.POST or None)
+    
+    if request.method == "POST" and form.is_valid():
+        email = form.cleaned_data['email']
+        password = form.cleaned_data['password']
+        
+        user = authenticate(request, username=email, password=password)
+        if user:
+            login(request, user)
+            return redirect('cms:dashboard')
+        else:
+            messages.error(request, "Invalid email or password")
+            
+    return render(request, "marketing/login.html", {"form": form})
+
+
+def tenant_logout(request):
+    logout(request)
+    messages.success(request, "You've been logged out successfully")
+    return redirect('public_marketing:tenant_login')
 
 
 def landing_page(request):
@@ -74,45 +150,11 @@ def template_select(request):
 
 
 def template_preview(request, template_id):
-    name = request.GET.get('company_name') or "Your Company"
-    context = {
+    name = request.GET.get('company_name', 'Your Company')
+    return render(request, "marketing/preview_main.html", {
         'template_id': template_id,
-        'company_name': name,
-        'jobs': [
-            {
-                'title': 'Senior Software Engineer', 
-                'salary': '£80,000', 
-                'location': 'London',
-                'summary': 'Join a high-growth fintech team building scalable microservices.'
-            },
-            {
-                'title': 'Talent Acquisition Manager', 
-                'salary': '£55,000', 
-                'location': 'Manchester',
-                'summary': 'Lead the end-to-end recruitment lifecycle for our creative agency.'
-            },
-        ]
-    }
-    return render(request, "marketing/preview_main.html", context)
-
-
-def tenant_login(request):
-    form = TenantLoginForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        email = form.cleaned_data['email']
-        password = form.cleaned_data['password']
-        user = authenticate(request, username=email, password=password)
-        if user:
-            login(request, user)
-            return redirect('cms:dashboard')
-        else:
-            messages.error(request, "Invalid credentials")
-    return render(request, "marketing/login.html", {"form": form})
-
-
-def tenant_logout(request):
-    logout(request)
-    return redirect('public_marketing:landing')
+        'company_name': name
+    })
 
 
 def about_page(request):
