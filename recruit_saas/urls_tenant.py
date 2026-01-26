@@ -1,15 +1,19 @@
 from django.urls import path, include
-from django.urls import path, include
-from marketing import views
 from django.contrib import admin
+from marketing import views
 
 urlpatterns = [
-    # Wrap these in the 'public_marketing' namespace to match the public urls.py
-    path('', include(([
-        path("login/", views.tenant_login, name="tenant_login"),
-        path('logout/', views.tenant_logout, name='tenant_logout'),
-    ], 'public_marketing'))),
+    path('login/', views.tenant_login, name='tenant_login'),
+    path('logout/', views.tenant_logout, name='tenant_logout'),
     
-    path('', include(('cms.urls', 'cms'), namespace='cms')),
+    # We need to provide 'landing' so base.html logo doesn't crash
+    path('', include('cms.urls')),
+    path('dashboard/', include('cms.urls'), name='landing'), 
+
+    # Dummy routes to keep shared navbar happy
+    path('choose-template/', views.template_select, name='template_select'),
+    path('about/', views.about_page, name='about'),
+    path('find-portal/', views.portal_finder, name='portal_finder'),
+
     path('admin/', admin.site.urls),
 ]

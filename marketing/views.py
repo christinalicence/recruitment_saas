@@ -133,7 +133,7 @@ def tenant_login(request):
 def tenant_logout(request):
     logout(request)
     messages.success(request, "You've been logged out successfully")
-    return redirect('public_marketing:tenant_login')
+    return redirect('tenant_login')
 
 
 def landing_page(request):

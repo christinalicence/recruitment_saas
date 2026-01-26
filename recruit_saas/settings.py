@@ -50,25 +50,26 @@ MIDDLEWARE = [
 ]
 
 # --- COOKIES & CSRF ---
-# 1. This ensures the cookie is shared across vf.localhost and localhost
-SESSION_COOKIE_DOMAIN = ".localhost"
-CSRF_COOKIE_DOMAIN = ".localhost"
+# We comment these out for localhost development to avoid 403 errors.
+# SESSION_COOKIE_DOMAIN = ".localhost"
+# CSRF_COOKIE_DOMAIN = ".localhost"
 
-# 2. Recommended for multi-tenant redirects
+# Ensure Django trusts the subdomain origins
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://*.localhost:8000",
+]
+
+# Security settings for local development
+CSRF_COOKIE_HTTPONLY = False  # Allows Django's CSRF middleware to see it
+SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
 
-# 3. Security settings for local development
-CSRF_COOKIE_HTTPONLY = True   # <--- CHANGE THIS TO TRUE
-CSRF_COOKIE_SECURE = False     # Must be False for http://
-SESSION_COOKIE_SECURE = False  # Must be False for http://
-
-# 4. Origins (You have these right, but double check the port)
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8000",
-    "http://*.localhost:8000",
-    "http://127.0.0.1:8000",
-]
+# This is important for some middleware setups
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # --- DATABASE ---
 DATABASES = {
