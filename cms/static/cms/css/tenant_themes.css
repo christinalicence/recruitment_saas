@@ -1,44 +1,118 @@
-/* cms/static/css/tenant_themes.css */
+/* --- 1. THEME DEFINITIONS & BOLD DEFAULTS --- */
 
-/* 1. THEME DEFINITIONS */
-
-/* The Executive - Sharp & Corporate */
+/* The Executive - Deep Navy, Sharp Corners, Corporate */
 .theme-executive {
+    --brand-primary: #1e3a8a; 
+    --brand-secondary: #64748b;
+    --brand-bg: #f8fafc;
+    --hero-text-color: #0f172a; /* Dark Slate */
     --brand-font: 'Inter', sans-serif;
     --brand-radius: 4px;
     --brand-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* The Startup - Bold & Modern */
+/* The Startup - Hot Coral, Dark Mode, High Energy */
 .theme-startup {
+    --brand-primary: #ff4f00; 
+    --brand-secondary: #ffffff;
+    --brand-bg: #000000; /* Dark background for that bold startup feel */
+    --hero-text-color: #ffffff; 
     --brand-font: 'Lexend', sans-serif;
-    --brand-radius: 12px;
-    --brand-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    --brand-radius: 50px;
+    --brand-shadow: 0 12px 40px rgba(255, 79, 0, 0.2);
 }
 
-/* The Boutique - Elegant & Soft */
+/* The Boutique - Terracotta, Warm Cream, Elegant */
 .theme-boutique {
+    --brand-primary: #92400e; 
+    --brand-secondary: #fef3c7;
+    --brand-bg: #fffcf5; /* Warm cream background */
+    --hero-text-color: #451a03; /* Deep brown text */
     --brand-font: 'Space Grotesk', sans-serif;
-    --brand-radius: 20px;
+    --brand-radius: 24px;
     --brand-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-/* 2. DYNAMIC OVERRIDES */
-/* These allow the 'Agency Site' logic to use the colors 
-   stored in the database via the style attribute on the body tag */
+/* --- 2. CORE COMPONENT LOGIC --- */
 
 .agency-site {
     font-family: var(--brand-font);
-    background-color: var(--brand-bg, #ffffff);
+    background-color: var(--brand-bg);
+    color: var(--hero-text-color);
+    transition: all 0.3s ease;
 }
 
-.agency-site .btn-primary {
-    background-color: var(--brand-primary);
-    border-color: var(--brand-primary);
+/* Hero Section Base */
+.hero-section {
+    padding: 100px 0;
+    background-color: var(--brand-bg);
+}
+
+.hero-section h1 {
+    color: var(--hero-text-color);
+    font-weight: 800;
+}
+
+/* Primary Button Styling */
+.btn-primary {
+    background-color: var(--brand-primary) !important;
+    border-color: var(--brand-primary) !important;
     border-radius: var(--brand-radius);
+    padding: 12px 28px;
+    font-weight: 600;
+    color: #ffffff !important;
 }
 
-.agency-site h1, .agency-site h2, .agency-site h3 {
-    font-family: var(--brand-font);
-    font-weight: 700;
+/* Accent Block for emphasis */
+.accent-block {
+    padding: 80px 0;
+    background-color: var(--brand-primary);
+    color: #ffffff;
+    margin: 40px 0;
+}
+
+/* Card Styling */
+.card-brand {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: var(--brand-radius);
+    box-shadow: var(--brand-shadow);
+    height: 100%;
+    border: 1px solid rgba(0,0,0,0.05);
+    color: #212529; 
+}
+
+/* --- 3. LAYOUT SPECIFICS --- */
+
+/* Executive: Classic Left-aligned */
+.theme-executive .hero-section {
+    text-align: left;
+    border-bottom: 6px solid var(--brand-primary);
+}
+
+/* Startup: Centered & Dramatic */
+.theme-startup .hero-section {
+    text-align: center;
+    padding: 140px 0;
+}
+.theme-startup .hero-image-container {
+    margin-top: 50px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Boutique: Clean & Editorial */
+.theme-boutique .hero-section {
+    text-align: left;
+}
+
+/* --- 4. DYNAMIC OVERRIDES --- */
+/* These allow the variables to be overwritten by the database values 
+   injected into the style tag in the HTML head. */
+
+.agency-site {
+    --primary: var(--brand-primary);
+    --secondary: var(--brand-secondary);
+    --bg: var(--brand-bg);
 }

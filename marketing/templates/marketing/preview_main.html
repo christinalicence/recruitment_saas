@@ -1,49 +1,81 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Template Preview | Pillar & Post{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'cms/css/tenant_themes.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="theme-{{ template_id }}">
-    <div class="hero-section text-center">
-        <div class="container">
-            <span class="feature-label">Welcome to</span>
-            <h1 class="display-4 mb-3">{{ company_name }}</h1>
-            <p class="lead text-muted mx-auto" style="max-width: 600px;">Connecting Talent with Great Opportunities. High quality specialist recruiters.</p>
-        </div>
-    </div>
+<div class="theme-{{ template_id }} agency-site">
 
-    <div class="container py-5">
-        <div class="row">
-            <h3 class="h4 mb-4">Latest Roles</h3>
-            {% for job in jobs %}
-            <div class="col-md-6 mb-4">
-                <div class="card-brand">
-                    <span class="feature-label">{{ job.location }}</span>
-                    <h5 class="fw-bold">{{ job.title }}</h5>
-                    <p class="text-muted small">{{ job.summary }}</p>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <span class="fw-bold">{{ job.salary }}</span>
-                        <span class="btn btn-primary btn-sm">Apply Now</span>
+    <header class="hero-section">
+        <div class="container">
+            <div class="row align-items-center {% if template_id == 'startup' %}text-center{% endif %}">
+                
+                <div class="{% if template_id == 'startup' %}col-12{% else %}col-lg-6{% endif %}">
+                    <h1 class="display-3 fw-bold mb-4">{{ company_name }}</h1>
+                    <p class="lead mb-5">Redefining recruitment with a {{ template_id|title }} approach.</p>
+                    <div class="d-flex gap-3 {% if template_id == 'startup' %}justify-content-center{% endif %}">
+                        <button class="btn btn-primary btn-lg px-5">Join Us</button>
+                        <button class="btn btn-outline-secondary btn-lg px-5">Learn More</button>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
 
-    <div class="preview-cta-bar">
-        <div class="container">
-            <div class="cta-flex-container">
-                <div>
-                    <span class="badge bg-dark mb-1">Previewing: {{ template_id|title }}</span>
-                    <p class="mb-0 small text-muted">Ready to make this yours?</p>
+                {% if template_id != 'startup' %}
+                <div class="col-lg-6 d-none d-lg-block">
+                    <img src="{{ hero_image }}?auto=format&fit=crop&w=800&q=80" class="img-fluid shadow-lg rounded">
                 </div>
-                <a href="{% url 'public_marketing:tenant_signup' %}?template={{ template_id }}&company_name={{ company_name|urlencode }}" 
-                   class="btn btn-primary">
-                    Claim this Design & Continue →
-                </a>
+                {% endif %}
             </div>
+
+            {% if template_id == 'startup' %}
+            <div class="hero-image-container d-none d-lg-block">
+                <img src="{{ hero_image }}?auto=format&fit=crop&w=1200&q=60" class="img-fluid shadow-lg rounded-4">
+            </div>
+            {% endif %}
+        </div>
+    </header>
+
+    <section class="color-accent-section">
+        <div class="container text-center">
+            <h2 class="fw-bold">Modern Solutions for Modern Talent</h2>
+            <p class="mb-0">Using the latest in {{ template_id }} design to power your search.</p>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container py-5">
+            <h2 class="fw-bold mb-5 {% if template_id == 'startup' %}text-center{% endif %}">Latest Vacancies</h2>
+            <div class="row g-4">
+                {% for job in jobs %}
+                <div class="col-md-4">
+                    <div class="card-brand border p-4 shadow-sm bg-white">
+                        <h4 class="fw-bold h5 mb-3">{{ job.title }}</h4>
+                        <p class="text-muted small mb-4">{{ job.summary }}</p>
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <span class="fw-bold" style="color: var(--brand-primary);">{{ job.salary }}</span>
+                            <span class="btn btn-sm btn-primary">View Role</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <div class="fixed-bottom bg-white border-top py-3 shadow-lg">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <span class="badge bg-primary mb-1">{{ template_id|title }} Template</span>
+                <p class="mb-0 small text-muted">Colors and fonts are 100% customizable.</p>
+            </div>
+            <a href="{% url 'public_marketing:tenant_signup' %}?template={{ template_id }}&company_name={{ company_name|urlencode }}" 
+               class="btn btn-primary px-4 fw-bold">
+                Continue with this Design →
+            </a>
         </div>
     </div>
 </div>
+
+<div style="height: 100px;"></div>
 {% endblock %}

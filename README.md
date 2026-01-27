@@ -75,3 +75,11 @@ https://github.com/django-tenants/django-tenants/issues/28
 https://pypi.org/project/Django-Subdomain-Middleware/
 https://lincolnloop.com/blog/user-generated-themes-django-css/
 https://www.youtube.com/watch?v=_wefsc8X5VQ
+
+
+Photo credits
+
+unsplash.com
+'executive': 'https://images.unsplash.com/photo-1497366216548-37526070297c',
+'startup': 'https://images.unsplash.com/photo-1522071820081-009f0129c71c',
+'boutique': 'https://images.unsplash.com/photo-1497366754035-f200968a6e72'
