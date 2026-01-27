@@ -67,7 +67,7 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
 
-# This is important for some middleware setups
+# middleware settings for cookies
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -113,6 +113,7 @@ TEMPLATES = [
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "marketing" / "static",
+    BASE_DIR / "cms" / "static",
 ]
 
 # --- MEDIA FILES ---

@@ -1,308 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lexend:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-/* 1. ROOT VARIABLES - The Master Defaults (P&P Colors) */
 :root {
     --brand-primary: #1a2a40;
     --brand-accent: #0056b3;
     --brand-bg-light: #f8f9fa;
-    --brand-text: #212529;
     --brand-font: 'Inter', sans-serif;
-    --brand-radius: 8px;
-    --brand-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    
-    --navbar-bg: #ffffff;
-    --navbar-text: var(--brand-text);
-    --navbar-border: rgba(0, 0, 0, 0.1);
 }
 
-/* 2. BRANDING LOGIC - This controls the context */
-
-/* Force P&P Branding on the main marketing site */
 body.marketing-site {
-    --brand-primary: #1a2a40 !important;
-    --brand-accent: #0056b3 !important;
-    --brand-radius: 8px !important;
-    --brand-font: 'Inter', sans-serif !important;
-}
-
-/* Agency Site: Values are injected by dynamic-branding.js */
-body.agency-site {
-    background-color: var(--brand-bg, #ffffff);
-}
-
-/* 3. THEME DEFINITIONS - Controls the "Vibe" */
-.theme-executive {
-    --brand-font: 'Inter', sans-serif;
-    --brand-radius: 0px; /* Sharp corners */
-}
-
-.theme-startup {
-    --brand-font: 'Lexend', sans-serif;
-    --brand-radius: 50px; /* Very rounded */
-}
-
-.theme-boutique {
-    --brand-font: 'Space Grotesk', sans-serif;
-    --brand-radius: 4px; /* Soft corners */
-}
-
-/* 4. COMPONENT STYLES - Using the variables above */
-body {
-    margin: 0;
-    padding: 0;
     font-family: var(--brand-font);
-    color: var(--brand-text);
-    -webkit-font-smoothing: antialiased;
+    color: #333;
+    background-color: #fff;
 }
 
+/* Primary Button - Single Definition */
 .btn-primary {
     background-color: var(--brand-primary);
     border-color: var(--brand-primary);
-    border-radius: var(--brand-radius);
     padding: 0.6rem 1.5rem;
     font-weight: 600;
-    transition: filter 0.2s;
-}
-
-.btn-primary:hover {
-    filter: brightness(90%); /* Automatically creates a darker hover state */
-    background-color: var(--brand-primary);
-    border-color: var(--brand-primary);
-}
-
-.navbar {
-    background-color: var(--navbar-bg);
-    border-bottom: 1px solid var(--navbar-border);
-}
-
-.navbar-brand {
-    color: var(--brand-primary) !important;
-    font-weight: 800;
-}
-
-/* ... Keep the rest of your card and footer styles below ... */
-.navbar .nav-link {
-    color: var(--navbar-text);
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    transition: color 0.2s ease;
-}
-
-.navbar .nav-link:hover {
-    color: var(--brand-primary);
-}
-
-.navbar .dropdown-toggle {
-    color: var(--navbar-text);
-}
-
-/* Navbar toggler for mobile */
-.navbar-toggler {
-    border-color: var(--navbar-border);
-}
-
-.navbar-toggler-icon {
-    filter: var(--toggler-filter, none);
-}
-
-/* Dropdown menu styling */
-.dropdown-menu {
-    border: 1px solid var(--navbar-border);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-}
-
-.dropdown-item {
-    padding: 0.5rem 1rem;
-    font-size: 0.95rem;
-}
-
-.dropdown-item:hover {
-    background-color: var(--brand-bg-light);
-    color: var(--brand-primary);
-}
-
-/* GLOBAL COMPONENTS */
-
-/* Buttons */
-.btn-primary {
-    background-color: var(--brand-primary) !important;
-    border-color: var(--brand-primary) !important;
-    font-family: var(--brand-font);
-    border-radius: var(--brand-radius) !important;
-    padding: 12px 28px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: var(--brand-border, none);
+    transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background-color: #0d1621;
+    border-color: #0d1621;
+    transform: translateY(-1px);
 }
 
-.btn-primary {
-    background-color: var(--brand-primary);
-    border-color: var(--brand-primary);
-    color: #fff;
-}
-
-.navbar-brand {
-    color: var(--brand-primary) !important;
-}
-
-/* Navbar-specific button sizing */
-.navbar .btn-primary {
-    padding: 8px 20px;
-}
-
-/* Cards */
-.card-brand {
-    background: #fff;
-    border-radius: var(--brand-radius);
-    padding: 2rem;
-    border: var(--brand-border, 1px solid #eee);
-    box-shadow: var(--brand-shadow);
-    transition: transform 0.3s ease;
-}
-
-.card-brand:hover {
-    transform: translateY(-5px);
-}
-
-/* MARKETING & LANDING PAGE */
-.hero-section {
-    padding: 100px 0;
-    background: linear-gradient(180deg, #f4f7f9 0%, #ffffff 100%);
-}
-
-.feature-card {
-    padding: 2.5rem;
-    border-radius: 16px;
-    background: white;
-    border: 1px solid #f0f0f0;
-    transition: all 0.3s ease;
-}
-
-/* ONBOARDING & SIGNUP */
+/* Marketing Sections */
 .signup-page-wrapper {
+    background-color: var(--brand-bg-light);
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background-color: var(--brand-bg-light);
-}
-
-.signup-container {
-    width: 100%;
+    padding: 40px 0;
 }
 
 .signup-card {
     background: white;
     padding: 3rem;
-    border-radius: var(--brand-radius);
+    border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-    border: var(--brand-border, none);
-    max-width: 550px;
-    margin: 0 auto;
-}
-
-/* DASHBOARD LAYOUT (CMS) */
-.dashboard-wrapper {
-    display: flex;
-    min-height: 100vh;
-}
-
-.sidebar {
-    width: 280px;
-    background-color: var(--brand-primary);
-    color: white;
-    padding: 2rem;
-}
-
-.sidebar .nav-link {
-    color: rgba(255,255,255,0.7);
-    padding: 12px 15px;
-    border-radius: var(--brand-radius);
-    margin-bottom: 5px;
-    transition: all 0.2s;
-}
-
-.sidebar .nav-link:hover, .sidebar .nav-link.active {
-    background: rgba(255,255,255,0.1);
-    color: white;
-}
-
-/* PREVIEW FRAME */
-.preview-cta-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    padding: 1.5rem 0;
-    border-top: 1px solid #ddd;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-    z-index: 1000;
-}
-
-.cta-flex-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Utility */
-.text-balance { text-wrap: balance; }
-.py-section { padding: 80px 0; }
-
-/* Logo Placeholder */
-.navbar-brand-img {
-    display: inline-block;
-    width: 180px;
-    height: 40px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: left center;
-}
-
-/* SHARED CMS & PREVIEW STYLES */
-
-/* The 'Professional' Iframe Wrapper */
-body.frame-mode nav, 
-body.frame-mode footer { 
-    display: none !important; 
-}
-
-body.frame-mode { 
-    overflow: hidden; 
-}
-
-.preview-window {
-    height: calc(100vh - 72px); /* Subtracts the top bar height */
-    width: 100%;
-    background: #e9ecef;
-}
-
-.preview-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: white;
-}
-
-/* Dashboard Swatch */
-.color-swatch {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    display: inline-block;
-    vertical-align: middle;
-    border: 1px solid rgba(0,0,0,0.1);
-    margin-right: 8px;
-}
-
-.editor-max-width {
-    max-width: 800px;
+    max-width: 500px;
     margin: 0 auto;
 }

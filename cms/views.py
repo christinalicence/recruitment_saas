@@ -68,6 +68,8 @@ def live_preview(request):
     })
 
 
+
+
 def home(request):
     """The public-facing home page for the tenant (Agency site)."""
     profile, _ = CompanyProfile.objects.get_or_create(
@@ -75,7 +77,6 @@ def home(request):
         defaults=get_profile_defaults(request)
     )
     return render(request, "cms/home.html", {"profile": profile})
-
 
 def about(request):
     """The public-facing 'About Us' page."""

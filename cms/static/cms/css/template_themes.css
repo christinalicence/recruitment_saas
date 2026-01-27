@@ -1,0 +1,44 @@
+/* cms/static/css/tenant_themes.css */
+
+/* 1. THEME DEFINITIONS */
+
+/* The Executive - Sharp & Corporate */
+.theme-executive {
+    --brand-font: 'Inter', sans-serif;
+    --brand-radius: 4px;
+    --brand-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* The Startup - Bold & Modern */
+.theme-startup {
+    --brand-font: 'Lexend', sans-serif;
+    --brand-radius: 12px;
+    --brand-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* The Boutique - Elegant & Soft */
+.theme-boutique {
+    --brand-font: 'Space Grotesk', sans-serif;
+    --brand-radius: 20px;
+    --brand-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* 2. DYNAMIC OVERRIDES */
+/* These allow the 'Agency Site' logic to use the colors 
+   stored in the database via the style attribute on the body tag */
+
+.agency-site {
+    font-family: var(--brand-font);
+    background-color: var(--brand-bg, #ffffff);
+}
+
+.agency-site .btn-primary {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+    border-radius: var(--brand-radius);
+}
+
+.agency-site h1, .agency-site h2, .agency-site h3 {
+    font-family: var(--brand-font);
+    font-weight: 700;
+}

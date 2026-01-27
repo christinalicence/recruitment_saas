@@ -26,6 +26,32 @@ User Flow (signed up)
 Persistant Bug
 Getting a 404 error when trying to hit a subdomain, because django's middleware didn't use the correct url file (it kept hitting the one at the root rather than the one in the marketing app). Solved locally through adapting some bespoke middleware code. This is likely to need more attention during deployment.
 
+Another subdomain issue is getting 403 errors when trying to get to the dashboard/properly looged on. This has been solved in local dev with the settings look like 
+
+# --- COOKIES & CSRF ---
+# We comment these out for localhost development to avoid 403 errors.
+# SESSION_COOKIE_DOMAIN = ".localhost"
+# CSRF_COOKIE_DOMAIN = ".localhost"
+
+# Ensure Django trusts the subdomain origins
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://*.localhost:8000",
+]
+
+# Security settings for local development
+CSRF_COOKIE_HTTPONLY = False  # Allows Django's CSRF middleware to see it
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# middleware settings for cookies
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = 
+
+But these do need changing when deployed to heroku.
+
 Migrations
 
 Need to be applied to tenant or public egs of commands

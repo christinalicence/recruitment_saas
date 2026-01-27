@@ -113,26 +113,23 @@ def portal_finder(request):
 
 
 def tenant_login(request):
-    """Login for tenant subdomains - simple email/password."""
     form = TenantLoginForm(request.POST or None)
-    
     if request.method == "POST" and form.is_valid():
-        email = form.cleaned_data['email']
-        password = form.cleaned_data['password']
-        
-        user = authenticate(request, username=email, password=password)
+        user = authenticate(
+            request, 
+            username=form.cleaned_data['email'], 
+            password=form.cleaned_data['password']
+        )
         if user:
             login(request, user)
-            return redirect('cms:dashboard')
+            return redirect('cms:dashboard') 
         else:
             messages.error(request, "Invalid email or password")
-            
     return render(request, "marketing/login.html", {"form": form})
-
 
 def tenant_logout(request):
     logout(request)
-    messages.success(request, "You've been logged out successfully")
+    messages.success(request, "You've been logged out.")
     return redirect('tenant_login')
 
 
