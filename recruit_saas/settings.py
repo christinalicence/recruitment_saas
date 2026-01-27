@@ -49,6 +49,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Allow iframe embedding for tenant preview
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 # --- COOKIES & CSRF ---
 # We comment these out for localhost development to avoid 403 errors.
 # SESSION_COOKIE_DOMAIN = ".localhost"

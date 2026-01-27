@@ -28,6 +28,8 @@ Getting a 404 error when trying to hit a subdomain, because django's middleware 
 
 Another subdomain issue is getting 403 errors when trying to get to the dashboard/properly looged on. This has been solved in local dev with the settings look like 
 
+Seperate base.html and css files for the marketing site, the dashboard/editor and the tenant sites. This keeps the files cleaner and stops them trying to link to other subdomains in the navbar causing 403 issues.
+
 # --- COOKIES & CSRF ---
 # We comment these out for localhost development to avoid 403 errors.
 # SESSION_COOKIE_DOMAIN = ".localhost"

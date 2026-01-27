@@ -18,7 +18,7 @@
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         
-                        <div class="editor-scroll-area" style="max-height: 60vh; overflow-y: auto; padding-right: 10px;">
+                        <div class="editor-scroll-area">
                             {{ form|crispy }}
                 
                             <div id="contrast-warning" class="alert alert-warning mt-3 d-none border-start border-4 border-warning">
@@ -36,15 +36,30 @@
 
             <div class="col-lg-7 col-xl-8">
                 <div class="preview-container sticky-top" style="top: 20px;">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="mb-0 text-muted small text-uppercase fw-bold">Live Preview</h5>
-                        <div class="d-flex gap-2">
-                            <span class="badge bg-light text-dark border">Auto-updating</span>
+                        
+                        <div class="btn-group shadow-sm bg-white" role="group" aria-label="Device Preview">
+                            <button type="button" class="btn btn-outline-secondary btn-sm active" onclick="setPreviewSize('desktop')" id="btn-desktop">
+                                Desktop
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('tablet')" id="btn-tablet">
+                                Tablet
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('mobile')" id="btn-mobile">
+                                Mobile
+                            </button>
                         </div>
                     </div>
                     
-                    <div class="ratio ratio-16x9 shadow rounded bg-white overflow-hidden border">
-                        <iframe src="{% url 'cms:live_preview' %}" id="preview-frame" title="Site Preview"></iframe>
+                    <div id="preview-wrapper" class="preview-frame-wrapper desktop-mode mx-auto shadow rounded bg-white overflow-hidden border">
+                        <div class="ratio ratio-16x9" id="preview-ratio">
+                            <iframe src="{% url 'cms:live_preview' %}" id="preview-frame" title="Site Preview"></iframe>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-center">
+                        <small class="text-muted italic">Changes are reflected in real-time as you type.</small>
                     </div>
                 </div>
             </div>

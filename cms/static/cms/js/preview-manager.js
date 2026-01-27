@@ -29,3 +29,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+/**
+ * Changes the preview iframe width based on device selection
+ * @param {string} device - 'desktop', 'tablet', or 'mobile'
+ */
+function setPreviewSize(device) {
+    const wrapper = document.getElementById('preview-wrapper');
+    const devices = ['desktop', 'tablet', 'mobile'];
+    
+    // 1. Swap the mode class on the wrapper
+    devices.forEach(d => wrapper.classList.remove(`${d}-mode`));
+    wrapper.classList.add(`${device}-mode`);
+    
+    // 2. Update Button UI states
+    devices.forEach(d => {
+        const btn = document.getElementById(`btn-${d}`);
+        if (d === device) {
+            btn.classList.add('active', 'btn-primary');
+            btn.classList.remove('btn-outline-secondary');
+        } else {
+            btn.classList.remove('active', 'btn-primary');
+            btn.classList.add('btn-outline-secondary');
+        }
+    });
+}
