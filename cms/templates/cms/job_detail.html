@@ -1,0 +1,81 @@
+{% extends "cms/base_tenant.html" %}
+
+{% block content %}
+<div class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card-brand p-5 mb-4 bg-white">
+    <a href="{% url 'cms:job_list' %}" class="small">&larr; Back to all jobs</a>
+    
+    <h1 class="display-5 fw-bold mt-3 mb-4">{{ job.title }}</h1>
+    
+    <div class="d-flex gap-2 mb-5">
+        <span class="badge bg-light text-dark border p-2">Location: {{ job.location }}</span>
+        <span class="badge bg-light text-dark border p-2">Salary: {{ job.salary }}</span>
+    </div>
+    ...
+</div>{% extends "cms/base_tenant.html" %}
+
+{% block title %}{{ job.title }} | {{ profile.display_name }}{% endblock %}
+
+{% block content %}
+<div class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card-brand p-5 bg-white">
+                    <a href="{% url 'cms:job_list' %}" class="small">&larr; Back to all jobs</a>
+                    
+                    <h1 class="display-5 fw-bold mt-3 mb-4">{{ job.title }}</h1>
+                    
+                    <div class="d-flex gap-3 mb-5 flex-wrap">
+                        <span class="badge bg-light text-dark border p-2">📍 {{ job.location }}</span>
+                        <span class="badge bg-light text-dark border p-2">💰 {{ job.salary }}</span>
+                        <span class="badge bg-light text-dark border p-2">🕒 {{ job.posted_at|timesince }} ago</span>
+                    </div>
+
+                    <div class="job-content lead mb-5">
+                        <h5 class="fw-bold mb-3">Role Description</h5>
+                        {{ job.description|linebreaks }}
+                    </div>
+
+                    <div class="mt-5 pt-4 border-top">
+                        <button class="btn btn-primary btn-lg px-5">Apply for this Position</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card-brand p-4 bg-white sticky-top" style="top: 20px;">
+                    <h5 class="fw-bold mb-3">About {{ profile.display_name }}</h5>
+                    <p class="small text-muted mb-4">{{ profile.about_content|truncatewords:50 }}</p>
+                    <a href="{% url 'cms:about' %}" class="small fw-bold text-decoration-none">Read More &rarr;</a>
+                    
+                    <hr class="my-4">
+                    
+                    <h6 class="fw-bold mb-3 small text-uppercase">Share this role</h6>
+                    <div class="d-flex gap-2">
+                        <div class="bg-light rounded" style="width: 35px; height: 35px;"></div>
+                        <div class="bg-light rounded" style="width: 35px; height: 35px;"></div>
+                        <div class="bg-light rounded" style="width: 35px; height: 35px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card-brand p-4 bg-white sticky-top" style="top: 20px;">
+                    <h5 class="fw-bold mb-3">About {{ profile.display_name }}</h5>
+                    <p class="small text-muted mb-4">{{ profile.about_content|truncatewords:40 }}</p>
+                    <a href="{% url 'cms:about' %}" class="small fw-bold text-decoration-none" style="color: var(--brand-primary);">Read More &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

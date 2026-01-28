@@ -3,63 +3,70 @@
 {% load static %}
 
 {% block content %}
-<div class="theme-{{ tenant.template_choice|default:'executive' }} py-4 bg-light">
+<div class="py-4 bg-light">
     <div class="container-fluid px-4">
         <div class="row g-4">
             
             <div class="col-lg-5 col-xl-4">
-                <div class="card-brand p-4 bg-white shadow-sm sticky-top" style="top: 20px;">
+                <div class="card p-4 bg-white shadow-sm sticky-top" style="top: 20px;">
                     <div class="mb-4">
                         <a href="{% url 'cms:dashboard' %}" class="text-decoration-none small text-muted">&larr; Back to Dashboard</a>
                         <h1 class="h3 mt-2">Edit Site Design</h1>
-                        <p class="text-muted small">Update your brand and landing page content below.</p>
                     </div>
 
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" id="editor-form">
                         {% csrf_token %}
                         
-                        <div class="editor-scroll-area">
-                            {{ form|crispy }}
-                
-                            <div id="contrast-warning" class="alert alert-warning mt-3 d-none border-start border-4 border-warning">
-                                <strong>Low Contrast Detected</strong><br>
-                                <small>Your primary color might be hard to read against the background.</small>
+                        <div class="editor-scroll-area" style="max-height: 65vh; overflow-y: auto; padding-right: 10px;">
+                            
+                            <h6 class="fw-bold text-uppercase small text-muted mb-3">Layout & Branding</h6>
+                            {{ form.template_choice|as_crispy_field }}
+                            {{ form.display_name|as_crispy_field }}
+                            
+                            <div class="color-section p-3 border rounded bg-light mb-3 mt-3">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="fw-bold mb-0 small">Brand Colors</h6>
+                                    <button type="button" id="refresh-preview-btn" class="btn btn-sm btn-outline-primary" style="font-size: 0.7rem;">
+                                        Sync Preview
+                                    </button>
+                                </div>
+                                {{ form.primary_color|as_crispy_field }}
+                                {{ form.secondary_color|as_crispy_field }}
+                                {{ form.background_color|as_crispy_field }}
+                                
+                                <div id="contrast-warning" class="alert alert-warning mt-2 d-none small">
+                                    <strong>Low Contrast!</strong> Check readability.
+                                </div>
                             </div>
+
+                            <h6 class="fw-bold text-uppercase small text-muted mb-3 mt-4">Content</h6>
+                            {{ form.hero_title|as_crispy_field }}
+                            {{ form.hero_text|as_crispy_field }}
+                            {{ form.hero_image|as_crispy_field }}
                         </div>
 
                         <div class="mt-4 pt-3 border-top">
-                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Save All Changes</button>
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Save Changes</button>
                         </div>
                     </form>
                 </div>
             </div>
 
             <div class="col-lg-7 col-xl-8">
-                <div class="preview-container sticky-top" style="top: 20px;">
+                <div class="sticky-top" style="top: 20px;">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="mb-0 text-muted small text-uppercase fw-bold">Live Preview</h5>
-                        
-                        <div class="btn-group shadow-sm bg-white" role="group" aria-label="Device Preview">
-                            <button type="button" class="btn btn-outline-secondary btn-sm active" onclick="setPreviewSize('desktop')" id="btn-desktop">
-                                Desktop
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('tablet')" id="btn-tablet">
-                                Tablet
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('mobile')" id="btn-mobile">
-                                Mobile
-                            </button>
+                        <h5 class="mb-0 fw-bold text-muted">Live Preview</h5>
+                        <div class="btn-group shadow-sm bg-white">
+                            <button type="button" class="btn btn-outline-secondary btn-sm active" onclick="setPreviewSize('desktop')" id="btn-desktop">Desktop</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('tablet')" id="btn-tablet">Tablet</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('mobile')" id="btn-mobile">Mobile</button>
                         </div>
                     </div>
                     
-                    <div id="preview-wrapper" class="preview-frame-wrapper desktop-mode mx-auto shadow rounded bg-white overflow-hidden border">
-                        <div class="ratio ratio-16x9" id="preview-ratio">
-                            <iframe src="{% url 'cms:live_preview' %}" id="preview-frame" title="Site Preview"></iframe>
+                    <div id="preview-wrapper" class="preview-frame-wrapper desktop-mode mx-auto shadow rounded border overflow-hidden">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="{% url 'cms:live_preview' %}" id="preview-frame"></iframe>
                         </div>
-                    </div>
-
-                    <div class="mt-3 text-center">
-                        <small class="text-muted italic">Changes are reflected in real-time as you type.</small>
                     </div>
                 </div>
             </div>

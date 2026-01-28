@@ -1,4 +1,4 @@
-/* --- 1. THEME DEFINITIONS & BOLD DEFAULTS --- */
+/* --- THEME DEFINITIONS & BOLD DEFAULTS --- */
 
 /* The Executive - Deep Navy, Sharp Corners, Corporate */
 .theme-executive {
@@ -33,7 +33,7 @@
     --brand-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-/* --- 2. CORE COMPONENT LOGIC --- */
+/* --- CORE COMPONENT LOGIC --- */
 
 .agency-site {
     font-family: var(--brand-font);
@@ -82,7 +82,7 @@
     color: #212529; 
 }
 
-/* --- 3. LAYOUT SPECIFICS --- */
+/* --- LAYOUT SPECIFICS --- */
 
 /* Executive: Classic Left-aligned */
 .theme-executive .hero-section {
@@ -107,7 +107,7 @@
     text-align: left;
 }
 
-/* --- 4. DYNAMIC OVERRIDES --- */
+/* ---  DYNAMIC OVERRIDES --- */
 /* These allow the variables to be overwritten by the database values 
    injected into the style tag in the HTML head. */
 
@@ -115,4 +115,94 @@
     --primary: var(--brand-primary);
     --secondary: var(--brand-secondary);
     --bg: var(--brand-bg);
+}
+
+/* --- GLOBAL BRANDING RULES  --- */
+
+.agency-site h1, 
+.agency-site h2, 
+.agency-site h3, 
+.agency-site h4, 
+.agency-site .brand-text {
+    color: var(--brand-primary);
+}
+
+.agency-site a:not(.btn) {
+    color: var(--brand-primary);
+    text-decoration: none;
+}
+
+.agency-site a:not(.btn):hover {
+    filter: brightness(85%); /* Darkens the brand color slightly on hover */
+}
+
+/* Specific fix for the Job List/Detail icons or small labels */
+.job-meta-icon {
+    color: var(--brand-primary);
+    margin-right: 5px;
+}
+
+/* Make sure secondary color button looks good */
+.btn-secondary {
+    background-color: var(--brand-secondary) !important;
+    border-color: var(--brand-secondary) !important;
+    color: white !important;
+}
+
+/* A subtle hover effect for cards using the primary color */
+.card-brand {
+    border-top: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.card-brand:hover {
+    border-top: 3px solid var(--brand-primary);
+    transform: translateY(-5px);
+}
+
+/* --- BRAND FOOTER --- */
+.brand-footer {
+    background-color: var(--brand-secondary);
+    color: white;
+    margin-top: 3rem; /* Same as mt-5 */
+    padding-top: 3rem; /* Same as py-5 */
+    padding-bottom: 3rem;
+}
+
+.brand-footer h3, 
+.brand-footer h4 {
+    color: white !important; /* Overrides global brand-primary heading color */
+}
+
+.brand-footer .opacity-75 {
+    opacity: 0.75;
+}
+
+.brand-footer .opacity-50 {
+    opacity: 0.50;
+}
+
+.brand-footer .opacity-25 {
+    opacity: 0.25;
+}
+
+.brand-footer hr {
+    border-color: white;
+}
+
+/* --- HERO IMAGE STYLES --- */
+.hero-img-styled {
+    border-radius: var(--brand-radius);
+    width: 100%;
+    object-fit: cover;
+}
+
+.hero-placeholder {
+    background-color: #f8fafc;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border-radius: var(--brand-radius);
 }

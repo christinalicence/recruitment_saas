@@ -21,8 +21,7 @@ To test locally you need to specify the port so that django can create the subdo
 python3 manage.py runserver localhost:8000
 
 Main Landing Page	http://localhost:8000
-Tenant Login Page	http://test-co.localhost:8000/login/
-Tenant Dashboard	http://test-co.localhost:8000/dashboard/
+Tenant Login Page	http://test-company.localhost:8000/dashboard/
 
 These are test links when run locally.
 
@@ -34,3 +33,5 @@ Client.objects.exclude(schema_name='public').delete()
 # List the clients in the db
 for tenant in Client.objects.all():
     print(f"Name: {tenant.name} | Schema: {tenant.schema_name}")
+
+python manage.py flush - deletes everyone inc superuser

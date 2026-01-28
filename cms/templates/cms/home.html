@@ -3,52 +3,70 @@
 {% block title %}{{ profile.display_name }} | Careers{% endblock %}
 
 {% block content %}
-<section class="py-5 text-center bg-white border-bottom">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-3" style="color: var(--brand-primary);">
-                    {{ profile.hero_title }}
-                </h1>
-                <p class="lead text-muted mb-4">
-                    {{ profile.hero_text|linebreaksbr }}
-                </p>
-                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                    <a href="#jobs" class="btn btn-primary btn-lg px-4 gap-3">View Openings</a>
-                    <a href="{% url 'cms:about' %}" class="btn btn-outline-secondary btn-lg px-4">About Us</a>
+<div class="theme-{{ profile.template_choice|default:'executive' }} agency-site">
+    
+    <section class="hero-section py-5">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-12 {% if profile.template_choice == 'startup' %}text-center{% else %}col-lg-6{% endif %} mb-5 mb-lg-0">
+                    <h1 class="display-3 fw-bold mb-4">{{ profile.hero_title }}</h1>
+                    <p class="lead mb-4 text-muted">{{ profile.hero_text|linebreaksbr }}</p>
+                    <div class="d-flex gap-3 {% if profile.template_choice == 'startup' %}justify-content-center{% endif %}">
+                        <a href="{% url 'cms:job_list' %}" class="btn btn-primary btn-lg px-4">Browse Jobs</a>
+                        <a href="{% url 'cms:about' %}" class="btn btn-outline-dark btn-lg px-4">Our Story</a>
+                    </div>
+                </div>
+                <div class="col-12 {% if profile.template_choice == 'startup' %}col-lg-10 mx-auto mt-4{% else %}col-lg-6{% endif %}">
+                    {% if profile.hero_image %}
+                        <img src="{% if profile.hero_image.url %}{{ profile.hero_image.url }}{% else %}{{ profile.hero_image }}{% endif %}" 
+                             alt="Careers" class="img-fluid shadow-lg hero-img-styled">
+                    {% elif profile.get_hero_image %}
+                        <img src="{{ profile.get_hero_image }}" 
+                             alt="Careers" class="img-fluid shadow-lg hero-img-styled">
+                    {% else %}
+                        <div class="hero-placeholder">
+                            <p class="text-muted">Upload Hero Image</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section id="jobs" class="py-5">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-4">
-            <div>
-                <h2 class="fw-bold">Latest Openings</h2>
+    <section id="jobs" class="py-5 bg-light">
+        <div class="container py-5">
+            <div class="mb-5 {% if profile.template_choice == 'startup' %}text-center{% endif %}">
+                <h2 class="fw-bold">Current Vacancies</h2>
                 <p class="text-muted">{{ profile.jobs_header_text }}</p>
             </div>
         </div>
+    </section>
 
-        <div class="row g-4">
-            {% for job in latest_jobs %}
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm p-3">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold" style="color: var(--brand-primary);">{{ job.title }}</h5>
-                        <p class="text-muted small mb-2">{{ job.location }} • {{ job.salary }}</p>
-                        <p class="card-text text-truncate">{{ job.summary }}</p>
-                        <a href="#" class="btn btn-link p-0 text-decoration-none" style="color: var(--brand-accent);">Apply Now &rarr;</a>
+   <footer class="brand-footer">
+        <div class="container">
+            <div class="row g-4 align-items-center">
+                <div class="col-md-6">
+                    <h3 class="fw-bold mb-2">{{ profile.display_name }}</h3>
+                    <p class="mb-0 opacity-75">Connecting exceptional talent with world-class opportunities since 2010.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex justify-content-md-end gap-4">
+                        <div class="text-center">
+                            <h4 class="fw-bold mb-0">98%</h4>
+                            <small class="text-uppercase" style="font-size: 0.7rem;">Retention Rate</small>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="fw-bold mb-0">2.5k</h4>
+                            <small class="text-uppercase" style="font-size: 0.7rem;">Placements</small>
+                        </div>
                     </div>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-5">
-                <p class="text-muted italic">No active openings at the moment. Check back soon!</p>
+            <hr class="my-4 opacity-25">
+            <div class="text-center small opacity-50">
+                &copy; 2026 {{ profile.display_name }} Recruitment Partners. All rights reserved.
             </div>
-            {% endfor %}
         </div>
-    </div>
-</section>
+    </footer>
+</div> 
 {% endblock %}
