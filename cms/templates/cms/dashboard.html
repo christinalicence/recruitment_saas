@@ -35,7 +35,20 @@
                     <a href="{% url 'cms:edit_site' %}" class="btn btn-outline-primary btn-sm">Update Branding</a>
                 </div>
             </div>
-
+            <div class="col-md-4">
+    <div class="card-brand h-100">
+        <h3 class="h5">Subscription & Billing</h3>
+        {% if request.tenant.is_active %}
+            <p class="text-muted small">Your plan is active.</p>
+            <span class="badge bg-success mb-3">Active: Standard Plan</span>
+            <a href="{% url 'customers:customer_portal' %}" class="btn btn-outline-primary btn-sm d-block">Manage Subscription</a>
+        {% else %}
+            <p class="text-muted small">Your trial ends: {{ request.tenant.trial_ends }}</p>
+            <span class="badge bg-warning text-dark mb-3">Trial Mode</span>
+            <a href="{% url 'customers:create_checkout' %}" class="btn btn-primary btn-sm d-block">Upgrade to Standard</a>
+        {% endif %}
+    </div>
+</div>
             <div class="col-md-4">
                 <div class="card-brand h-100">
                     <h3 class="h5">Site Status</h3>

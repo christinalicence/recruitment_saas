@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django_tenants.utils import schema_context
-from customers.models import Client, Domain
+from customers.models import Client, Domain, Plan
 from .forms import TenantSignupForm, TenantLoginForm
 
 
@@ -18,13 +18,21 @@ def tenant_signup(request):
         admin_email = form.cleaned_data["admin_email"]
         password = form.cleaned_data["password"]
         
-        # 1. Create Tenant
+        # 1. Get the Standard Plan (Pro-standard check)
+        # We use .filter().first() to avoid a crash if the plan isn't created yet
+        standard_plan = Plan.objects.filter(name="Standard").first()
+        
+        # 2. Create Tenant
         tenant, created = Client.objects.get_or_create(
             name=company_name,
-            defaults={'template_choice': template_id, 'on_trial': True}
+            defaults={
+                'is_active': True,
+                'template_choice': template_id, # Added the missing comma here
+                'plan': standard_plan 
+            }
         )
         
-        # 2. Create Domain
+        # 3. Create Domain
         host_full = request.get_host()
         base_domain = host_full.split(':')[0]
         if base_domain in ["127.0.0.1", "localhost"]:
@@ -36,7 +44,7 @@ def tenant_signup(request):
             defaults={'tenant': tenant, 'is_primary': True}
         )
         
-        # 3. Create user AND profile inside the Tenant Schema
+        # 4. Create user AND profile inside the Tenant Schema
         with schema_context(tenant.schema_name):
             tenant_user, t_created = User.objects.get_or_create(
                 username=admin_email,
@@ -46,8 +54,9 @@ def tenant_signup(request):
                     'is_superuser': True
                 }
             )
-            tenant_user.set_password(password)
-            tenant_user.save()
+            if t_created: # Only set password if the user was just created
+                tenant_user.set_password(password)
+                tenant_user.save()
             
             # Create CompanyProfile
             from cms.models import CompanyProfile
@@ -61,7 +70,7 @@ def tenant_signup(request):
                 }
             )
         
-        # 4. Show success page instead of redirecting
+        # 5. Show success page
         port = f":{host_full.split(':')[1]}" if ":" in host_full else ""
         login_url = f"http://{full_domain}{port}/login/"
         
@@ -145,8 +154,6 @@ def template_select(request):
     ]
     return render(request, "marketing/template_select.html", {'templates': templates})
 
-
-# marketing/views.py
 
 def template_preview(request, template_id):
     name = request.GET.get('company_name', 'Your Company')

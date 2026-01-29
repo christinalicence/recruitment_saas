@@ -1,3 +1,4 @@
+import stripe
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -130,3 +131,42 @@ def live_preview(request):
         'profile': preview_data,
         'latest_jobs': Job.objects.all()[:3]
     })
+
+# --- STRIPE INTEGRATION FOR CMS ---#
+
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+def create_checkout_session(request):
+    """Initiates the Stripe Checkout process."""
+    client = request.tenant # django-tenants provides the current client
+    
+    # Check if we already have a Stripe Customer ID
+    if not client.stripe_customer_id:
+        customer = stripe.Customer.create(
+            email=request.user.email,
+            name=client.name,
+            metadata={'tenant_id': client.id}
+        )
+        client.stripe_customer_id = customer.id
+        client.save()
+
+    session = stripe.checkout.Session.create(
+        customer=client.stripe_customer_id,
+        payment_method_types=['card'],
+        line_items=[{'price': client.plan.stripe_price_id, 'quantity': 1}],
+        mode='subscription',
+        success_url=f"{settings.SITE_URL}/dashboard/?success=true",
+        cancel_url=f"{settings.SITE_URL}/dashboard/?cancel=true",
+        metadata={'tenant_id': client.id}
+    )
+    return redirect(session.url, code=303)
+
+def customer_portal(request):
+    """Redirects active subscribers to manage their own billing."""
+    session = stripe.billing_portal.Session.create(
+        customer=request.tenant.stripe_customer_id,
+        return_url=f"{settings.SITE_URL}/dashboard/",
+    )
+    return redirect(session.url, code=303)
