@@ -18,10 +18,7 @@
     </div>
 </div>
 
-<div class="preview-window">
-    <iframe 
-        src="{% url 'public_marketing:template_preview_content' template_id %}?company_name={{ company_name|urlencode }}" 
-        class="preview-iframe">
-    </iframe>
+<div id="preview-wrapper" class="preview-frame-wrapper desktop-mode mx-auto shadow rounded border overflow-hidden">
+    <iframe src="{% url 'cms:live_preview' %}" id="preview-frame" style="width: 100%; height: 100%; border: none;"></iframe>
 </div>
 {% endblock %}

@@ -146,37 +146,27 @@ def template_select(request):
     return render(request, "marketing/template_select.html", {'templates': templates})
 
 
+# marketing/views.py
+
 def template_preview(request, template_id):
     name = request.GET.get('company_name', 'Your Company')
+    
     stock_images = {
-        'executive': 'https://images.unsplash.com/photo-1497366216548-37526070297c',
-        'startup': 'https://images.unsplash.com/photo-1522071820081-009f0129c71c',
-        'boutique': 'https://images.unsplash.com/photo-1497366754035-f200968a6e72'
+        'executive': 'hero/default_executive.jpg',
+        'boutique': 'hero/default_boutique.jpg',
+        'startup': 'hero/default_startup.jpg',
     }
+
     dummy_jobs = [
-        {
-            'title': 'Senior Strategy Consultant',
-            'location': 'London, UK',
-            'salary': '£85k - £110k',
-            'summary': 'Leading a team of analysts to deliver high-impact corporate growth strategies.'
-        },
-        {
-            'title': 'Lead Frontend Engineer',
-            'location': 'Remote / Berlin',
-            'salary': '€70k - €95k',
-            'summary': 'Building scalable React components for a fast-growing fintech platform.'
-        },
-        {
-            'title': 'Creative Account Manager',
-            'location': 'New York, NY',
-            'salary': '$90k - $120k',
-            'summary': 'Bridging the gap between high-end design teams and boutique fashion clients.'
-        }
+        {'title': 'Senior Strategy Consultant', 'location': 'London, UK', 'salary': '£85k - £110k', 'summary': 'Leading a team of analysts...'},
+        {'title': 'Lead Frontend Engineer', 'location': 'Remote', 'salary': '€70k - €95k', 'summary': 'Building scalable React components...'},
+        {'title': 'Creative Account Manager', 'location': 'New York', 'salary': '$90k - $120k', 'summary': 'Bridging the gap between design and clients...'}
     ]
+
     return render(request, "marketing/preview_main.html", {
         'template_id': template_id,
         'company_name': name,
-        'hero_image': stock_images.get(template_id, stock_images['executive']),
+        'hero_image': f"/media/{stock_images.get(template_id, stock_images['executive'])}",
         'jobs': dummy_jobs
     })
 

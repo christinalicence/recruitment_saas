@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class CompanyProfile(models.Model):
     TEMPLATE_CHOICES = [
@@ -29,6 +30,22 @@ class CompanyProfile(models.Model):
     
     # Page 3: Jobs Page
     jobs_header_text = models.TextField(blank=True, default="Explore our current openings.")
+
+    
+    def get_hero_image(self):
+        """Returns the uploaded hero image URL or a local default based on template."""
+        if self.hero_image:
+            return self.hero_image.url
+        
+        return f"{settings.MEDIA_URL}hero/default_{self.template_choice}.jpg"
+
+    def get_team_photo(self):
+        """Returns the uploaded team photo URL or the local default."""
+        if self.team_photo:
+            return self.team_photo.url
+        
+        # Matches: media/team/default_team.jpg
+        return f"{settings.MEDIA_URL}team/default_team.jpg"
 
     def __str__(self):
         return self.display_name

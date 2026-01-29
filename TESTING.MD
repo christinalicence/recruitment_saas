@@ -35,3 +35,17 @@ for tenant in Client.objects.all():
     print(f"Name: {tenant.name} | Schema: {tenant.schema_name}")
 
 python manage.py flush - deletes everyone inc superuser
+python3 manage.py createsuperuser
+
+# Import from the 'customers' app (or wherever your Tenant model lives)
+from customers.models import Client, Domain
+
+# 1. Create the public tenant
+# Note: Ensure the model name is 'Client' or 'Tenant' based on your code
+tenant = Client(schema_name='public', name='Public Tenant')
+tenant.save()
+
+# 2. Add the domain so Django knows how to route to it
+# If you are developing locally, use 'localhost'
+domain = Domain(domain='localhost', tenant=tenant, is_primary=True)
+domain.save()

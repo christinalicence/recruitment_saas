@@ -17,18 +17,10 @@
                     </div>
                 </div>
                 <div class="col-12 {% if profile.template_choice == 'startup' %}col-lg-10 mx-auto mt-4{% else %}col-lg-6{% endif %}">
-                    {% if profile.hero_image %}
-                        <img src="{% if profile.hero_image.url %}{{ profile.hero_image.url }}{% else %}{{ profile.hero_image }}{% endif %}" 
-                             alt="Careers" class="img-fluid shadow-lg hero-img-styled">
-                    {% elif profile.get_hero_image %}
-                        <img src="{{ profile.get_hero_image }}" 
-                             alt="Careers" class="img-fluid shadow-lg hero-img-styled">
-                    {% else %}
-                        <div class="hero-placeholder">
-                            <p class="text-muted">Upload Hero Image</p>
-                        </div>
-                    {% endif %}
-                </div>
+    <img src="{{ profile.get_hero_image }}" 
+         alt="Careers" 
+         class="img-fluid shadow-lg hero-img-styled">
+</div>
             </div>
         </div>
     </section>

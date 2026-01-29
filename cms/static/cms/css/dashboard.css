@@ -41,58 +41,43 @@
     border-radius: 16px;
 }
 
-/* --- DEVICE PREVIEW SCALING LOGIC --- */
+/* --- Device Preview Scaling Logic --- */
 
 .preview-frame-wrapper {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s ease-in-out;
     margin: 0 auto;
     background: #fff;
     position: relative;
-    overflow: hidden; /* Clips the scaled iframe */
+    border: 8px solid #333; /* Gives it a "device" frame look */
+    border-radius: 20px;
+    overflow: hidden;
 }
 
-/* Desktop Mode: Scale 1280px down to fit */
+/* Desktop: Standard Wide View */
 .preview-frame-wrapper.desktop-mode {
-    width: 640px; /* This is 50% of 1280px */
-    height: 400px;
-}
-
-.preview-frame-wrapper.desktop-mode iframe {
-    width: 1280px; 
-    height: 800px;
-    transform: scale(0.5);
-    transform-origin: top left;
-    border: none;
-}
-
-/* Tablet Mode: Scale 768px down to fit */
-.preview-frame-wrapper.tablet-mode {
-    width: 460px; 
+    width: 100%;
     height: 600px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
-.preview-frame-wrapper.tablet-mode iframe {
+/* Tablet: Portrait iPad size */
+.preview-frame-wrapper.tablet-mode {
     width: 768px;
-    height: 1000px;
-    transform: scale(0.6);
-    transform-origin: top left;
-    border: none;
+    max-width: 100%;
+    height: 800px;
 }
 
-/* Mobile Mode: No scale needed (usually fits) */
+/* Mobile: iPhone size */
 .preview-frame-wrapper.mobile-mode {
     width: 375px;
+    max-width: 100%;
     height: 667px;
 }
 
-.preview-frame-wrapper.mobile-mode iframe {
+#preview-frame {
     width: 100%;
     height: 100%;
-    transform: none;
     border: none;
-}
-
-/* Ensure Iframe fills wrapper before transform */
-#preview-frame {
-    border: none;
+    display: block;
 }

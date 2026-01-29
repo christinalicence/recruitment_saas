@@ -1,6 +1,8 @@
 from django.urls import path, include
 from django.contrib import admin
 from marketing import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('login/', views.tenant_login, name='tenant_login'),
@@ -17,3 +19,6 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
