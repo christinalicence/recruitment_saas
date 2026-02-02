@@ -10,4 +10,6 @@ urlpatterns = [
     path('dashboard/edit/', views.edit_site, name='edit_site'),
     path('dashboard/jobs/', views.job_list, name='job_list'),
     path('preview/', views.live_preview, name='live_preview'),
+    path('billing/success/', views.payment_success, name='payment_success'),
+    path('billing/cancel/', views.payment_cancel, name='payment_cancel'),
 ]

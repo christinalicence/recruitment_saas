@@ -1,0 +1,15 @@
+{% extends 'cms/base_cms.html' %}
+{% block content %}
+<div class="container text-center py-5">
+    <div class="card shadow p-5 border-0">
+        <div class="display-1 text-success mb-4">
+            <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <h1 class="fw-bold">Payment Successful!</h1>
+        <p class="lead text-muted">Thank you for subscribing. Your account is now fully activated.</p>
+        <hr class="my-4">
+        <p>You can now access all recruitment tools and manage your jobs.</p>
+        <a href="{% url 'cms:dashboard' %}" class="btn btn-primary btn-lg px-5">Go to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

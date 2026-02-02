@@ -1,0 +1,18 @@
+{% extends 'cms/base_cms.html' %}
+{% block content %}
+<div class="container text-center py-5">
+    <div class="card shadow p-5 border-0">
+        <div class="display-1 text-warning mb-4">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+        <h1 class="fw-bold">Payment Cancelled</h1>
+        <p class="lead text-muted">It looks like you didn't complete the checkout process. No charges were made.</p>
+        <hr class="my-4">
+        <p>If you're having trouble with payment, please contact our support.</p>
+        <div class="d-grid gap-2 d-md-block">
+            <a href="{% url 'customers:create_checkout' %}" class="btn btn-primary btn-lg px-5">Try Again</a>
+            <a href="{% url 'cms:dashboard' %}" class="btn btn-outline-secondary btn-lg px-5">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

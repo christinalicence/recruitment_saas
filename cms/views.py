@@ -140,9 +140,9 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def create_checkout_session(request):
     """Initiates the Stripe Checkout process."""
-    client = request.tenant # django-tenants provides the current client
+    client = request.tenant 
     
-    # Check if we already have a Stripe Customer ID
+    # 1. Ensure the customer exists in Stripe
     if not client.stripe_customer_id:
         customer = stripe.Customer.create(
             email=request.user.email,
@@ -152,15 +152,21 @@ def create_checkout_session(request):
         client.stripe_customer_id = customer.id
         client.save()
 
+    # 2. Get the specific tenant domain (e.g., 'python.localhost')
+    domain = client.domains.first().domain 
+    
+    # 3. Create the ONE session with your new pretty URLs
     session = stripe.checkout.Session.create(
         customer=client.stripe_customer_id,
         payment_method_types=['card'],
         line_items=[{'price': client.plan.stripe_price_id, 'quantity': 1}],
         mode='subscription',
-        success_url=f"{settings.SITE_URL}/dashboard/?success=true",
-        cancel_url=f"{settings.SITE_URL}/dashboard/?cancel=true",
+        # Note: Added the 'cms' prefix to match your urls.py namespace
+        success_url=f"http://{domain}:8000/billing/success/",
+        cancel_url=f"http://{domain}:8000/billing/cancel/",
         metadata={'tenant_id': client.id}
     )
+    
     return redirect(session.url, code=303)
 
 def customer_portal(request):
@@ -170,3 +176,12 @@ def customer_portal(request):
         return_url=f"{settings.SITE_URL}/dashboard/",
     )
     return redirect(session.url, code=303)
+
+
+def payment_success(request):
+    """Render the success page after a successful Stripe payment."""
+    return render(request, 'cms/payment_success.html')
+
+def payment_cancel(request):
+    """Render the cancel page if a user exits Stripe Checkout."""
+    return render(request, 'cms/payment_cancel.html')

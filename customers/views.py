@@ -9,34 +9,28 @@ from django.core.mail import send_mail
 
 
 def create_checkout_session(request):
-    """Sends the user to Stripe's hosted checkout page."""
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    client = request.tenant # Provided by django-tenants middleware
+    """Initiates the Stripe Checkout process."""
+    client = request.tenant
     
-    # Ensure the client has a Stripe Customer ID so we can track them
     if not client.stripe_customer_id:
-        # This creates the customer in Stripe
         customer = stripe.Customer.create(
             email=request.user.email,
             name=client.name,
             metadata={'tenant_id': client.id}
         )
-        # This saves it to YOUR database so 'customer_portal' can use it later
         client.stripe_customer_id = customer.id
         client.save()
 
-    # Create the checkout session
+    domain = client.domains.first().domain
+    
     session = stripe.checkout.Session.create(
         customer=client.stripe_customer_id,
         payment_method_types=['card'],
-        line_items=[{
-            'price': client.plan.stripe_price_id,
-            'quantity': 1,
-        }],
+        line_items=[{'price': client.plan.stripe_price_id, 'quantity': 1}],
         mode='subscription',
-        success_url=f"http://{request.get_host()}/dashboard/?success=true",
-        cancel_url=f"http://{request.get_host()}/dashboard/?cancel=true",
-        metadata={'tenant_id': client.id} # Crucial for the webhook handshake
+        success_url=f"http://{domain}:8000/billing/success/",
+        cancel_url=f"http://{domain}:8000/billing/cancel/",
+        metadata={'tenant_id': client.id}
     )
     return redirect(session.url, code=303)
 
