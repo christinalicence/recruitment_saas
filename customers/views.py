@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.shortcuts import redirect
 from .models import Client
+from django.core.mail import send_mail
 
 
 def create_checkout_session(request):
@@ -55,6 +56,7 @@ def stripe_webhook(request):
     """Server-to-server communication from Stripe to confirm payment."""
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
     event = None
 
     try:
@@ -71,7 +73,15 @@ def stripe_webhook(request):
         
         if tenant_id:
             client = Client.objects.get(id=tenant_id)
-            client.is_active = True # Your 'Pro' active status
+            client.is_active = True # Activate the tenant
             client.save()
+
+            send_mail(
+                subject="Subscription Active!",
+                message=f"Hi {client.name}, your Standard Plan is now active.",
+                from_email="billing@recruit-saas.com",
+                recipient_list=[client.notification_email_1], # Uses the email from signup
+                fail_silently=False,
+    )
 
     return HttpResponse(status=200)

@@ -26,7 +26,7 @@ class Client(TenantMixin):
     plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, null=True, blank=True)
     created_on = models.DateField(default=date.today)
     trial_ends = models.DateField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     # GDPR-Safe Notification Emails
     notification_email_1 = models.EmailField(max_length=255, blank=True, null=True)
@@ -35,6 +35,13 @@ class Client(TenantMixin):
     stripe_customer_id = models.CharField(max_length=100, blank=True)
 
     auto_create_schema = True
+
+    @property
+    def is_on_trial(self):
+        """Returns True if the trial hasn't expired yet."""
+        if self.trial_ends:
+            return date.today() <= self.trial_ends
+        return False
 
     def save(self, *args, **kwargs):
         if not self.trial_ends:

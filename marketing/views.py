@@ -8,7 +8,7 @@ from .forms import TenantSignupForm, TenantLoginForm
 
 
 def tenant_signup(request):
-    """Public signup - creates tenant and shows success page."""
+    """Public signup - creates tenant with automated email and standard user."""
     template_id = request.GET.get('template', 'executive')
     initial_data = {'company_name': request.GET.get('company_name', '')}
     form = TenantSignupForm(request.POST or None, initial=initial_data)
@@ -18,21 +18,20 @@ def tenant_signup(request):
         admin_email = form.cleaned_data["admin_email"]
         password = form.cleaned_data["password"]
         
-        # 1. Get the Standard Plan (Pro-standard check)
-        # We use .filter().first() to avoid a crash if the plan isn't created yet
         standard_plan = Plan.objects.filter(name="Standard").first()
         
-        # 2. Create Tenant
+        # 2. Create Tenant with the automated notification email
         tenant, created = Client.objects.get_or_create(
             name=company_name,
             defaults={
-                'is_active': True,
-                'template_choice': template_id, # Added the missing comma here
-                'plan': standard_plan 
+                'is_active': False, # Start as False to test trial/paywall
+                'template_choice': template_id,
+                'plan': standard_plan,
+                'notification_email_1': admin_email # <--- This fixes the email issue!
             }
         )
         
-        # 3. Create Domain
+        # 3. Create Domain (Standard logic)
         host_full = request.get_host()
         base_domain = host_full.split(':')[0]
         if base_domain in ["127.0.0.1", "localhost"]:
@@ -44,30 +43,25 @@ def tenant_signup(request):
             defaults={'tenant': tenant, 'is_primary': True}
         )
         
-        # 4. Create user AND profile inside the Tenant Schema
+        # 4. Create standard user inside the Tenant Schema
         with schema_context(tenant.schema_name):
             tenant_user, t_created = User.objects.get_or_create(
                 username=admin_email,
                 defaults={
-                    'email': admin_email, 
-                    'is_staff': True,
-                    'is_superuser': True
+                    'email': admin_email,
+                    'is_staff': False,      
+                    'is_superuser': False 
                 }
             )
-            if t_created: # Only set password if the user was just created
+            if t_created:
                 tenant_user.set_password(password)
                 tenant_user.save()
             
-            # Create CompanyProfile
+            # Create CompanyProfile for their dashboard to manage
             from cms.models import CompanyProfile
             CompanyProfile.objects.get_or_create(
                 id=1,
-                defaults={
-                    'display_name': company_name,
-                    'primary_color': '#2c3e50',
-                    'secondary_color': '#e74c3c',
-                    'background_color': '#ffffff'
-                }
+                defaults={'display_name': company_name}
             )
         
         # 5. Show success page

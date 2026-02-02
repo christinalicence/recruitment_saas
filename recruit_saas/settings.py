@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'recruit_saas.debug_middleware.SubscriptionGuardMiddleware',
 ]
 
 # Allow iframe embedding for tenant preview
@@ -154,3 +155,6 @@ STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 SITE_URL = 'http://localhost:8000'  # for local dev
+
+# Email Settings (Console Backend for Development)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

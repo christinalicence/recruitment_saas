@@ -1,7 +1,9 @@
 from django_tenants.middleware.main import TenantMainMiddleware
 from django.conf import settings
 from django.utils.cache import patch_vary_headers
-from django.urls import set_urlconf
+from django.urls import set_urlconf, reverse
+from django.shortcuts import redirect
+
 
 class CustomTenantMiddleware(TenantMainMiddleware):
     def get_tenant(self, domain_model, hostname):
@@ -38,3 +40,35 @@ class CustomTenantMiddleware(TenantMainMiddleware):
             print(f"DEBUG: Host={request.get_host()} | Tenant={tenant_name} | URLConf={getattr(request, 'urlconf', 'Default')}")
         
         return response
+    
+
+class SubscriptionGuardMiddleware:
+    """Middleware to block access to inactive tenants except for billing paths."""
+    
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # 1. Ignore the public marketing site
+        if not request.tenant or request.tenant.schema_name == 'public':
+            return self.get_response(request)
+
+        # 2. Paths that are ALWAYS allowed (Login, Logout, and Billing)
+        # Otherwise, they can't pay to get back in!
+        allowed_paths = [
+            reverse('customers:create_checkout'),
+            reverse('customers:stripe_webhook'),
+            '/login/', 
+            '/logout/',
+            '/billing/portal/',
+        ]
+
+        if any(request.path.startswith(path) for path in allowed_paths):
+            return self.get_response(request)
+
+        # 3. If not active AND trial has expired, redirect to checkout
+        # This uses the @property we just created in the model
+        if not request.tenant.is_active and not request.tenant.is_on_trial:
+            return redirect(reverse('customers:create_checkout'))
+
+        return self.get_response(request)
