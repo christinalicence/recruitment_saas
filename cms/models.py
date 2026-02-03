@@ -24,7 +24,7 @@ class CompanyProfile(models.Model):
     hero_image = models.ImageField(upload_to='hero/', null=True, blank=True)
     
     # Page 2: About Us
-    about_title = models.CharField(max_length=200, default="Our Story")
+    about_title = models.CharField(max_length=200, default="Our Story", blank=True, null=True)
     team_photo = models.ImageField(upload_to='team/', null=True, blank=True)
     about_content = models.TextField(blank=True)
     

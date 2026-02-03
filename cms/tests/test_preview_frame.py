@@ -27,20 +27,15 @@ class PreviewFrameTest(TenantCleanupTestCase):
         
         # Create user and profile in tenant schema
         with schema_context('testcorp'):
-            CompanyProfile.objects.get_or_create(
-                id=1,
-                defaults={'display_name': 'Test Corp Branding'}
-            )
-            self.user = User.objects.create_user(
-                username='admin@test.com',
-                email='admin@test.com',
-                password='password123'
-            )
+            with schema_context('testcorp'):
+            # Match display_name to self.tenant.name ('Test Corp')
+                CompanyProfile.objects.create(
+                    display_name='Test Corp', 
+                    hero_title='Test Corp Branding'
+                )
 
     @override_settings(ROOT_URLCONF='recruit_saas.urls_tenant')
     def test_preview_frame_access(self):
-        """Test that authenticated users can access the live preview."""
-        # Use force_login instead of login()
         with schema_context('testcorp'):
             user = User.objects.get(username='admin@test.com')
             self.client.force_login(user)
@@ -49,6 +44,7 @@ class PreviewFrameTest(TenantCleanupTestCase):
         response = self.client.get(url, HTTP_HOST='testcorp.localhost')
         
         self.assertEqual(response.status_code, 200)
+        # Now this will pass because the hero_title is what's rendered
         self.assertContains(response, "Test Corp Branding")
 
     @override_settings(ROOT_URLCONF='recruit_saas.urls_tenant')

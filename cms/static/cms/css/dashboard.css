@@ -41,43 +41,59 @@
     border-radius: 16px;
 }
 
-/* --- Device Preview Scaling Logic --- */
-
-.preview-frame-wrapper {
-    transition: all 0.4s ease-in-out;
-    margin: 0 auto;
-    background: #fff;
-    position: relative;
-    border: 8px solid #333; /* Gives it a "device" frame look */
-    border-radius: 20px;
-    overflow: hidden;
+/* --- THE EXECUTIVE --- */
+.theme-executive {
+    --brand-primary: var(--brand-primary, #1e3a8a); 
+    --brand-secondary: var(--brand-secondary, #64748b);
+    --brand-bg: var(--brand-bg, #f8fafc);
+    --brand-font: 'Inter', sans-serif;
 }
 
-/* Desktop: Standard Wide View */
-.preview-frame-wrapper.desktop-mode {
-    width: 100%;
-    height: 600px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+/* --- THE STARTUP --- */
+.theme-startup {
+    --brand-primary: var(--brand-primary, #ff4f00); 
+    --brand-secondary: var(--brand-secondary, #2d3748);
+    --brand-bg: var(--brand-bg, #ffffff);
+    --brand-font: 'Inter', sans-serif;
 }
 
-/* Tablet: Portrait iPad size */
-.preview-frame-wrapper.tablet-mode {
-    width: 768px;
-    max-width: 100%;
-    height: 800px;
+/* --- GLOBAL COMPONENT MAPPING --- */
+.agency-site {
+    background-color: var(--brand-bg);
+    color: var(--brand-secondary); /* Secondary color for main body text */
 }
 
-/* Mobile: iPhone size */
-.preview-frame-wrapper.mobile-mode {
-    width: 375px;
-    max-width: 100%;
-    height: 667px;
+/* PRIMARY COLOR: Used for Nav and Footer "Blocks" */
+.navbar {
+    background-color: var(--brand-primary) !important;
 }
 
-#preview-frame {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block;
+.navbar .navbar-brand, 
+.navbar .nav-link {
+    color: var(--brand-bg) !important; /* Text on primary blocks uses BG color for contrast */
+}
+
+.brand-footer {
+    background-color: var(--brand-primary) !important;
+    color: var(--brand-bg) !important;
+}
+
+.brand-footer h3, .brand-footer h4 {
+    color: var(--brand-bg) !important;
+}
+
+/* SECONDARY COLOR: Used for all text/headings */
+.agency-site h1, 
+.agency-site h2, 
+.agency-site h3, 
+.agency-site h4,
+.hero-section h1 {
+    color: var(--brand-secondary) !important;
+}
+
+/* BUTTONS */
+.btn-primary {
+    background-color: var(--brand-primary) !important;
+    border-color: var(--brand-primary) !important;
+    color: var(--brand-bg) !important;
 }

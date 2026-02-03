@@ -79,27 +79,35 @@ def dashboard(request):
 
 @login_required
 def edit_site(request):
-    """Handles site design updates, supporting image uploads and resizing."""
+    # 1. Fetch the existing profile
     profile, created = CompanyProfile.objects.get_or_create(
         display_name=request.tenant.name,
         defaults=get_profile_defaults(request)
     )
 
     if request.method == 'POST':
-        # Pass request.FILES for image uploads
         form = CompanyProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            try:
-                form.save() # This triggers the resizing save() in models.py
-                messages.success(request, "Your site has been updated successfully!")
-                return redirect('cms:edit_site')
-            except Exception as e:
-                messages.error(request, f"Error processing images: {str(e)}")
+            form.save()
+            messages.success(request, "Changes saved successfully!")
+            return redirect('cms:edit_site')
+        else:
+            # This will now show you the "This field is required" 
+            # message at the top of your dashboard
+            messages.error(request, "Please fix the errors below.")
+            print(form.errors)
     else:
+        # 5. Normal page load (GET)
         form = CompanyProfileForm(instance=profile)
 
-    return render(request, 'cms/edit_site.html', {'form': form, 'profile': profile})
+    # 6. This return is aligned with the 'if request.method' block
+    return render(request, 'cms/edit_site.html', {
+        'form': form,
+        'profile': profile,
+    })
 
+
+@login_required
 @xframe_options_exempt
 def live_preview(request):
     """Powers the real-time preview iframe in the dashboard."""

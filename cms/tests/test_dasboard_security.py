@@ -2,6 +2,8 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django_tenants.utils import schema_context
+from cms.views import get_profile_defaults
+from urllib3 import request
 from customers.models import Client as TenantClient, Domain
 from cms.models import CompanyProfile
 from customers.tests import TenantCleanupTestCase
@@ -39,28 +41,27 @@ class DashboardSecurityTest(TenantCleanupTestCase):
         
         # Create user for Tenant A
         with schema_context('tenant_a_test'):
-            CompanyProfile.objects.get_or_create(
-                id=1,
-                defaults={'display_name': 'Tenant A Corp'}
+            # DON'T use get_profile_defaults here; it needs a request object
+            CompanyProfile.objects.create(
+                display_name='Tenant A', 
+                hero_title="Welcome to Tenant A"
             )
             self.user_a = User.objects.create_user(
-                username='user@a.com',
-                email='user@a.com',
-                password='password123'
+                username='user@a.com', email='user@a.com', password='password123'
             )
         
         # Create user for Tenant B
         with schema_context('tenant_b_test'):
-            CompanyProfile.objects.get_or_create(
-                id=1,
-                defaults={'display_name': 'Tenant B Corp'}
+            # Remove id=1 to prevent IntegrityErrors
+            CompanyProfile.objects.create(
+                display_name='Tenant B',
+                hero_title="Welcome to Tenant B"
             )
             self.user_b = User.objects.create_user(
-                username='user@b.com',
-                email='user@b.com',
-                password='password123'
+                username='user@b.com', email='user@b.com', password='password123'
             )
 
+            
     @override_settings(ROOT_URLCONF='recruit_saas.urls_tenant')
     def test_cross_tenant_access_is_forbidden(self):
         """

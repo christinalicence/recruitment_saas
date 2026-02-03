@@ -1,208 +1,56 @@
-/* --- THEME DEFINITIONS & BOLD DEFAULTS --- */
-
-/* The Executive - Deep Navy, Sharp Corners, Corporate */
+/* --- THE EXECUTIVE --- */
 .theme-executive {
-    --brand-primary: #1e3a8a; 
-    --brand-secondary: #64748b;
-    --brand-bg: #f8fafc;
-    --hero-text-color: #0f172a; /* Dark Slate */
+    --brand-primary: var(--brand-primary, #1e3a8a); 
+    --brand-secondary: var(--brand-secondary, #64748b);
+    --brand-bg: var(--brand-bg, #f8fafc);
     --brand-font: 'Inter', sans-serif;
-    --brand-radius: 4px;
-    --brand-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* The Startup - Hot Coral, Dark Mode, High Energy */
+/* --- THE STARTUP --- */
 .theme-startup {
-    --brand-primary: #ff4f00; 
-    --brand-secondary: #ffffff;
-    --brand-bg: #000000; /* Dark background for that bold startup feel */
-    --hero-text-color: #ffffff; 
-    --brand-font: 'Lexend', sans-serif;
-    --brand-radius: 50px;
-    --brand-shadow: 0 12px 40px rgba(255, 79, 0, 0.2);
+    --brand-primary: var(--brand-primary, #ff4f00); 
+    --brand-secondary: var(--brand-secondary, #2d3748);
+    --brand-bg: var(--brand-bg, #ffffff);
+    --brand-font: 'Inter', sans-serif;
 }
 
-/* The Boutique - Terracotta, Warm Cream, Elegant */
-.theme-boutique {
-    --brand-primary: #92400e; 
-    --brand-secondary: #fef3c7;
-    --brand-bg: #fffcf5; /* Warm cream background */
-    --hero-text-color: #451a03; /* Deep brown text */
-    --brand-font: 'Space Grotesk', sans-serif;
-    --brand-radius: 24px;
-    --brand-shadow: 0 10px 30px rgba(0,0,0,0.05);
-}
-
-/* --- CORE COMPONENT LOGIC --- */
-
+/* --- GLOBAL COMPONENT MAPPING --- */
 .agency-site {
-    font-family: var(--brand-font);
     background-color: var(--brand-bg);
-    color: var(--hero-text-color);
-    transition: all 0.3s ease;
+    color: var(--brand-secondary); /* Secondary color for main body text */
 }
 
-/* Hero Section Base */
-.hero-section {
-    padding: 100px 0;
-    background-color: var(--brand-bg);
-}
-
-.hero-section h1 {
-    color: var(--hero-text-color);
-    font-weight: 800;
-}
-
-/* Primary Button Styling */
-.btn-primary {
+/* PRIMARY COLOR: Used for Nav and Footer "Blocks" */
+.navbar {
     background-color: var(--brand-primary) !important;
-    border-color: var(--brand-primary) !important;
-    border-radius: var(--brand-radius);
-    padding: 12px 28px;
-    font-weight: 600;
-    color: #ffffff !important;
 }
 
-/* Accent Block for emphasis */
-.accent-block {
-    padding: 80px 0;
-    background-color: var(--brand-primary);
-    color: #ffffff;
-    margin: 40px 0;
+.navbar .navbar-brand, 
+.navbar .nav-link {
+    color: var(--brand-bg) !important; /* Text on primary blocks uses BG color for contrast */
 }
 
-/* Card Styling */
-.card-brand {
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: var(--brand-radius);
-    box-shadow: var(--brand-shadow);
-    height: 100%;
-    border: 1px solid rgba(0,0,0,0.05);
-    color: #212529; 
+.brand-footer {
+    background-color: var(--brand-primary) !important;
+    color: var(--brand-bg) !important;
 }
 
-/* --- LAYOUT SPECIFICS --- */
-
-/* Executive: Classic Left-aligned */
-.theme-executive .hero-section {
-    text-align: left;
-    border-bottom: 6px solid var(--brand-primary);
+.brand-footer h3, .brand-footer h4 {
+    color: var(--brand-bg) !important;
 }
 
-/* Startup: Centered & Dramatic */
-.theme-startup .hero-section {
-    text-align: center;
-    padding: 140px 0;
-}
-.theme-startup .hero-image-container {
-    margin-top: 50px;
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Boutique: Clean & Editorial */
-.theme-boutique .hero-section {
-    text-align: left;
-}
-
-/* ---  DYNAMIC OVERRIDES --- */
-/* These allow the variables to be overwritten by the database values 
-   injected into the style tag in the HTML head. */
-
-.agency-site {
-    --primary: var(--brand-primary);
-    --secondary: var(--brand-secondary);
-    --bg: var(--brand-bg);
-}
-
-/* --- GLOBAL BRANDING RULES  --- */
-
+/* SECONDARY COLOR: Used for all text/headings */
 .agency-site h1, 
 .agency-site h2, 
 .agency-site h3, 
-.agency-site h4, 
-.agency-site .brand-text {
-    color: var(--brand-primary);
+.agency-site h4,
+.hero-section h1 {
+    color: var(--brand-secondary) !important;
 }
 
-.agency-site a:not(.btn) {
-    color: var(--brand-primary);
-    text-decoration: none;
-}
-
-.agency-site a:not(.btn):hover {
-    filter: brightness(85%); /* Darkens the brand color slightly on hover */
-}
-
-/* Specific fix for the Job List/Detail icons or small labels */
-.job-meta-icon {
-    color: var(--brand-primary);
-    margin-right: 5px;
-}
-
-/* Make sure secondary color button looks good */
-.btn-secondary {
-    background-color: var(--brand-secondary) !important;
-    border-color: var(--brand-secondary) !important;
-    color: white !important;
-}
-
-/* A subtle hover effect for cards using the primary color */
-.card-brand {
-    border-top: 3px solid transparent;
-    transition: all 0.3s ease;
-}
-
-.card-brand:hover {
-    border-top: 3px solid var(--brand-primary);
-    transform: translateY(-5px);
-}
-
-/* --- BRAND FOOTER --- */
-.brand-footer {
-    background-color: var(--brand-secondary);
-    color: white;
-    margin-top: 3rem; /* Same as mt-5 */
-    padding-top: 3rem; /* Same as py-5 */
-    padding-bottom: 3rem;
-}
-
-.brand-footer h3, 
-.brand-footer h4 {
-    color: white !important; /* Overrides global brand-primary heading color */
-}
-
-.brand-footer .opacity-75 {
-    opacity: 0.75;
-}
-
-.brand-footer .opacity-50 {
-    opacity: 0.50;
-}
-
-.brand-footer .opacity-25 {
-    opacity: 0.25;
-}
-
-.brand-footer hr {
-    border-color: white;
-}
-
-/* --- HERO IMAGE STYLES --- */
-.hero-img-styled {
-    border-radius: var(--brand-radius);
-    width: 100%;
-    object-fit: cover;
-}
-
-.hero-placeholder {
-    background-color: #f8fafc;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    border-radius: var(--brand-radius);
+/* BUTTONS */
+.btn-primary {
+    background-color: var(--brand-primary) !important;
+    border-color: var(--brand-primary) !important;
+    color: var(--brand-bg) !important;
 }

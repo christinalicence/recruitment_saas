@@ -20,8 +20,8 @@ SHARED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage', 
-    'cloudinary',          
+    'cloudinary_storage',
+    'cloudinary',      
     'django.contrib.staticfiles',
     'marketing',
     'crispy_forms',
@@ -147,8 +147,15 @@ CLOUDINARY_STORAGE = {
 # Toggle between local and Cloudinary
 USE_CLOUDINARY = os.getenv('USE_CLOUDINARY', 'False') == 'True'
 
+# ADD THESE PRINTS TO YOUR TERMINAL
+print(f"--- DEBUG: USE_CLOUDINARY is {USE_CLOUDINARY} ---")
+print(f"--- DEBUG: CLOUD_NAME is {os.getenv('CLOUDINARY_CLOUD_NAME')} ---")
+
 if USE_CLOUDINARY:
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    print("--- SUCCESS: Cloudinary Storage Backend Loaded ---")
+else:
+    print("--- WARNING: Cloudinary NOT Loaded, using local storage ---")
 
 # Stripe Settings
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')

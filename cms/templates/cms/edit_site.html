@@ -42,7 +42,15 @@
                             <h6 class="fw-bold text-uppercase small text-muted mb-3 mt-4">Content</h6>
                             {{ form.hero_title|as_crispy_field }}
                             {{ form.hero_text|as_crispy_field }}
-                            {{ form.hero_image|as_crispy_field }}
+                           <div class="mb-3">
+                                {{ form.hero_image|as_crispy_field }}
+                                {% if profile.hero_image %}
+                                    <div class="mt-2">
+                                        <p class="small text-muted mb-1">Current Image:</p>
+                                        <img src="{{ profile.hero_image.url }}" class="img-thumbnail" style="max-height: 100px;">
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
 
                         <div class="mt-4 pt-3 border-top">

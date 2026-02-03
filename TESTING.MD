@@ -49,3 +49,6 @@ tenant.save()
 # If you are developing locally, use 'localhost'
 domain = Domain(domain='localhost', tenant=tenant, is_primary=True)
 domain.save()
+
+
+There are issues with testing locally and when deployed caused by the movements bewteen subdomains. The tests written for local dev are often not compatbile
