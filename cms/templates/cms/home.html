@@ -1,64 +1,227 @@
 {% extends "cms/base_tenant.html" %}
+{% load static %}
 
 {% block title %}{{ profile.display_name }} | Careers{% endblock %}
 
 {% block content %}
 <div class="theme-{{ profile.template_choice|default:'executive' }} agency-site">
     
-    <section class="hero-section py-5">
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <div class="col-12 {% if profile.template_choice == 'startup' %}text-center{% else %}col-lg-6{% endif %} mb-5 mb-lg-0">
-                    <h1 class="display-3 fw-bold mb-4">{{ profile.hero_title }}</h1>
-                    <p class="lead mb-4 text-muted">{{ profile.hero_text|linebreaksbr }}</p>
-                    <div class="d-flex gap-3 {% if profile.template_choice == 'startup' %}justify-content-center{% endif %}">
-                        <a href="{% url 'cms:job_list' %}" class="btn btn-primary btn-lg px-4">Browse Jobs</a>
-                        <a href="{% url 'cms:about' %}" class="btn btn-outline-dark btn-lg px-4">Our Story</a>
-                    </div>
-                </div>
-                <div class="col-12 {% if profile.template_choice == 'startup' %}col-lg-10 mx-auto mt-4{% else %}col-lg-6{% endif %}">
-    <img src="{{ profile.get_hero_image }}" 
-         alt="Careers" 
-         class="img-fluid shadow-lg hero-img-styled">
-</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="jobs" class="py-5 bg-light">
-        <div class="container py-5">
-            <div class="mb-5 {% if profile.template_choice == 'startup' %}text-center{% endif %}">
-                <h2 class="fw-bold">Current Vacancies</h2>
-                <p class="text-muted">{{ profile.jobs_header_text }}</p>
-            </div>
-        </div>
-    </section>
-
-   <footer class="brand-footer">
+    {# HERO SECTION #}
+    <section class="hero-section">
         <div class="container">
-            <div class="row g-4 align-items-center">
-                <div class="col-md-6">
-                    <h3 class="fw-bold mb-2">{{ profile.display_name }}</h3>
-                    <p class="mb-0 opacity-75">Connecting exceptional talent with world-class opportunities since 2010.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="d-flex justify-content-md-end gap-4">
-                        <div class="text-center">
-                            <h4 class="fw-bold mb-0">98%</h4>
-                            <small class="text-uppercase" style="font-size: 0.7rem;">Retention Rate</small>
-                        </div>
-                        <div class="text-center">
-                            <h4 class="fw-bold mb-0">2.5k</h4>
-                            <small class="text-uppercase" style="font-size: 0.7rem;">Placements</small>
+            <div class="row align-items-center {% if profile.template_choice == 'startup' %}flex-column-reverse flex-lg-row{% endif %}">
+                
+                <div class="col-12 {% if profile.template_choice == 'startup' %}col-lg-12 text-center order-2{% else %}col-lg-6 order-1{% endif %} {% if profile.template_choice == 'boutique' %}col-lg-7{% endif %}">
+                    <div class="hero-content">
+                        <h1 class="hero-title">{{ profile.hero_title }}</h1>
+                        <p class="hero-text">{{ profile.hero_text|linebreaksbr }}</p>
+                        <div class="hero-actions {% if profile.template_choice == 'startup' %}justify-content-center{% endif %}">
+                            {% if profile.featured_job %}
+                                <a href="#featured-role" class="btn btn-primary btn-lg">View Featured Role</a>
+                            {% else %}
+                                <a href="{% url 'cms:job_list' %}" class="btn btn-primary btn-lg">View All Jobs</a>
+                            {% endif %}
+                            <a href="{% url 'cms:about' %}" class="btn btn-outline-dark btn-lg">Learn About Us</a>
                         </div>
                     </div>
                 </div>
+                
+                <div class="col-12 {% if profile.template_choice == 'startup' %}col-lg-10 mx-auto order-1 mb-5{% else %}col-lg-6 order-2{% endif %} {% if profile.template_choice == 'boutique' %}col-lg-5{% endif %}">
+                    <div class="hero-image-wrapper">
+                        <img src="{{ profile.get_hero_image }}" alt="{{ profile.display_name }}" class="hero-img-styled">
+                    </div>
+                </div>
             </div>
-            <hr class="my-4 opacity-25">
-            <div class="text-center small opacity-50">
-                &copy; 2026 {{ profile.display_name }} Recruitment Partners. All rights reserved.
+        </div>
+    </section>
+
+    {# VALUE PROPS SECTION #}
+    <section class="value-props-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Why Work With Us</h2>
+                <p class="section-subtitle">We're committed to finding the perfect match for your career journey</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <h3 class="value-title">{{ profile.value_prop_1_title }}</h3>
+                        <p class="value-desc">{{ profile.value_prop_1_text }}</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <h3 class="value-title">{{ profile.value_prop_2_title }}</h3>
+                        <p class="value-desc">{{ profile.value_prop_2_text }}</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <h3 class="value-title">{{ profile.value_prop_3_title }}</h3>
+                        <p class="value-desc">{{ profile.value_prop_3_text }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# FEATURED JOB SECTION (only if job selected) #}
+    {% if profile.featured_job %}
+    <section id="featured-role" class="featured-job-section">
+        <div class="container">
+            <div class="featured-job-header">
+                <span class="featured-badge">Featured Role</span>
+                <h2 class="section-title">{{ profile.featured_job.title }}</h2>
+                <div class="job-meta">
+                    <span class="meta-item">📍 {{ profile.featured_job.location }}</span>
+                    <span class="meta-item">💰 {{ profile.featured_job.salary }}</span>
+                    <span class="meta-item">🕒 Posted {{ profile.featured_job.created_at|timesince }} ago</span>
+                </div>
+            </div>
+            
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="job-summary">
+                        <h3 class="job-summary-title">About This Role</h3>
+                        <p class="lead">{{ profile.featured_job.summary }}</p>
+                        <p>{{ profile.featured_job.description|truncatewords:50|linebreaks }}</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-5">
+                    <div class="job-apply-card">
+                        <h4 class="job-apply-title">Ready to Apply?</h4>
+                        <p class="job-apply-text">Join {{ profile.display_name }} and take the next step in your career</p>
+                        <a href="{% url 'cms:job_detail' profile.featured_job.id %}" class="btn btn-primary btn-lg w-100 mb-3">
+                            View Full Details
+                        </a>
+                        <a href="{% url 'cms:job_list' %}" class="btn btn-outline-light w-100">
+                            Browse All Roles
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {# STATS SECTION (only if enabled) #}
+    {% if profile.show_stats %}
+    <section class="stats-section">
+        <div class="container">
+            <div class="row text-center g-4">
+                {% if profile.stat_placements %}
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ profile.stat_placements }}</div>
+                        <div class="stat-label">Successful Placements</div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if profile.stat_satisfaction %}
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ profile.stat_satisfaction }}</div>
+                        <div class="stat-label">Candidate Satisfaction</div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if profile.stat_companies %}
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ profile.stat_companies }}</div>
+                        <div class="stat-label">Partner Companies</div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if profile.stat_experience %}
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ profile.stat_experience }}</div>
+                        <div class="stat-label">Years of Excellence</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {# CTA SECTION #}
+    <section class="cta-section">
+        <div class="container text-center">
+            <h2 class="cta-title">Ready to Find Your Perfect Role?</h2>
+            <p class="cta-text">Browse our current opportunities or get in touch to discuss your career goals</p>
+            <div class="cta-actions">
+                <a href="{% url 'cms:job_list' %}" class="btn btn-primary btn-lg">View All Jobs</a>
+                <a href="{% url 'cms:about' %}" class="btn btn-outline-light btn-lg">Our Story</a>
+            </div>
+        </div>
+    </section>
+
+    {# FOOTER #}
+    <footer class="brand-footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h3 class="footer-title">{{ profile.display_name }}</h3>
+                    <p class="footer-desc">Connecting exceptional talent with world-class opportunities</p>
+                </div>
+                
+                <div class="col-md-4">
+                    {% if profile.contact_email or profile.contact_phone %}
+                    <h4 class="footer-subtitle">Get in Touch</h4>
+                    {% if profile.contact_email %}
+                        <p class="footer-contact">
+                            <span class="footer-contact-label">Email:</span>
+                            <a href="mailto:{{ profile.contact_email }}" class="footer-contact-link">{{ profile.contact_email }}</a>
+                        </p>
+                    {% endif %}
+                    {% if profile.contact_phone %}
+                        <p class="footer-contact">
+                            <span class="footer-contact-label">Phone:</span>
+                            <a href="tel:{{ profile.contact_phone }}" class="footer-contact-link">{{ profile.contact_phone }}</a>
+                        </p>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                
+                <div class="col-md-4 text-md-end">
+                    <div class="footer-links">
+                        <a href="{% url 'cms:home' %}">Home</a>
+                        <a href="{% url 'cms:job_list' %}">Jobs</a>
+                        <a href="{% url 'cms:about' %}">About</a>
+                    </div>
+                    
+                    {% if profile.linkedin_url or profile.twitter_url or profile.facebook_url %}
+                    <div class="social-links">
+                        {% if profile.linkedin_url %}
+                            <a href="{{ profile.linkedin_url }}" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
+                        {% endif %}
+                        {% if profile.twitter_url %}
+                            <a href="{{ profile.twitter_url }}" target="_blank" rel="noopener" class="social-link">Twitter</a>
+                        {% endif %}
+                        {% if profile.facebook_url %}
+                            <a href="{{ profile.facebook_url }}" target="_blank" rel="noopener" class="social-link">Facebook</a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <hr class="footer-divider">
+            
+            <div class="text-center footer-copyright">
+                &copy; 2026 {{ profile.display_name }}. All rights reserved.
             </div>
         </div>
     </footer>
-</div> 
+    
+</div>
 {% endblock %}

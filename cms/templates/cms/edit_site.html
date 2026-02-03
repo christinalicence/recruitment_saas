@@ -8,74 +8,217 @@
         <div class="row g-4">
             
             <div class="col-lg-5 col-xl-4">
-                <div class="card p-4 bg-white shadow-sm sticky-top" style="top: 20px;">
-                    <div class="mb-4">
-                        <a href="{% url 'cms:dashboard' %}" class="text-decoration-none small text-muted">&larr; Back to Dashboard</a>
-                        <h1 class="h3 mt-2">Edit Site Design</h1>
+                <div class="card p-4 bg-white shadow-sm editor-card">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <a href="{% url 'cms:dashboard' %}" class="text-decoration-none small text-muted">&larr; Dashboard</a>
+                            <h1 class="h4 mt-1 mb-0">Design Editor</h1>
+                        </div>
+                        <button type="submit" form="editor-form" class="btn btn-save-all btn-sm px-3 shadow-sm">
+                            Save All
+                        </button>
                     </div>
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger shadow-sm border-start border-4 border-danger py-2 mb-4">
+                        <small><strong>Please fix the errors below to save changes.</strong></small>
+                    </div>
+                    {% endif %}
 
                     <form method="post" enctype="multipart/form-data" id="editor-form">
                         {% csrf_token %}
-                        
-                        <div class="editor-scroll-area" style="max-height: 65vh; overflow-y: auto; padding-right: 10px;">
+
+                        <div class="editor-scroll-area">
                             
-                            <h6 class="fw-bold text-uppercase small text-muted mb-3">Layout & Branding</h6>
-                            {{ form.template_choice|as_crispy_field }}
-                            {{ form.display_name|as_crispy_field }}
-                            
-                            <div class="color-section p-3 border rounded bg-light mb-3 mt-3">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h6 class="fw-bold mb-0 small">Brand Colors</h6>
-                                    <button type="button" id="refresh-preview-btn" class="btn btn-sm btn-outline-primary" style="font-size: 0.7rem;">
-                                        Sync Preview
-                                    </button>
-                                </div>
-                                {{ form.primary_color|as_crispy_field }}
-                                {{ form.secondary_color|as_crispy_field }}
-                                {{ form.background_color|as_crispy_field }}
+                            <div class="editor-section">
+                                <h6 class="section-heading">
+                                    <span class="section-number">1</span> Identity & Layout
+                                </h6>
+                                {{ form.template_choice|as_crispy_field }}
+                                {{ form.display_name|as_crispy_field }}
+                                {{ form.logo|as_crispy_field }}
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <div class="editor-section">
+                                <h6 class="section-heading">
+                                    <span class="section-number">2</span> Brand Colors
+                                </h6>
                                 
-                                <div id="contrast-warning" class="alert alert-warning mt-2 d-none small">
-                                    <strong>Low Contrast!</strong> Check readability.
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <small id="contrast-status-text" class="text-muted">Calculating contrast...</small>
+                                    </div>
+                                    <div class="progress contrast-meter">
+                                        <div id="contrast-status-bar" class="progress-bar" role="progressbar"></div>
+                                    </div>
+                                </div>
+
+                                <div class="color-grid">
+                                    {{ form.primary_color|as_crispy_field }}
+                                    {{ form.secondary_color|as_crispy_field }}
+                                    {{ form.background_color|as_crispy_field }}
+                                </div>
+
+                                <div class="alert alert-info mt-3 small">
+                                    <strong>💡 Tip:</strong> Colors work across all templates, each using them uniquely.
                                 </div>
                             </div>
 
-                            <h6 class="fw-bold text-uppercase small text-muted mb-3 mt-4">Content</h6>
-                            {{ form.hero_title|as_crispy_field }}
-                            {{ form.hero_text|as_crispy_field }}
-                           <div class="mb-3">
+                            <hr class="section-divider">
+
+                            <div class="editor-section">
+                                <h6 class="section-heading">
+                                    <span class="section-number">3</span> Hero Section
+                                </h6>
+                                {{ form.hero_title|as_crispy_field }}
+                                {{ form.hero_text|as_crispy_field }}
                                 {{ form.hero_image|as_crispy_field }}
-                                {% if profile.hero_image %}
-                                    <div class="mt-2">
-                                        <p class="small text-muted mb-1">Current Image:</p>
-                                        <img src="{{ profile.hero_image.url }}" class="img-thumbnail" style="max-height: 100px;">
-                                    </div>
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <div class="editor-section">
+                                <h6 class="section-heading">
+                                    <span class="section-number">4</span> Why Work With Us
+                                </h6>
+                                <p class="small text-muted mb-3">Three key benefits you offer candidates</p>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Benefit 1</label>
+                                    {{ form.value_prop_1_title|as_crispy_field }}
+                                    {{ form.value_prop_1_text|as_crispy_field }}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Benefit 2</label>
+                                    {{ form.value_prop_2_title|as_crispy_field }}
+                                    {{ form.value_prop_2_text|as_crispy_field }}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Benefit 3</label>
+                                    {{ form.value_prop_3_title|as_crispy_field }}
+                                    {{ form.value_prop_3_text|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <div class="editor-section">
+                                <h6 class="section-heading">
+                                    <span class="section-number">5</span> About & Team
+                                </h6>
+                                {{ form.about_title|as_crispy_field }}
+                                {{ form.about_content|as_crispy_field }}
+                                {{ form.team_photo|as_crispy_field }}
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <div class="editor-section">
+                                <h6 class="section-heading">
+                                    <span class="section-number">6</span> Jobs Section
+                                </h6>
+                                {{ form.jobs_header_text|as_crispy_field }}
+                                {{ form.featured_job|as_crispy_field }}
+                                
+                                {% if not form.featured_job.field.queryset.exists %}
+                                <div class="alert alert-warning small mt-2">
+                                    <strong>No jobs yet!</strong> Create a job to feature it here.
+                                </div>
                                 {% endif %}
                             </div>
-                        </div>
 
-                        <div class="mt-4 pt-3 border-top">
-                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Save Changes</button>
+                            <hr class="section-divider">
+
+                            <div class="editor-section">
+                                <h6 class="section-heading">
+                                    <span class="section-number">7</span> Stats Section 
+                                    <span class="badge bg-secondary badge-sm">Optional</span>
+                                </h6>
+                                
+                                <div class="stats-toggle-wrapper">
+                                    {{ form.show_stats }}
+                                    <label class="form-check-label" for="{{ form.show_stats.id_for_label }}">
+                                        {{ form.show_stats.label }}
+                                    </label>
+                                </div>
+
+                                <div id="stats-fields" class="{% if not form.instance.show_stats %}d-none{% endif %}">
+                                    <div class="row g-2 mt-2">
+                                        <div class="col-6">
+                                            {{ form.stat_placements|as_crispy_field }}
+                                        </div>
+                                        <div class="col-6">
+                                            {{ form.stat_satisfaction|as_crispy_field }}
+                                        </div>
+                                        <div class="col-6">
+                                            {{ form.stat_companies|as_crispy_field }}
+                                        </div>
+                                        <div class="col-6">
+                                            {{ form.stat_experience|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">Labels: Placements, Satisfaction, Companies, Experience</small>
+                                </div>
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <div class="editor-section">
+                                <h6 class="section-heading">
+                                    <span class="section-number">8</span> Contact & Social
+                                    <span class="badge bg-secondary badge-sm">Optional</span>
+                                </h6>
+                                
+                                <p class="small text-muted mb-3">Appear in footer</p>
+                                
+                                {{ form.contact_email|as_crispy_field }}
+                                {{ form.contact_phone|as_crispy_field }}
+                                
+                                <div class="mt-3">
+                                    <label class="form-label small fw-bold">Social Media</label>
+                                    {{ form.linkedin_url|as_crispy_field }}
+                                    {{ form.twitter_url|as_crispy_field }}
+                                    {{ form.facebook_url|as_crispy_field }}
+                                </div>
+                            </div>
+
                         </div>
                     </form>
                 </div>
             </div>
 
             <div class="col-lg-7 col-xl-8">
-                <div class="sticky-top" style="top: 20px;">
+                <div class="preview-sticky-wrapper">
+                    
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="mb-0 fw-bold text-muted">Live Preview</h5>
-                        <div class="btn-group shadow-sm bg-white">
-                            <button type="button" class="btn btn-outline-secondary btn-sm active" onclick="setPreviewSize('desktop')" id="btn-desktop">Desktop</button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('tablet')" id="btn-tablet">Tablet</button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('mobile')" id="btn-mobile">Mobile</button>
+                        <h5 class="mb-0 text-muted small text-uppercase">Live Preview</h5>
+                        <div class="preview-controls btn-group shadow-sm bg-white">
+                            <button type="button" class="btn btn-outline-secondary btn-sm active" 
+                                    onclick="setPreviewSize('desktop')" id="btn-desktop">
+                                Desktop
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" 
+                                    onclick="setPreviewSize('tablet')" id="btn-tablet">
+                                Tablet
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" 
+                                    onclick="setPreviewSize('mobile')" id="btn-mobile">
+                                Mobile
+                            </button>
                         </div>
                     </div>
                     
-                    <div id="preview-wrapper" class="preview-frame-wrapper desktop-mode mx-auto shadow rounded border overflow-hidden">
+                    <div id="preview-wrapper" class="preview-frame-wrapper desktop-mode mx-auto shadow-lg rounded border overflow-hidden">
                         <div class="ratio ratio-16x9">
                             <iframe src="{% url 'cms:live_preview' %}" id="preview-frame"></iframe>
                         </div>
                     </div>
+                    
                 </div>
             </div>
 
@@ -84,7 +227,141 @@
 </div>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+/* Editor styling */
+.editor-card {
+    position: sticky;
+    top: 20px;
+}
+
+.editor-section {
+    margin-bottom: 2rem;
+}
+
+.section-heading {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    color: #495057;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: #0d6efd;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.section-divider {
+    margin: 2rem 0;
+    opacity: 0.1;
+}
+
+.badge-sm {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* FIX: Stats toggle - no margin on mobile */
+.stats-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.stats-toggle-wrapper .form-check-input {
+    margin: 0 !important;
+    flex-shrink: 0;
+}
+
+.stats-toggle-wrapper .form-check-label {
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Color grid */
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* Contrast meter */
+.contrast-meter {
+    height: 6px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Preview */
+.preview-sticky-wrapper {
+    position: sticky;
+    top: 20px;
+}
+
+/* Editor scroll area */
+.editor-scroll-area {
+    max-height: 75vh;
+    overflow-y: auto;
+    padding-right: 12px;
+}
+
+.editor-scroll-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.editor-scroll-area::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.editor-scroll-area::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.editor-scroll-area::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+</style>
+{% endblock %}
+
 {% block extra_js %}
-    <script src="{% static 'cms/js/contrast-checker.js' %}"></script>
-    <script src="{% static 'cms/js/preview-manager.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Stats toggle functionality
+    const statsToggle = document.getElementById('{{ form.show_stats.id_for_label }}');
+    const statsFields = document.getElementById('stats-fields');
+    
+    if (statsToggle && statsFields) {
+        statsToggle.addEventListener('change', function() {
+            if (this.checked) {
+                statsFields.classList.remove('d-none');
+            } else {
+                statsFields.classList.add('d-none');
+            }
+        });
+    }
+});
+</script>
+<script src="{% static 'cms/js/contrast-checker.js' %}" defer></script>
+<script src="{% static 'cms/js/preview-manager.js' %}" defer></script>
 {% endblock %}

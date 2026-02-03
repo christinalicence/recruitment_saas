@@ -10,29 +10,37 @@ function getBrightness(hexcolor) {
 }
 
 /**
- * Checks contrast between primary and background colors.
+ * Updates a dynamic contrast status bar.
  */
 function validateContrast() {
     const primaryInput = document.querySelector('#id_primary_color');
     const bgInput = document.querySelector('#id_background_color');
-    const warning = document.querySelector('#contrast-warning');
+    const statusBar = document.querySelector('#contrast-status-bar');
+    const statusText = document.querySelector('#contrast-status-text');
 
-    if (!primaryInput || !bgInput || !warning) return;
+    if (!primaryInput || !bgInput || !statusBar || !statusText) return;
 
     const brightnessPrimary = getBrightness(primaryInput.value);
     const brightnessBG = getBrightness(bgInput.value);
-
-    // Standard threshold: a difference less than 125 indicates poor readability
     const diff = Math.abs(brightnessPrimary - brightnessBG);
 
-    if (diff < 125) {
-        warning.classList.remove('d-none');
+    // Calculate percentage (max diff is 255)
+    const score = Math.min(100, Math.round((diff / 125) * 50)); 
+    
+    statusBar.style.width = `${score}%`;
+    
+    if (diff < 70) {
+        statusBar.className = 'progress-bar bg-danger';
+        statusText.innerHTML = '<i class="bi bi-x-circle"></i> Very Poor Contrast';
+    } else if (diff < 125) {
+        statusBar.className = 'progress-bar bg-warning';
+        statusText.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Fair Contrast';
     } else {
-        warning.classList.add('d-none');
+        statusBar.className = 'progress-bar bg-success';
+        statusText.innerHTML = '<i class="bi bi-check-circle"></i> Good Contrast';
     }
 }
 
-// Initialize listeners
 document.addEventListener('DOMContentLoaded', () => {
     const primaryInput = document.querySelector('#id_primary_color');
     const bgInput = document.querySelector('#id_background_color');
@@ -40,6 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (primaryInput && bgInput) {
         primaryInput.addEventListener('input', validateContrast);
         bgInput.addEventListener('input', validateContrast);
-        validateContrast(); // Run once on load
+        validateContrast(); // Initial check
     }
 });

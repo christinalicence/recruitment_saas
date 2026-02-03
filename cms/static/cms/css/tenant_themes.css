@@ -1,56 +1,956 @@
-/* --- THE EXECUTIVE --- */
+/* ========================================
+   RECRUITMENT SITE THEMES - COMPLETE CSS
+   NO INLINE STYLES NEEDED
+   ======================================== */
+
+/* ========== CSS VARIABLES (Overridden by Database) ========== */
+
+:root,
 .theme-executive {
-    --brand-primary: var(--brand-primary, #1e3a8a); 
-    --brand-secondary: var(--brand-secondary, #64748b);
-    --brand-bg: var(--brand-bg, #f8fafc);
-    --brand-font: 'Inter', sans-serif;
+    --brand-primary: #1e3a8a;
+    --brand-secondary: #64748b;
+    --brand-bg: #f8fafc;
+    --brand-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --section-padding: 80px;
+    --card-radius: 8px;
 }
 
-/* --- THE STARTUP --- */
 .theme-startup {
-    --brand-primary: var(--brand-primary, #ff4f00); 
-    --brand-secondary: var(--brand-secondary, #2d3748);
-    --brand-bg: var(--brand-bg, #ffffff);
+    --brand-primary: #ff4f00;
+    --brand-secondary: #2d3748;
+    --brand-bg: #0a0a0a;
     --brand-font: 'Inter', sans-serif;
+    --section-padding: 100px;
+    --card-radius: 20px;
 }
 
-/* --- GLOBAL COMPONENT MAPPING --- */
+.theme-boutique {
+    --brand-primary: #92400e;
+    --brand-secondary: #78350f;
+    --brand-bg: #fffcf5;
+    --brand-font: 'Crimson Pro', Georgia, serif;
+    --section-padding: 90px;
+    --card-radius: 0px;
+}
+
+/* ========== GLOBAL STYLES ========== */
+
 .agency-site {
     background-color: var(--brand-bg);
-    color: var(--brand-secondary); /* Secondary color for main body text */
+    color: var(--brand-secondary);
+    font-family: var(--brand-font);
+    line-height: 1.7;
 }
 
-/* PRIMARY COLOR: Used for Nav and Footer "Blocks" */
-.navbar {
+/* ========== TOP STRIPE ========== */
+
+.top-stripe {
+    height: 5px;
+    background-color: var(--brand-secondary);
+}
+
+.theme-startup .top-stripe {
+    display: none;
+}
+
+.theme-boutique .top-stripe {
+    height: 8px;
+    background-color: var(--brand-primary);
+}
+
+/* ========== NAVIGATION ========== */
+
+.theme-executive .navbar {
     background-color: var(--brand-primary) !important;
+    border-bottom: 3px solid rgba(255,255,255,0.2);
 }
 
-.navbar .navbar-brand, 
+.theme-startup .navbar {
+    background: rgba(10, 10, 10, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid rgba(255, 79, 0, 0.3);
+}
+
+.theme-boutique .navbar {
+    background-color: #ffffff !important;
+    border-bottom: 4px solid var(--brand-primary);
+}
+
+/* Navbar brand and links */
+.theme-executive .navbar .navbar-brand,
+.theme-executive .navbar .nav-link {
+    color: var(--brand-bg) !important;
+}
+
+.theme-startup .navbar .navbar-brand,
+.theme-startup .navbar .nav-link {
+    color: #ffffff !important;
+}
+
+.theme-boutique .navbar .navbar-brand,
+.theme-boutique .navbar .nav-link {
+    color: var(--brand-primary) !important;
+}
+
+.navbar .navbar-brand,
 .navbar .nav-link {
-    color: var(--brand-bg) !important; /* Text on primary blocks uses BG color for contrast */
+    font-weight: 600;
 }
 
-.brand-footer {
-    background-color: var(--brand-primary) !important;
-    color: var(--brand-bg) !important;
+.navbar .nav-link {
+    transition: opacity 0.2s;
 }
 
-.brand-footer h3, .brand-footer h4 {
-    color: var(--brand-bg) !important;
+.navbar .nav-link:hover {
+    opacity: 0.8;
 }
 
-/* SECONDARY COLOR: Used for all text/headings */
-.agency-site h1, 
-.agency-site h2, 
-.agency-site h3, 
-.agency-site h4,
-.hero-section h1 {
-    color: var(--brand-secondary) !important;
+/* Logo in navbar */
+.navbar-logo {
+    max-height: 40px;
+    max-width: 150px;
+    height: auto;
+    width: auto;
+    object-fit: contain;
 }
 
-/* BUTTONS */
+.navbar-brand {
+    font-size: 1.3rem;
+}
+
+.navbar-brand-text {
+    line-height: 1;
+}
+
+/* ========== HERO SECTION ========== */
+
+.hero-section {
+    padding: var(--section-padding) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: var(--brand-primary);
+}
+
+.hero-text {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.hero-img-styled {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    border-radius: var(--card-radius);
+}
+
+/* Executive hero */
+.theme-executive .hero-section {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-bottom: 6px solid var(--brand-primary);
+}
+
+.theme-executive .hero-img-styled {
+    box-shadow: 20px 20px 60px rgba(30, 58, 138, 0.2);
+    max-height: 500px;
+}
+
+/* Startup hero */
+.theme-startup .hero-section {
+    background: radial-gradient(circle at top right, rgba(255, 79, 0, 0.1) 0%, transparent 70%), #0a0a0a;
+    text-align: center;
+    padding: 120px 0;
+}
+
+.theme-startup .hero-title {
+    color: #ffffff;
+    text-shadow: 0 0 40px rgba(255, 79, 0, 0.3);
+}
+
+.theme-startup .hero-text {
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.theme-startup .hero-img-styled {
+    box-shadow: 0 30px 80px rgba(255, 79, 0, 0.3);
+    max-height: 450px;
+    margin: 0 auto;
+    max-width: 90%;
+}
+
+/* Boutique hero */
+.theme-boutique .hero-section {
+    background: linear-gradient(to right, #fffcf5 0%, #fef3c7 100%);
+    border-bottom: 8px solid var(--brand-primary);
+}
+
+.theme-boutique .hero-title {
+    font-family: 'Crimson Pro', Georgia, serif;
+}
+
+.theme-boutique .hero-img-styled {
+    border: 8px solid var(--brand-primary);
+    box-shadow: 20px 20px 0px rgba(146, 64, 14, 0.15);
+    max-height: 550px;
+}
+
+/* ========== VALUE PROPS SECTION ========== */
+
+.value-props-section {
+    padding: var(--section-padding) 0;
+}
+
+.section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--brand-primary);
+}
+
+.section-subtitle {
+    font-size: 1.2rem;
+    color: var(--brand-secondary);
+    opacity: 0.8;
+}
+
+.value-card {
+    padding: 2rem;
+    border-radius: var(--card-radius);
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.value-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--brand-primary);
+}
+
+.value-desc {
+    color: var(--brand-secondary);
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+/* Executive value cards */
+.theme-executive .value-card {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.theme-executive .value-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(30, 58, 138, 0.15);
+}
+
+/* Startup value cards */
+.theme-startup .value-props-section {
+    background: linear-gradient(to bottom, #0a0a0a 0%, #1a1a1a 100%);
+}
+
+.theme-startup .section-title,
+.theme-startup .section-subtitle {
+    color: #ffffff;
+}
+
+.theme-startup .value-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-startup .value-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 79, 0, 0.5);
+    box-shadow: 0 0 30px rgba(255, 79, 0, 0.2);
+}
+
+.theme-startup .value-title {
+    color: #ffffff;
+}
+
+.theme-startup .value-desc {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Boutique value cards */
+.theme-boutique .value-card {
+    background: white;
+    border: 3px solid var(--brand-primary);
+    position: relative;
+}
+
+.theme-boutique .value-card::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: 6px;
+    bottom: 6px;
+    border: 2px solid #fef3c7;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.theme-boutique .value-card:hover {
+    transform: translate(-3px, -3px);
+}
+
+/* ========== FEATURED JOB SECTION ========== */
+
+.featured-job-section {
+    padding: var(--section-padding) 0;
+}
+
+.featured-job-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.featured-badge {
+    display: inline-block;
+    background: var(--brand-primary);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+}
+
+.job-meta {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.meta-item {
+    font-size: 1rem;
+    color: var(--brand-secondary);
+    opacity: 0.8;
+}
+
+.job-summary {
+    padding: 2rem;
+}
+
+.job-summary-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.job-apply-card {
+    background: var(--brand-primary);
+    color: white;
+    padding: 3rem;
+    border-radius: var(--card-radius);
+    text-align: center;
+}
+
+.job-apply-title {
+    color: white !important;
+    margin-bottom: 1rem;
+}
+
+.job-apply-text {
+    color: white;
+    opacity: 0.75;
+    font-size: 0.9rem;
+}
+
+/* Executive featured job */
+.theme-executive .featured-job-section {
+    background: #ffffff;
+}
+
+.theme-executive .job-apply-card {
+    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
+}
+
+/* Startup featured job */
+.theme-startup .featured-job-section {
+    background: #0a0a0a;
+}
+
+.theme-startup .featured-job-header .section-title {
+    color: #ffffff;
+}
+
+.theme-startup .job-summary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+}
+
+.theme-startup .job-summary h3,
+.theme-startup .job-summary p,
+.theme-startup .job-summary .lead {
+    color: #ffffff !important;
+}
+
+.theme-startup .job-apply-card {
+    box-shadow: 0 0 40px rgba(255, 79, 0, 0.4);
+}
+
+/* Boutique featured job */
+.theme-boutique .job-apply-card {
+    border: 4px solid var(--brand-primary);
+    box-shadow: 12px 12px 0px rgba(146, 64, 14, 0.15);
+}
+
+/* ========== STATS SECTION ========== */
+
+.stats-section {
+    padding: 60px 0;
+}
+
+.stat-item {
+    padding: 2rem 1rem;
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--brand-primary);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.95rem;
+    color: var(--brand-secondary);
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.theme-executive .stats-section {
+    background: #f8fafc;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.theme-startup .stats-section {
+    background: #1a1a1a;
+}
+
+.theme-startup .stat-number {
+    color: #ff4f00;
+    text-shadow: 0 0 20px rgba(255, 79, 0, 0.3);
+}
+
+.theme-startup .stat-label {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.theme-boutique .stats-section {
+    background: #fef3c7;
+}
+
+.theme-boutique .stat-item {
+    position: relative;
+}
+
+.theme-boutique .stat-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background: var(--brand-primary);
+}
+
+/* ========== CTA SECTION ========== */
+
+.cta-section {
+    padding: 80px 0;
+    background: var(--brand-primary);
+    color: white;
+}
+
+.cta-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: white !important;
+}
+
+.cta-text {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.cta-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.theme-startup .cta-section {
+    background: linear-gradient(135deg, #ff4f00 0%, #ff7700 100%);
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.2);
+}
+
+.theme-boutique .cta-section {
+    border-top: 8px solid var(--brand-secondary);
+    border-bottom: 8px solid var(--brand-secondary);
+}
+
+/* ========== BUTTONS ========== */
+
 .btn-primary {
     background-color: var(--brand-primary) !important;
     border-color: var(--brand-primary) !important;
-    color: var(--brand-bg) !important;
+    color: white !important;
+    padding: 14px 32px;
+    font-weight: 600;
+    border-radius: var(--card-radius);
+    transition: all 0.3s ease;
 }
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.btn-outline-dark {
+    border: 2px solid var(--brand-primary) !important;
+    color: var(--brand-primary) !important;
+    background: transparent;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: var(--card-radius);
+}
+
+.btn-outline-dark:hover {
+    background: var(--brand-primary) !important;
+    color: white !important;
+}
+
+.btn-outline-light {
+    border: 2px solid white !important;
+    color: white !important;
+    background: transparent;
+    padding: 12px 30px;
+    font-weight: 600;
+}
+
+.btn-outline-light:hover {
+    background: white !important;
+    color: var(--brand-primary) !important;
+}
+
+.theme-startup .btn-primary {
+    box-shadow: 0 0 30px rgba(255, 79, 0, 0.5);
+}
+
+.theme-startup .btn-primary:hover {
+    box-shadow: 0 0 50px rgba(255, 79, 0, 0.7);
+}
+
+.theme-startup .btn-outline-dark {
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.theme-startup .btn-outline-dark:hover {
+    background: rgba(255, 79, 0, 0.2) !important;
+    border-color: #ff4f00 !important;
+}
+
+.theme-boutique .btn-primary,
+.theme-boutique .btn-outline-dark,
+.theme-boutique .btn-outline-light {
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+/* ========== FOOTER ========== */
+
+.brand-footer {
+    background-color: var(--brand-primary) !important;
+    color: white !important;
+    padding: 60px 0 30px;
+}
+
+.footer-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: white !important;
+}
+
+.footer-subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: white !important;
+}
+
+.footer-desc {
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.footer-contact {
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.footer-contact-label {
+    opacity: 0.8;
+    margin-right: 0.5rem;
+}
+
+.footer-contact-link {
+    color: white;
+    text-decoration: none;
+    opacity: 0.95;
+}
+
+.footer-contact-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+    color: white;
+}
+
+.footer-links {
+    display: flex;
+    gap: 2rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+}
+
+.social-links {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.social-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+}
+
+.social-link:hover {
+    opacity: 1;
+    color: white;
+}
+
+.footer-divider {
+    border-color: rgba(255, 255, 255, 0.2);
+    margin: 2rem 0;
+}
+
+.footer-copyright {
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+.theme-startup .brand-footer {
+    background: linear-gradient(to bottom, #0a0a0a 0%, #000000 100%) !important;
+    border-top: 2px solid rgba(255, 79, 0, 0.3);
+}
+
+.theme-boutique .footer-title {
+    font-family: 'Crimson Pro', Georgia, serif;
+}
+
+/* ========== ABOUT PAGE ========== */
+
+.about-header {
+    padding: 80px 0 40px;
+    text-align: center;
+}
+
+.page-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--brand-primary);
+    margin-bottom: 1rem;
+}
+
+.page-subtitle {
+    font-size: 1.2rem;
+    color: var(--brand-secondary);
+    opacity: 0.8;
+}
+
+.about-content-section {
+    padding: 60px 0;
+}
+
+.lead-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--brand-secondary);
+}
+
+.about-image-wrapper {
+    width: 100%;
+    height: auto;
+}
+
+.about-image {
+    width: 100%;
+    height: auto;
+    max-height: 600px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: var(--card-radius);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+.theme-executive .about-image {
+    box-shadow: 20px 20px 60px rgba(30, 58, 138, 0.2);
+}
+
+.theme-startup .about-image {
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(255, 79, 0, 0.3);
+}
+
+.theme-boutique .about-image {
+    border: 8px solid var(--brand-primary);
+    box-shadow: 16px 16px 0px rgba(146, 64, 14, 0.15);
+    border-radius: 0;
+}
+
+.about-image-placeholder {
+    width: 100%;
+    height: 400px;
+    background: #f0f0f0;
+    border-radius: var(--card-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder-text {
+    color: #999;
+    font-size: 1.2rem;
+}
+
+.about-highlights {
+    border-left: 4px solid var(--brand-primary);
+    padding-left: 2rem;
+    margin-top: 2rem;
+}
+
+.about-highlights-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.highlight-item {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.highlight-icon {
+    color: var(--brand-primary);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.highlight-text {
+    color: var(--brand-secondary);
+    line-height: 1.6;
+}
+
+.about-cta {
+    margin-top: 2rem;
+}
+
+.mission-section {
+    padding: 80px 0;
+    background: var(--brand-primary);
+    color: white;
+}
+
+.theme-startup .mission-section {
+    background: linear-gradient(135deg, #ff4f00 0%, #ff7700 100%);
+}
+
+.theme-boutique .mission-section {
+    border-top: 8px solid var(--brand-secondary);
+    border-bottom: 8px solid var(--brand-secondary);
+}
+
+.mission-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.mission-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: white !important;
+}
+
+.mission-text {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    opacity: 0.95;
+}
+
+.about-cta-section {
+    padding: 80px 0;
+    background: var(--brand-secondary);
+    color: white;
+}
+
+.theme-startup .about-cta-section {
+    background: #0a0a0a;
+}
+
+.theme-startup .about-header,
+.theme-startup .about-content-section {
+    background: #0a0a0a;
+}
+
+.theme-startup .page-title,
+.theme-startup .lead-text,
+.theme-startup .highlight-text,
+.theme-startup .about-highlights-title {
+    color: #ffffff !important;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+@media (max-width: 768px) {
+    .navbar-logo {
+        max-height: 35px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+    
+    .hero-section {
+        padding: 60px 0 !important;
+    }
+    
+    .hero-title {
+        font-size: 2rem !important;
+    }
+    
+    .hero-text {
+        font-size: 1.1rem !important;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+    }
+    
+    .hero-actions .btn {
+        width: 100%;
+    }
+    
+    .value-props-section,
+    .featured-job-section,
+    .cta-section {
+        padding: 50px 0;
+    }
+    
+    .job-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+    }
+    
+    .footer-links,
+    .social-links {
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+    }
+    
+    .about-header {
+        padding: 50px 0 30px;
+    }
+    
+    .page-title {
+        font-size: 2rem !important;
+    }
+    
+    .mission-title {
+        font-size: 2rem;
+    }
+    
+    .mission-text {
+        font-size: 1.1rem;
+    }
+    
+    .about-image {
+        max-height: 400px;
+    }
+}
+
+/* ========== UTILITY CLASSES ========== */
+
+.text-center {
+    text-align: center;
+}
+
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.mb-5 { margin-bottom: 3rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-5 { margin-top: 3rem; }
+
+.w-100 { width: 100%; }

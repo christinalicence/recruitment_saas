@@ -4,26 +4,87 @@
 
 {% block content %}
 <div class="theme-{{ profile.template_choice|default:'executive' }} agency-site">
-    <section class="py-5">
+    
+    <section class="about-header">
         <div class="container">
-            <h1 class="display-5 fw-bold mb-4">
-                {{ profile.about_title|default:"Our Story" }}
-            </h1>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="lead">
-                        {{ profile.about_content|linebreaks }}
+            <h1 class="page-title">{{ profile.about_title|default:"Our Story" }}</h1>
+            <p class="page-subtitle">Get to know the team behind your career success</p>
+        </div>
+    </section>
+
+    <section class="about-content-section">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                
+                <div class="col-lg-6 {% if profile.template_choice == 'boutique' %}order-2{% endif %}">
+                    <div class="about-text-content">
+                        <div class="lead-text">
+                            {{ profile.about_content|linebreaks }}
+                        </div>
+                        
+                        <div class="about-highlights">
+                            <h3 class="about-highlights-title">What Sets Us Apart</h3>
+                            <div class="highlight-item">
+                                <span class="highlight-icon">✓</span>
+                                <span class="highlight-text">Deep industry expertise across multiple sectors</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-icon">✓</span>
+                                <span class="highlight-text">Personal, one-on-one career guidance</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-icon">✓</span>
+                                <span class="highlight-text">Exclusive access to unlisted opportunities</span>
+                            </div>
+                        </div>
+
+                        <div class="about-cta">
+                            <a href="{% url 'cms:job_list' %}" class="btn btn-primary">View Current Roles</a>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    {% if profile.team_photo %}
-                        <img src="{{ profile.team_photo.url }}" class="team-photo" alt="Our Team">
-                    {% elif profile.get_team_photo %}
-                        <img src="{{ profile.get_team_photo }}" class="team-photo" alt="Our Team">
-                    {% endif %}
+                
+                <div class="col-lg-6 {% if profile.template_choice == 'boutique' %}order-1{% endif %}">
+                    <div class="about-image-wrapper">
+                        {% if profile.team_photo or profile.get_team_photo %}
+                            <img src="{% if profile.team_photo %}{{ profile.team_photo.url }}{% else %}{{ profile.get_team_photo }}{% endif %}" 
+                                 class="about-image" 
+                                 alt="Our Team at {{ profile.display_name }}">
+                        {% else %}
+                            <div class="about-image-placeholder">
+                                <span class="placeholder-text">Team Photo</span>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
+                
             </div>
         </div>
     </section>
+
+    <section class="mission-section">
+        <div class="container">
+            <div class="mission-content text-center">
+                <h2 class="mission-title">Our Mission</h2>
+                <p class="mission-text">
+                    To connect talented professionals with companies where they can truly thrive. 
+                    We believe the right career fit transforms lives, builds stronger teams, 
+                    and creates lasting success for everyone involved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-cta-section">
+        <div class="container text-center">
+            <h2 class="cta-title">Ready to Start Your Next Chapter?</h2>
+            <p class="cta-text">Let's find the perfect opportunity for your skills and ambitions</p>
+            <div class="cta-actions">
+                <a href="{% url 'cms:job_list' %}" class="btn btn-primary btn-lg">Browse Opportunities</a>
+                <a href="{% url 'cms:home' %}" class="btn btn-outline-light btn-lg">Back to Home</a>
+            </div>
+        </div>
+    </section>
+
 </div>
 {% endblock %}

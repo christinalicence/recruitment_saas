@@ -97,3 +97,140 @@
     border-color: var(--brand-primary) !important;
     color: var(--brand-bg) !important;
 }
+
+/* --- Editor UI Enhancements --- */
+.editor-scroll-area {
+    max-height: 75vh;
+    overflow-y: auto;
+    padding-right: 12px;
+    scrollbar-width: thin;
+}
+
+/* Custom Input Group Styling */
+.input-group-custom {
+    margin-bottom: 1.25rem;
+    position: relative;
+}
+
+.input-group-custom label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #6c757d;
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+/* Make the update button look like part of the field */
+.btn-update-preview {
+    border-color: #dee2e6;
+    background-color: #f8fafc;
+    transition: all 0.2s ease;
+}
+
+.btn-update-preview:hover {
+    background-color: #343a40;
+    color: white;
+}
+
+/* Color section specific styling */
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* Device Toggle Styling */
+.preview-controls {
+    background: white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Dashboard CSS Fixes */
+
+/* This forces the desktop preview to look like a desktop even in a 7-column layout */
+.preview-frame-wrapper.desktop-mode iframe {
+    width: 1280px; /* Force internal width */
+    height: 720px;
+    transform: scale(0.65); /* Scale it down to fit the card */
+    transform-origin: top left;
+}
+
+.preview-frame-wrapper.desktop-mode {
+    width: 100%;
+    height: 468px; /* 720 * 0.65 approx */
+    overflow: hidden;
+}
+
+/* Ensure update buttons look clickable and high-contrast */
+.btn-update-preview {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    border: 1px solid #dee2e6 !important;
+    font-weight: 600;
+}
+
+.btn-update-preview:hover {
+    background-color: #f8f9fa !important;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.spin-once {
+    animation: spin 0.5s ease-in-out;
+}
+
+.btn-save-all {
+    background-color: #0d6efd !important;
+    color: #ffffff !important;
+    border: none;
+}
+
+/* Contrast Status Bar */
+.contrast-meter {
+    background: #eee;
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+#contrast-status-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Mobile Toggle Size Fix */
+/* This ensures the mobile mode actually shrinks the iframe content */
+.preview-frame-wrapper.mobile-mode {
+    width: 320px; 
+    height: 580px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden; /* This clips any 'bleeding' margins */
+    background: #000; 
+    border: 12px solid #222;
+    border-radius: 36px;
+    display: flex;
+    justify-content: center; /* Anchors the content to the center of the 'phone' */
+}
+
+.preview-frame-wrapper.mobile-mode iframe {
+    width: 375px !important; 
+    height: 812px !important;
+    position: absolute;
+    /* Use 'left: 50%' and 'translate(-50%)' for perfect centering regardless of scale */
+    left: 50%;
+    top: 0;
+    transform: scale(0.8) translateX(-50%); 
+    transform-origin: top left;
+    border: none;
+}
