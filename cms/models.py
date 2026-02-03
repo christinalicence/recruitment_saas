@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 
 class CompanyProfile(models.Model):
+    tenant_slug = models.CharField(max_length=63, unique=True, editable=False, null=True)
     TEMPLATE_CHOICES = [
         ('executive', 'The Executive'),
         ('startup', 'The Startup'),

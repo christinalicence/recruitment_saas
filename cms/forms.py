@@ -188,12 +188,14 @@ class CompanyProfileForm(forms.ModelForm):
         return image
 
     def clean_logo(self):
-        logo = self.cleaned_data.get('logo')
-        if logo:
-            if logo.size > 500 * 1024:
-                raise ValidationError(f"Logo too large ({logo.size / 1024:.0f}KB). Max 500KB.")
-            if logo.content_type not in ['image/jpeg', 'image/jpg', 'image/png', 'image/svg+xml', 'image/webp']:
-                raise ValidationError("Upload JPG, PNG, SVG, or WebP only.")
+        logo = self.cleaned_data.get('logo')   
+        if not logo:
+            return logo
+        if hasattr(logo, 'content_type'):
+            if logo.content_type not in ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']:
+                raise forms.ValidationError("Please upload a valid image (JPG, PNG, WEBP, or SVG).")
+            if logo.size > 5 * 1024 * 1024:
+                raise forms.ValidationError("This file is a bit too big! Please keep it under 5MB.")
         return logo
 
     def clean(self):

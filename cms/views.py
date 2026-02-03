@@ -77,12 +77,18 @@ def dashboard(request):
     )
     return render(request, 'cms/dashboard.html', {'profile': profile})
 
+# --- DASHBOARD / EDITOR VIEWS ---
+
+
 @login_required
 def edit_site(request):
-    # 1. Fetch the existing profile
     profile, created = CompanyProfile.objects.get_or_create(
-        display_name=request.tenant.name,
-        defaults=get_profile_defaults(request)
+        tenant_slug=request.tenant.schema_name,
+        defaults={
+            'tenant_slug': request.tenant.schema_name,
+            'display_name': request.tenant.name,
+            **get_profile_defaults(request)
+        }
     )
 
     if request.method == 'POST':
@@ -92,51 +98,40 @@ def edit_site(request):
             messages.success(request, "Changes saved successfully!")
             return redirect('cms:edit_site')
         else:
-            # This will now show you the "This field is required" 
-            # message at the top of your dashboard
             messages.error(request, "Please fix the errors below.")
-            print(form.errors)
+            print(form.errors) # Still good for debugging!
     else:
-        # 5. Normal page load (GET)
         form = CompanyProfileForm(instance=profile)
 
-    # 6. This return is aligned with the 'if request.method' block
     return render(request, 'cms/edit_site.html', {
         'form': form,
         'profile': profile,
     })
 
-
 @login_required
 @xframe_options_exempt
 def live_preview(request):
-    """Powers the real-time preview iframe in the dashboard."""
-    profile = CompanyProfile.objects.filter(display_name=request.tenant.name).first()
+    profile, _ = CompanyProfile.objects.get_or_create(
+        tenant_slug=request.tenant.schema_name,
+        defaults={
+            'tenant_slug': request.tenant.schema_name,
+            'display_name': request.tenant.name,
+            **get_profile_defaults(request)
+        }
+    )
     
-    # Grab current form choices from GET params for instant preview feedback
-    template_choice = request.GET.get('template_choice', getattr(profile, 'template_choice', 'executive'))
-    
-    # Calculate image path: Uploaded URL vs Local Fallback URL
-    hero_url = f"{settings.MEDIA_URL}hero/default_{template_choice}.jpg"
-    if profile and profile.hero_image:
-        try:
-            hero_url = profile.hero_image.url
-        except ValueError:
-            pass
-
-    preview_data = {
-        'display_name': request.GET.get('display_name', profile.display_name if profile else "Your Company"),
-        'primary_color': request.GET.get('primary_color', profile.primary_color if profile else "#1e3a8a"),
-        'secondary_color': request.GET.get('secondary_color', profile.secondary_color if profile else "#64748b"),
-        'background_color': request.GET.get('background_color', profile.background_color if profile else "#ffffff"),
-        'template_choice': template_choice,
-        'hero_title': request.GET.get('hero_title', profile.hero_title if profile else "Great Careers Await"),
-        'hero_text': request.GET.get('hero_text', profile.hero_text if profile else ""),
-        'get_hero_image': hero_url,  # Key for the template
-    }
+    # Override the profile object attributes with GET params for the preview
+    # This keeps it as an object so .url methods still work!
+    profile.template_choice = request.GET.get('template_choice', profile.template_choice)
+    profile.display_name = request.GET.get('display_name', profile.display_name)
+    profile.primary_color = request.GET.get('primary_color', profile.primary_color)
+    profile.secondary_color = request.GET.get('secondary_color', profile.secondary_color)
+    profile.background_color = request.GET.get('background_color', profile.background_color)
+    profile.hero_title = request.GET.get('hero_title', profile.hero_title)
+    profile.hero_text = request.GET.get('hero_text', profile.hero_text)
 
     return render(request, "cms/home.html", {
-        'profile': preview_data,
+        'profile': profile, # Now passing the updated object
         'latest_jobs': Job.objects.all()[:3]
     })
 

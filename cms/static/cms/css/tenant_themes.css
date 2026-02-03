@@ -1,37 +1,31 @@
-/* ========================================
-   RECRUITMENT SITE THEMES - COMPLETE CSS
-   NO INLINE STYLES NEEDED
-   ======================================== */
+//* tenant_themes.css */
 
-/* ========== CSS VARIABLES (Overridden by Database) ========== */
-
-:root,
-.theme-executive {
+/* 1. Global Fallbacks (Only used if database is empty) */
+:root {
     --brand-primary: #1e3a8a;
     --brand-secondary: #64748b;
-    --brand-bg: #f8fafc;
+    --brand-bg: #ffffff;
+}
+
+/* 2. Theme-Specific Settings (Fonts & Spacing only) */
+.theme-executive {
     --brand-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --section-padding: 80px;
     --card-radius: 8px;
 }
 
 .theme-startup {
-    --brand-primary: #ff4f00;
-    --brand-secondary: #2d3748;
-    --brand-bg: #0a0a0a;
     --brand-font: 'Inter', sans-serif;
     --section-padding: 100px;
     --card-radius: 20px;
 }
 
 .theme-boutique {
-    --brand-primary: #92400e;
-    --brand-secondary: #78350f;
-    --brand-bg: #fffcf5;
-    --brand-font: 'Crimson Pro', Georgia, serif;
-    --section-padding: 90px;
+    --brand-font: 'Playfair Display', serif;
+    --section-padding: 70px;
     --card-radius: 0px;
 }
+
 
 /* ========== GLOBAL STYLES ========== */
 
