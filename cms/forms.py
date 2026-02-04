@@ -54,50 +54,21 @@ class CompanyProfileForm(forms.ModelForm):
         ]
         
         widgets = {
-            # Colors
-            'primary_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color'}),
-            'secondary_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color'}),
-            'background_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color'}),
-            
-            # Text Inputs
-            'display_name': forms.TextInput(attrs={'class': 'form-control', 'maxlength': '40', 'placeholder': 'e.g., TechStaff Recruitment'}),
-            'hero_title': forms.TextInput(attrs={'class': 'form-control', 'maxlength': '65', 'placeholder': 'Your main headline (40-65 characters)'}),
-            'hero_text': forms.Textarea(attrs={'rows': 3, 'class': 'form-control', 'maxlength': '200', 'placeholder': 'Supporting text - 120-200 characters'}),
-            
-            # Value Props
-            'value_prop_1_title': forms.TextInput(attrs={'class': 'form-control', 'maxlength': '100', 'placeholder': 'e.g., Expert Matching'}),
-            'value_prop_1_text': forms.Textarea(attrs={'rows': 2, 'class': 'form-control', 'maxlength': '200', 'placeholder': 'Brief description'}),
-            'value_prop_2_title': forms.TextInput(attrs={'class': 'form-control', 'maxlength': '100', 'placeholder': 'e.g., Personal Support'}),
-            'value_prop_2_text': forms.Textarea(attrs={'rows': 2, 'class': 'form-control', 'maxlength': '200', 'placeholder': 'Brief description'}),
-            'value_prop_3_title': forms.TextInput(attrs={'class': 'form-control', 'maxlength': '100', 'placeholder': 'e.g., Fast Results'}),
-            'value_prop_3_text': forms.Textarea(attrs={'rows': 2, 'class': 'form-control', 'maxlength': '200', 'placeholder': 'Brief description'}),
-            
-            # About
-            'about_title': forms.TextInput(attrs={'class': 'form-control', 'maxlength': '50', 'placeholder': 'e.g., Our Story'}),
-            'about_content': forms.Textarea(attrs={'rows': 6, 'class': 'form-control', 'maxlength': '600', 'placeholder': 'Your company story - 400-600 characters'}),
-            'jobs_header_text': forms.Textarea(attrs={'rows': 2, 'class': 'form-control', 'maxlength': '120', 'placeholder': 'Brief intro'}),
-            
-            # File Uploads
-            'logo': forms.FileInput(attrs={'class': 'form-control'}),
-            'hero_image': forms.FileInput(attrs={'class': 'form-control'}),
-            'team_photo': forms.FileInput(attrs={'class': 'form-control'}),
-            
-            # Featured Job
-            'featured_job': forms.Select(attrs={'class': 'form-select'}),
-            
-            # Stats
-            'show_stats': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'stat_placements': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'e.g., 500+'}),
-            'stat_satisfaction': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'e.g., 95%'}),
-            'stat_companies': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'e.g., 200+'}),
-            'stat_experience': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'e.g., 10+'}),
-            
-            # Contact & Social
-            'contact_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'hello@yourcompany.com'}),
-            'contact_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+44 20 1234 5678'}),
-            'linkedin_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://linkedin.com/company/yourcompany'}),
-            'twitter_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://twitter.com/yourcompany'}),
-            'facebook_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://facebook.com/yourcompany'}),
+            'primary_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
+            'secondary_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
+            'background_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
+            'hero_text': forms.Textarea(attrs={'rows': 3}),
+            'about_content': forms.Textarea(attrs={'rows': 5}),
+            'linkedin_url': forms.URLInput(attrs={'placeholder': 'https://linkedin.com/in/yourprofile'}),
+            'twitter_url': forms.URLInput(attrs={'placeholder': 'https://twitter.com/yourhandle'}),
+            'facebook_url': forms.URLInput(attrs={'placeholder': 'https://facebook.com/yourpage'}),
+        }
+
+        help_texts = {
+            'linkedin_url': 'Full URL required (e.g., https://www.linkedin.com/...)',
+            'twitter_url': 'Full URL required (e.g., https://twitter.com/...)',
+            'facebook_url': 'Full URL required (e.g., https://facebook.com/...)',
+            'contact_phone': 'Enter your full number here.',
         }
         
         labels = {

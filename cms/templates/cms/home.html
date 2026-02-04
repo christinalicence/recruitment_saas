@@ -164,64 +164,6 @@
             </div>
         </div>
     </section>
-
-    {# FOOTER #}
-    <footer class="brand-footer">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <h3 class="footer-title">{{ profile.display_name }}</h3>
-                    <p class="footer-desc">Connecting exceptional talent with world-class opportunities</p>
-                </div>
-                
-                <div class="col-md-4">
-                    {% if profile.contact_email or profile.contact_phone %}
-                    <h4 class="footer-subtitle">Get in Touch</h4>
-                    {% if profile.contact_email %}
-                        <p class="footer-contact">
-                            <span class="footer-contact-label">Email:</span>
-                            <a href="mailto:{{ profile.contact_email }}" class="footer-contact-link">{{ profile.contact_email }}</a>
-                        </p>
-                    {% endif %}
-                    {% if profile.contact_phone %}
-                        <p class="footer-contact">
-                            <span class="footer-contact-label">Phone:</span>
-                            <a href="tel:{{ profile.contact_phone }}" class="footer-contact-link">{{ profile.contact_phone }}</a>
-                        </p>
-                    {% endif %}
-                    {% endif %}
-                </div>
-                
-                <div class="col-md-4 text-md-end">
-                    <div class="footer-links">
-                        <a href="{% url 'cms:home' %}">Home</a>
-                        <a href="{% url 'cms:job_list' %}">Jobs</a>
-                        <a href="{% url 'cms:about' %}">About</a>
-                    </div>
-                    
-                    {% if profile.linkedin_url or profile.twitter_url or profile.facebook_url %}
-                    <div class="social-links">
-                        {% if profile.linkedin_url %}
-                            <a href="{{ profile.linkedin_url }}" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
-                        {% endif %}
-                        {% if profile.twitter_url %}
-                            <a href="{{ profile.twitter_url }}" target="_blank" rel="noopener" class="social-link">Twitter</a>
-                        {% endif %}
-                        {% if profile.facebook_url %}
-                            <a href="{{ profile.facebook_url }}" target="_blank" rel="noopener" class="social-link">Facebook</a>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-            
-            <hr class="footer-divider">
-            
-            <div class="text-center footer-copyright">
-                &copy; 2026 {{ profile.display_name }}. All rights reserved.
-            </div>
-        </div>
-    </footer>
     
 </div>
 {% endblock %}

@@ -96,3 +96,20 @@ document.addEventListener('DOMContentLoaded', () => {
         previewFrame.src = `${baseUrl}?${params}`;
     }
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Stats toggle functionality
+    const statsToggle = document.getElementById('{{ form.show_stats.id_for_label }}');
+    const statsFields = document.getElementById('stats-fields');
+    
+    if (statsToggle && statsFields) {
+        statsToggle.addEventListener('change', function() {
+            if (this.checked) {
+                statsFields.classList.remove('d-none');
+            } else {
+                statsFields.classList.add('d-none');
+            }
+        });
+    }
+});

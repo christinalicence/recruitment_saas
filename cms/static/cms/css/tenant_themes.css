@@ -698,6 +698,15 @@
     font-family: 'Crimson Pro', Georgia, serif;
 }
 
+.footer {
+    border-top: 1px solid rgba(0,0,0,0.05);
+    background-color: var(--brand-bg); 
+}
+
+.footer h5, .footer h6 {
+    color: var(--brand-primary);
+}
+
 /* ========== ABOUT PAGE ========== */
 
 .about-header {
