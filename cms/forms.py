@@ -21,7 +21,7 @@ class CompanyProfileForm(forms.ModelForm):
             'background_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
             'hero_text': forms.Textarea(attrs={'rows': 3}),
             'about_content': forms.Textarea(attrs={'rows': 5}),
-            'address': forms.TextInput(attrs={'placeholder': 'e.g. 123 Recruiter Way, London'}),
+            'address': forms.Textarea(attrs={'rows': 3, 'placeholder': 'e.g. 123 Recruiter Way,\nLondon,\nNW1 1AA'}),
         }
 
     def __init__(self, *args, **kwargs):

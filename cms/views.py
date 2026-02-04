@@ -82,23 +82,17 @@ def dashboard(request):
 
 @login_required
 def edit_site(request):
-    profile, created = CompanyProfile.objects.get_or_create(
-        tenant_slug=request.tenant.schema_name,
-        defaults={
-            'tenant_slug': request.tenant.schema_name,
-            'display_name': request.tenant.name,
-            **get_profile_defaults(request)
-        }
-    )
+    profile, created = CompanyProfile.objects.get_or_create(...)
 
     if request.method == 'POST':
         form = CompanyProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            messages.success(request, "Changes saved successfully!")
+            messages.success(request, "Success! Your changes are now live.") # Success message
             return redirect('cms:edit_site')
         else:
-            messages.error(request, "Please fix the errors below.")
+            # This captures the "silent" failure and makes it a message
+            messages.error(request, "Wait! We couldn't save. Please check the form for errors.")
             print(form.errors) # Still good for debugging!
     else:
         form = CompanyProfileForm(instance=profile)

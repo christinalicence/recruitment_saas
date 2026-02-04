@@ -10,13 +10,14 @@ function getBrightness(hexcolor) {
 }
 
 /**
- * Updates a dynamic contrast status bar.
+ * Updates a dynamic contrast status bar and friendly labels.
  */
 function validateContrast() {
     const primaryInput = document.querySelector('#id_primary_color');
     const bgInput = document.querySelector('#id_background_color');
-    const statusBar = document.querySelector('#contrast-status-bar');
+    const statusBar = document.querySelector('#contrast-bar'); // Fixed naming mismatch
     const statusText = document.querySelector('#contrast-status-text');
+    const statusBadge = document.querySelector('#contrast-status-badge');
 
     if (!primaryInput || !bgInput || !statusBar || !statusText) return;
 
@@ -24,23 +25,28 @@ function validateContrast() {
     const brightnessBG = getBrightness(bgInput.value);
     const diff = Math.abs(brightnessPrimary - brightnessBG);
 
-    // Calculate percentage (max diff is 255)
     const score = Math.min(100, Math.round((diff / 125) * 50)); 
-    
     statusBar.style.width = `${score}%`;
     
-    if (diff < 70) {
+    if (diff < 90) {
         statusBar.className = 'progress-bar bg-danger';
-        statusText.innerHTML = '<i class="bi bi-x-circle"></i> Very Poor Contrast';
-    } else if (diff < 125) {
+        statusText.innerText = 'Hard to read - try a darker primary or lighter background.';
+        statusBadge.innerText = 'Poor';
+        statusBadge.className = 'badge bg-danger';
+    } else if (diff < 150) {
         statusBar.className = 'progress-bar bg-warning';
-        statusText.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Fair Contrast';
+        statusText.innerText = 'Looks okay, but could be clearer.';
+        statusBadge.innerText = 'Good';
+        statusBadge.className = 'badge bg-warning text-dark';
     } else {
         statusBar.className = 'progress-bar bg-success';
-        statusText.innerHTML = '<i class="bi bi-check-circle"></i> Good Contrast';
+        statusText.innerText = 'Great! Very easy for candidates to read.';
+        statusBadge.innerText = 'Perfect';
+        statusBadge.className = 'badge bg-success';
     }
 }
 
+// Initializing listeners
 document.addEventListener('DOMContentLoaded', () => {
     const primaryInput = document.querySelector('#id_primary_color');
     const bgInput = document.querySelector('#id_background_color');
@@ -48,6 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (primaryInput && bgInput) {
         primaryInput.addEventListener('input', validateContrast);
         bgInput.addEventListener('input', validateContrast);
-        validateContrast(); // Initial check
+        validateContrast(); 
     }
 });

@@ -1,6 +1,5 @@
 /**
  * Changes the preview iframe width based on device selection.
- * Defined outside DOMContentLoaded for global access by onclick attributes.
  */
 function setPreviewSize(device) {
     const wrapper = document.getElementById('preview-wrapper');
@@ -26,9 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!previewFrame || !editorForm) return;
 
-    // --- 1. INSTANT COLOR & CONTENT PREVIEW ---
-    
-    // Track current values to send to the iframe
+    // --- 1. INSTANT COLOR PREVIEW ---
     let currentColors = {
         primary: document.getElementById('id_primary_color')?.value || '#1e3a8a',
         secondary: document.getElementById('id_secondary_color')?.value || '#64748b',
@@ -37,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateIframe = () => {
         if (previewFrame.contentWindow) {
-            // Send message to iframe to update styles without a full reload
             previewFrame.contentWindow.postMessage({
                 type: 'updateStyles',
                 colors: currentColors
@@ -45,77 +41,67 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Listen for color input changes
     ['primary', 'secondary', 'background'].forEach(type => {
         const input = document.getElementById(`id_${type}_color`);
         if (input) {
             input.addEventListener('input', (e) => {
                 currentColors[type] = e.target.value;
                 updateIframe();
-                
-                // If the contrast checker script is loaded, trigger it
-                if (window.updateContrastUI) {
-                    window.updateContrastUI(currentColors.primary, currentColors.background);
-                }
             });
         }
     });
 
-    // --- 2. CHARACTER COUNTERS WITH MULTIPLE LIMITS ---
-
+    // --- 2. CHARACTER COUNTERS ---
     const trackedFields = document.querySelectorAll('input[type="text"], textarea');
-
     trackedFields.forEach(field => {
         const counter = document.querySelector(`.char-count[data-for="${field.id}"]`);
-        
         if (counter) {
             const updateCount = () => {
                 const currentLength = field.value.length;
-                let maxLength = 200; // Default limit
-                
-                // Apply specific limits based on field ID
-                if (field.id.includes('about_title')) {
-                    maxLength = 100;
-                } else if (field.id.includes('about_content')) {
-                    maxLength = 600;
-                } else if (field.id.includes('jobs_header_text')) {
-                    maxLength = 150;
-                }
+                let maxLength = field.id.includes('about_content') ? 600 : 
+                               field.id.includes('about_title') ? 100 : 
+                               field.id.includes('jobs_header_text') ? 150 : 200;
 
                 counter.innerText = `${currentLength} / ${maxLength}`;
-                
-                // Visual feedback if over limit
-                if (currentLength > maxLength) {
-                    counter.classList.add('text-danger');
-                    counter.classList.remove('text-muted');
-                } else {
-                    counter.classList.remove('text-danger');
-                    counter.classList.add('text-muted');
-                }
+                counter.classList.toggle('text-danger', currentLength > maxLength);
             };
-
-            // Run on load and on every keystroke
             updateCount();
             field.addEventListener('input', updateCount);
         }
     });
 
-    // --- 3. SMART SCROLLING ---
+    // --- 3. TOAST NOTIFICATIONS ---
+    const toastEl = document.getElementById('messageToast');
+    const toastMsgEl = document.getElementById('toastMessage');
+    if (toastEl && toastMsgEl && toastMsgEl.innerText.trim() !== "" && window.bootstrap) {
+        const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+        toast.show();
+    }
 
-    // Automatically scroll the editor to the right section when navigating the preview
+    // --- 4. SMART SCROLLING (Fixed & Moved Inside) ---
     previewFrame.onload = function() {
         try {
             const path = previewFrame.contentWindow.location.pathname;
-            
+            let targetSection = null;
+
             if (path.includes('/about/')) {
-                const aboutSection = document.querySelector('[data-section="about"]');
-                if (aboutSection) aboutSection.scrollIntoView({ behavior: 'smooth' });
-            } else if (path.includes('/jobs/')) {
-                const jobsSection = document.querySelector('[data-section="jobs"]');
-                if (jobsSection) jobsSection.scrollIntoView({ behavior: 'smooth' });
+                targetSection = document.querySelector('[data-section="about"]');
+            } else if (path.includes('/jobs/') || path.includes('/apply/')) {
+                targetSection = document.querySelector('[data-section="jobs"]');
+            }
+
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Optional: Add a brief "glow" effect so the user sees which section changed
+                targetSection.style.backgroundColor = '#fff3cd';
+                setTimeout(() => {
+                    targetSection.style.transition = 'background-color 1s ease';
+                    targetSection.style.backgroundColor = 'transparent';
+                }, 500);
             }
         } catch (e) {
-            console.log("Cross-origin preview prevented scroll-sync");
+            console.log("Navigation sync paused: External link.");
         }
     };
 });
