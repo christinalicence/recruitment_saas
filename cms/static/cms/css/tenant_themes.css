@@ -957,3 +957,11 @@
 .mt-5 { margin-top: 3rem; }
 
 .w-100 { width: 100%; }
+
+/* Hide the default crispy labels so our custom flex labels work */
+#div_id_hero_title label, 
+#div_id_hero_text label, 
+#div_id_about_title label, 
+#div_id_about_content label {
+    display: none;
+}

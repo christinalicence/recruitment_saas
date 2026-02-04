@@ -57,22 +57,12 @@ class CompanyProfile(models.Model):
         help_text="Choose a job to feature on your homepage"
     )
     
-    # Optional Stats Section
-    show_stats = models.BooleanField(
-        default=True,
-        help_text="Display stats/metrics on homepage"
-    )
-    stat_placements = models.CharField(max_length=20, default="500+", blank=True)
-    stat_satisfaction = models.CharField(max_length=20, default="95%", blank=True)
-    stat_companies = models.CharField(max_length=20, default="200+", blank=True)
-    stat_experience = models.CharField(max_length=20, default="10+", blank=True)
-    
     # Contact & Social
     contact_email = models.EmailField(max_length=200, blank=True, help_text="General enquiries email")
     contact_phone = models.CharField(max_length=50, blank=True, help_text="Main contact number")
-    
+    address = models.TextField(blank=True, help_text="Full office address for the footer")
+
     linkedin_url = models.URLField(max_length=200, blank=True)
-    twitter_url = models.URLField(max_length=200, blank=True)
     facebook_url = models.URLField(max_length=200, blank=True)
 
     def get_hero_image(self):

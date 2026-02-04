@@ -1,17 +1,15 @@
 /**
  * Changes the preview iframe width based on device selection.
- * This is defined OUTSIDE DOMContentLoaded so it is globally accessible to the onclick attributes.
+ * Defined outside DOMContentLoaded for global access by onclick attributes.
  */
 function setPreviewSize(device) {
     const wrapper = document.getElementById('preview-wrapper');
     const devices = ['desktop', 'tablet', 'mobile'];
     if (!wrapper) return;
 
-    // Toggle wrapper classes
     devices.forEach(d => wrapper.classList.remove(`${d}-mode`));
     wrapper.classList.add(`${device}-mode`);
     
-    // Toggle button active states
     devices.forEach(d => {
         const btn = document.getElementById(`btn-${d}`);
         if (btn) {
@@ -28,88 +26,96 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!previewFrame || !editorForm) return;
 
-    const basePreviewUrl = previewFrame.getAttribute('src');
+    // --- 1. INSTANT COLOR & CONTENT PREVIEW ---
     
-    // Track current color values
+    // Track current values to send to the iframe
     let currentColors = {
         primary: document.getElementById('id_primary_color')?.value || '#1e3a8a',
         secondary: document.getElementById('id_secondary_color')?.value || '#64748b',
         background: document.getElementById('id_background_color')?.value || '#ffffff'
     };
 
-    // --- 1. INSTANT COLOR UPDATES ---
+    const updateIframe = () => {
+        if (previewFrame.contentWindow) {
+            // Send message to iframe to update styles without a full reload
+            previewFrame.contentWindow.postMessage({
+                type: 'updateStyles',
+                colors: currentColors
+            }, '*');
+        }
+    };
+
+    // Listen for color input changes
     ['primary', 'secondary', 'background'].forEach(type => {
         const input = document.getElementById(`id_${type}_color`);
         if (input) {
             input.addEventListener('input', (e) => {
-                const newColor = e.target.value;
-                currentColors[type] = newColor;
+                currentColors[type] = e.target.value;
+                updateIframe();
                 
-                // Inject style directly into iframe for zero-lag preview
-                if (previewFrame.contentWindow) {
-                    const root = previewFrame.contentWindow.document.documentElement;
-                    const cssVar = type === 'background' ? '--brand-bg' : `--brand-${type}`;
-                    root.style.setProperty(cssVar, newColor);
+                // If the contrast checker script is loaded, trigger it
+                if (window.updateContrastUI) {
+                    window.updateContrastUI(currentColors.primary, currentColors.background);
                 }
             });
-            
-            // Trigger full refresh on change (mouse release) to sync with other logic
-            input.addEventListener('change', updateIframeSource);
         }
     });
 
-    // --- 2. DEBOUNCED TEXT UPDATES ---
-    let debounceTimer;
-    editorForm.querySelectorAll('input[type="text"], textarea').forEach(input => {
-        input.addEventListener('input', () => {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(updateIframeSource, 500);
-        });
+    // --- 2. CHARACTER COUNTERS WITH MULTIPLE LIMITS ---
+
+    const trackedFields = document.querySelectorAll('input[type="text"], textarea');
+
+    trackedFields.forEach(field => {
+        const counter = document.querySelector(`.char-count[data-for="${field.id}"]`);
+        
+        if (counter) {
+            const updateCount = () => {
+                const currentLength = field.value.length;
+                let maxLength = 200; // Default limit
+                
+                // Apply specific limits based on field ID
+                if (field.id.includes('about_title')) {
+                    maxLength = 100;
+                } else if (field.id.includes('about_content')) {
+                    maxLength = 600;
+                } else if (field.id.includes('jobs_header_text')) {
+                    maxLength = 150;
+                }
+
+                counter.innerText = `${currentLength} / ${maxLength}`;
+                
+                // Visual feedback if over limit
+                if (currentLength > maxLength) {
+                    counter.classList.add('text-danger');
+                    counter.classList.remove('text-muted');
+                } else {
+                    counter.classList.remove('text-danger');
+                    counter.classList.add('text-muted');
+                }
+            };
+
+            // Run on load and on every keystroke
+            updateCount();
+            field.addEventListener('input', updateCount);
+        }
     });
 
-    // --- 3. TEMPLATE SWITCHER ---
-    const templateSelect = document.getElementById('id_template_choice');
-    if (templateSelect) {
-        templateSelect.addEventListener('change', updateIframeSource);
-    }
+    // --- 3. SMART SCROLLING ---
 
-    // --- 4. HELPER: RELOAD IFRAME WITH FORM DATA ---
-    function updateIframeSource() {
-        const formData = new FormData(editorForm);
-        
-        // REMOVE file data to prevent "submit a file" validation errors in preview
-        formData.delete('hero_image');
-        formData.delete('hero_image-clear');
-        formData.delete('team_photo');
-        formData.delete('team_photo-clear');
-        formData.delete('logo');
-        formData.delete('logo-clear');
-
-        // Explicitly ensure current color values are sent
-        formData.set('primary_color', currentColors.primary);
-        formData.set('secondary_color', currentColors.secondary);
-        formData.set('background_color', currentColors.background);
-        
-        const params = new URLSearchParams(formData).toString();
-        const baseUrl = basePreviewUrl.split('?')[0];
-        
-        previewFrame.src = `${baseUrl}?${params}`;
-    }
-});
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Stats toggle functionality
-    const statsToggle = document.getElementById('{{ form.show_stats.id_for_label }}');
-    const statsFields = document.getElementById('stats-fields');
-    
-    if (statsToggle && statsFields) {
-        statsToggle.addEventListener('change', function() {
-            if (this.checked) {
-                statsFields.classList.remove('d-none');
-            } else {
-                statsFields.classList.add('d-none');
+    // Automatically scroll the editor to the right section when navigating the preview
+    previewFrame.onload = function() {
+        try {
+            const path = previewFrame.contentWindow.location.pathname;
+            
+            if (path.includes('/about/')) {
+                const aboutSection = document.querySelector('[data-section="about"]');
+                if (aboutSection) aboutSection.scrollIntoView({ behavior: 'smooth' });
+            } else if (path.includes('/jobs/')) {
+                const jobsSection = document.querySelector('[data-section="jobs"]');
+                if (jobsSection) jobsSection.scrollIntoView({ behavior: 'smooth' });
             }
-        });
-    }
+        } catch (e) {
+            console.log("Cross-origin preview prevented scroll-sync");
+        }
+    };
 });
