@@ -37,10 +37,8 @@ def home(request):
         display_name=request.tenant.name,
         defaults=get_profile_defaults(request)
     )
-    latest_jobs = Job.objects.all().order_by('-id')[:3]
     return render(request, "cms/home.html", {
         "profile": profile,
-        "latest_jobs": latest_jobs
     })
 
 def about(request):
@@ -51,12 +49,17 @@ def about(request):
     return render(request, "cms/about.html", {"profile": profile})
 
 def job_list(request):
+    """The public list of all jobs for this tenant."""
     profile, _ = CompanyProfile.objects.get_or_create(
         display_name=request.tenant.name,
         defaults=get_profile_defaults(request)
     )
     jobs = Job.objects.all()
-    return render(request, "cms/job_list.html", {"profile": profile, "jobs": jobs})
+    
+    return render(request, "cms/job_list.html", {
+        'profile': profile,
+        'jobs': jobs
+    })
 
 def job_detail(request, job_id):
     profile, _ = CompanyProfile.objects.get_or_create(
@@ -71,14 +74,17 @@ def job_detail(request, job_id):
 
 @login_required
 def dashboard(request):
-    """The internal management area for the company."""
     profile, _ = CompanyProfile.objects.get_or_create(
         display_name=request.tenant.name,
         defaults=get_profile_defaults(request)
     )
-    return render(request, 'cms/dashboard.html', {'profile': profile})
 
-# --- DASHBOARD / EDITOR VIEWS ---
+    jobs = Job.objects.all() 
+    
+    return render(request, 'cms/dashboard.html', {
+        'profile': profile,
+        'jobs': jobs, 
+    })
 
 
 @login_required
