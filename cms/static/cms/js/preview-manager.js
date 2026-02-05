@@ -105,3 +105,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 });
+
+// Function to update the sidebar thumbnails instantly when a file is chosen
+const setupImagePreview = (inputId, previewId) => {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    
+    // Check for specific fallbacks we might want to hide
+    const textFallback = document.getElementById('logo-text-fallback');
+    const heroPlaceholder = document.getElementById('hero-placeholder-text');
+
+    if (input && preview) {
+        input.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none'); // Show the image if it was hidden
+                    
+                    // Hide the text placeholders
+                    if (textFallback) textFallback.style.display = 'none';
+                    if (heroPlaceholder) heroPlaceholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+};
+
+// Initialize the logic for your three image fields
+document.addEventListener('DOMContentLoaded', () => {
+    setupImagePreview('id_logo', 'logo-preview');
+    setupImagePreview('id_hero_image', 'id_hero_image-preview');
+    setupImagePreview('id_team_photo', 'team_photo-preview');
+});
+
+// --- INSTANT THEME PREVIEW ---
+const themeRadios = document.querySelectorAll('input[name="template_choice"]');
+themeRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        if (previewFrame.contentWindow) {
+            previewFrame.contentWindow.postMessage({
+                type: 'updateTheme',
+                theme: e.target.value
+            }, '*');
+        }
+    });
+});

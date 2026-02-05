@@ -102,6 +102,7 @@ def edit_site(request):
         'profile': profile,
     })
 
+
 @login_required
 @xframe_options_exempt
 def live_preview(request):

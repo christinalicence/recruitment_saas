@@ -234,3 +234,56 @@
     transform-origin: top left;
     border: none;
 }
+/* --- Professional Upload Cards --- */
+.upload-preview-card {
+    transition: all 0.2s ease;
+    border: 2px dashed #dee2e6 !important;
+    background-color: #fdfdfd;
+}
+
+.upload-preview-card:hover {
+    border-color: #0d6efd !important;
+    background-color: #fff;
+}
+
+/* Style Django's 'Currently' links as subtle buttons */
+.upload-preview-card a {
+    display: inline-block !important;
+    font-size: 0.7rem;
+    color: #6c757d;
+    text-decoration: none;
+    background: #f1f3f5;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.upload-preview-card a:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+/* Hide the messy default widget text and checkbox */
+.upload-preview-card .form-check, 
+.upload-preview-card br,
+.upload-preview-card span.text-muted {
+    display: none !important;
+}
+
+/* Style the 'Choose File' button */
+.upload-preview-card input[type=file]::file-selector-button {
+    background-color: #212529;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.upload-preview-card input[type=file]::file-selector-button:hover {
+    background-color: #000;
+}

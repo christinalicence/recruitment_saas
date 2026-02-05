@@ -6,9 +6,10 @@ class CompanyProfileForm(forms.ModelForm):
     class Meta:
         model = CompanyProfile
         fields = [
+            'template_choice',
             'display_name', 'logo',
             'primary_color', 'secondary_color', 'background_color',
-            'hero_title', 'hero_text',
+            'hero_title', 'hero_text', 'hero_image',
             'about_title', 'about_content', 'team_photo',
             'jobs_header_text',
             'contact_email', 'contact_phone', 'address',
