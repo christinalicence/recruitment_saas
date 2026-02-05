@@ -13,8 +13,8 @@ class CompanyProfile(models.Model):
     template_choice = models.CharField(
         max_length=20, 
         choices=TEMPLATE_CHOICES, 
-        default='executive'
-    )
+        default='executive')
+    
     display_name = models.CharField(max_length=255) 
     logo = models.ImageField(
         upload_to='logos/', 
@@ -30,16 +30,6 @@ class CompanyProfile(models.Model):
     hero_title = models.CharField(max_length=200, default="Great Careers Await")
     hero_text = models.TextField(blank=True, help_text="The main pitch to candidates")
     hero_image = models.ImageField(upload_to='hero/', null=True, blank=True)
-    
-    # Value Props Section (3 editable benefits)
-    value_prop_1_title = models.CharField(max_length=100, default="Curated Opportunities")
-    value_prop_1_text = models.TextField(max_length=200, default="Every role is hand-selected and vetted to ensure quality and cultural fit")
-    
-    value_prop_2_title = models.CharField(max_length=100, default="Personal Support")
-    value_prop_2_text = models.TextField(max_length=200, default="Dedicated recruiters who understand your goals and advocate for your success")
-    
-    value_prop_3_title = models.CharField(max_length=100, default="Fast Placement")
-    value_prop_3_text = models.TextField(max_length=200, default="Streamlined process that respects your time and moves at your pace")
     
     # About Us
     about_title = models.CharField(max_length=200, default="Our Story", blank=True)
@@ -61,6 +51,11 @@ class CompanyProfile(models.Model):
     contact_email = models.EmailField(max_length=200, blank=True, help_text="General enquiries email")
     contact_phone = models.CharField(max_length=50, blank=True, help_text="Main contact number")
     address = models.TextField(blank=True, help_text="Full office address for the footer")
+    master_application_email = models.EmailField(
+        null=True, 
+        blank=True, 
+        help_text="The default email for applications if a job doesn't have a specific recipient set."
+    )
 
     linkedin_url = models.URLField(max_length=200, blank=True)
     facebook_url = models.URLField(max_length=200, blank=True)
@@ -94,11 +89,30 @@ class Job(models.Model):
     )
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    custom_recipient_1 = models.EmailField(
+        null=True, 
+        blank=True, 
+        help_text="Optional: Send applications for this job here instead of the master email."
+    )
+    custom_recipient_2 = models.EmailField(
+        null=True, 
+        blank=True, 
+        help_text="Optional: A second email to receive applications for this job."
+    )
     
     # For future LinkedIn sharing
     linkedin_post_id = models.CharField(max_length=100, blank=True, null=True)
     last_shared_date = models.DateTimeField(null=True, blank=True)
     
+    tenant = models.ForeignKey(
+        'customers.Client', 
+        on_delete=models.CASCADE, 
+        related_name='jobs',
+        null=True,
+        blank=True
+    )
+
     class Meta:
         ordering = ['-created_at']
     

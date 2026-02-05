@@ -14,16 +14,16 @@
                 <a href="{% url 'cms:edit_site' %}" class="btn btn-primary">Edit Design</a>
             </div>
         </div>
-
-        <div class="row g-4">
             <div class="col-md-4">
-                <div class="card-brand h-100">
-                    <h3 class="h5">Active Jobs</h3>
-                    <p class="display-6 fw-bold mb-3">0</p>
-                    <a href="#" class="btn btn-outline-primary btn-sm">Post a New Job</a>
+                <div class="card-brand h-100 shadow-sm border-0">
+                    <h3 class="h5 fw-bold">Active Jobs</h3>
+                    <p class="display-6 fw-bold mb-3">{{ jobs.count }}</p> 
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'cms:manage_jobs' %}" class="btn btn-primary btn-sm">Manage List</a>
+                        <a href="{% url 'cms:add_job' %}" class="btn btn-outline-primary btn-sm">Post New Job</a>
+                    </div>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="card-brand h-100">
                     <h3 class="h5">Identity</h3>

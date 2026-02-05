@@ -8,6 +8,7 @@ class CompanyProfileForm(forms.ModelForm):
         fields = [
             'template_choice',
             'display_name', 'logo',
+            'master_application_email',
             'primary_color', 'secondary_color', 'background_color',
             'hero_title', 'hero_text', 'hero_image',
             'about_title', 'about_content', 'team_photo',
@@ -48,3 +49,25 @@ class CompanyProfileForm(forms.ModelForm):
         if text and len(text) > 150:
             raise ValidationError("Jobs header text must be under 150 characters.")
         return text
+    
+
+class JobForm(forms.ModelForm):
+    class Meta:
+        model = Job
+        fields = [
+            'title', 'location', 'salary', 'summary', 
+            'description', 'custom_recipient_1', 'custom_recipient_2'
+        ]
+
+        labels = {
+            'custom_recipient_1': 'Recruiter Email 1',
+            'custom_recipient_2': 'Recruiter Email 2',
+            'summary': 'Short Summary',
+        }
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 6, 'class': 'form-control'}),
+            'summary': forms.TextInput(attrs={'placeholder': 'A one-sentence pitch for the job card'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'class': 'form-control'}),
+            'salary': forms.TextInput(attrs={'class': 'form-control'}),
+        }

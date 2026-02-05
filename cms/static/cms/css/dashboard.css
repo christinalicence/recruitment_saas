@@ -287,3 +287,57 @@
 .upload-preview-card input[type=file]::file-selector-button:hover {
     background-color: #000;
 }
+
+/* JOBS DASHBOARD SPECIFIC STYLES */
+
+.job-manage-card {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    background: white;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+    padding: 1.2rem;
+    border-top: none;
+}
+
+.table tbody td {
+    padding: 1.2rem;
+    vertical-align: middle;
+}
+
+/* Status Indicators */
+.status-pill {
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Form Styling */
+.job-form-section {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.helper-box {
+    background-color: #eef2f7;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #475569;
+}

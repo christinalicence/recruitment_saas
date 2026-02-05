@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.contrib import messages
 from django.conf import settings
+from django.core.mail import send_mail
 
 from .models import CompanyProfile, Job
-from .forms import CompanyProfileForm
+from .forms import CompanyProfileForm, JobForm
 
 def get_profile_defaults(request):
     """
@@ -183,3 +184,105 @@ def payment_success(request):
 def payment_cancel(request):
     """Render the cancel page if a user exits Stripe Checkout."""
     return render(request, 'cms/payment_cancel.html')
+
+from django.core.mail import send_mail
+
+# --- TENANT CONSOLE VIEWS --- JOBS
+
+
+@login_required
+def manage_jobs(request):
+    """The private dashboard area where tenants see their list of jobs."""
+    jobs = Job.objects.filter(tenant=request.tenant).order_by('-created_at')
+    return render(request, 'cms/manage_jobs.html', {'jobs': jobs})
+
+@login_required
+def add_job(request):
+    """The form to create a new job."""
+    if request.method == 'POST':
+        form = JobForm(request.POST)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.tenant = request.tenant # Link the job to the current tenant
+            job.save()
+            messages.success(request, "Job vacancy posted successfully!")
+            return redirect('cms:manage_jobs')
+    else:
+        form = JobForm()
+    return render(request, 'cms/job_form.html', {'form': form})
+
+@login_required
+def edit_job(request, pk):
+    """The form to edit an existing job."""
+    job = get_object_or_404(Job, pk=pk, tenant=request.tenant)
+    if request.method == 'POST':
+        form = JobForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Job vacancy updated!")
+            return redirect('cms:manage_jobs')
+    else:
+        form = JobForm(instance=job)
+    return render(request, 'cms/job_form.html', {'form': form})
+
+@login_required
+def delete_job(request, pk):
+    """Simple view to delete a job."""
+    job = get_object_or_404(Job, pk=pk, tenant=request.tenant)
+    if request.method == 'POST':
+        job.delete()
+        messages.success(request, "Job vacancy removed.")
+        return redirect('cms:manage_jobs')
+    return render(request, 'cms/job_confirm_delete.html', {'job': job})
+
+
+def public_job_list(request):
+    """The public page where candidates browse all jobs for this tenant."""
+    # This matches the name expected by your urls.py
+    profile, _ = CompanyProfile.objects.get_or_create(
+        display_name=request.tenant.name,
+        defaults=get_profile_defaults(request)
+    )
+    jobs = Job.objects.filter(tenant=request.tenant).order_by('-created_at')
+    return render(request, "cms/job_list.html", {
+        'profile': profile,
+        'jobs': jobs
+    })
+
+def job_detail(request, pk):
+    """The public detail page for a single job."""
+    job = get_object_or_404(Job, pk=pk)
+    profile = CompanyProfile.objects.get(display_name=request.tenant.name)
+    return render(request, "cms/job_detail.html", {
+        'job': job,
+        'profile': profile
+    })
+
+
+# --- PUBLIC CANDIDATE VIEWS ---
+
+def apply_to_job(request, pk):
+    """Triggers the direct email to the tenant."""
+    job = get_object_or_404(Job, pk=pk)
+    profile = CompanyProfile.objects.get(tenant=request.tenant)
+    
+    if request.method == 'POST':
+        # Logic: Priority 1 = Job Custom Emails, Priority 2 = Company Master Email
+        recipients = []
+        if job.custom_recipient_1:
+            recipients.append(job.custom_recipient_1)
+            if job.custom_recipient_2:
+                recipients.append(job.custom_recipient_2)
+        elif profile.master_application_email:
+            recipients.append(profile.master_application_email)
+
+        if recipients:
+            send_mail(
+                subject=f"Application: {job.title} - {request.POST.get('full_name')}",
+                message=f"New applicant for {job.title}.\n\nName: {request.POST.get('full_name')}\nEmail: {request.POST.get('email')}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=recipients,
+            )
+            messages.success(request, "Application sent directly to the recruiter!")
+        
+        return redirect('cms:job_detail', pk=pk)
