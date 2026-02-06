@@ -1,24 +1,41 @@
 {% extends "base.html" %}
 {% block title %}Pillar & Post | Professional Recruitment Websites{% endblock %}
+{% load static %}
 
+<!-- Hero Section -->
 {% block content %}
-<section class="py-5 text-center bg-white">
-    <div class="container py-5">
-        <h1 class="display-4 fw-bold mb-4">Your Recruitment Company, <br>Beautifully Branded.</h1>
-        <p class="lead text-muted mb-5">Create a stunning, professional job board and website in minutes.</p>
-        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-            <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary btn-lg px-5">Build Your Site</a>
-            <a href="{% url 'public_marketing:template_select' %}" class="btn btn-outline-secondary btn-lg px-5">View Templates</a>
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold mb-4">Professional Recruitment Websites</h1>
+        <p class="lead mb-5">Built for credibility. Scaled for growth.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary">Get Started</a>
         </div>
     </div>
 </section>
 
-<section class="py-5 bg-light border-top">
+<section class="py-5 bg-white border-bottom">
+    <div class="container text-center">
+        <p class="muted-text mb-0">Trusted by recruitment agencies across the UK</p>
+    </div>
+</section>
+
+<!-- Credibility Statement -->
+<section class="py-5 text-center bg-white">
+    <div class="container">
+        <p class="text-muted mb-0" style="font-size: 0.95rem;">
+            Trusted by recruitment agencies across the UK to power their digital presence
+        </p>
+    </div>
+</section>
+
+<!-- Member Portal Finder Section -->
+<section class="py-5 member-section">
     <div class="container py-4">
         <div class="row align-items-center">
             <div class="col-md-6 text-center text-md-start mb-4 mb-md-0">
                 <h2 class="fw-bold mb-3">Already a member?</h2>
-                <p class="text-muted mb-0">Access your recruitment dashboard to manage jobs.</p>
+                <p class="text-muted mb-0">Access your recruitment dashboard to manage jobs and candidates.</p>
             </div>
             <div class="col-md-6">
                 <form method="post" action="{% url 'public_marketing:portal_finder' %}" class="d-flex gap-2">
@@ -32,8 +49,47 @@
                     >
                     <button type="submit" class="btn btn-primary btn-lg">Find Portal</button>
                 </form>
-                <p class="small text-muted mt-2 mb-0">We'll find all portals associated with your email</p>
+                <p class="small text-muted mt-2 mb-0">We'll locate all portals associated with your email address</p>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- Key Features Section -->
+<section class="feature-section">
+    <div class="container text-center">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8">
+                <h2 class="display-6 fw-bold mb-3">Everything you need to launch</h2>
+                <p class="lead text-muted">Professional recruitment websites with all the features you need, none of the complexity.</p>
+            </div>
+        </div>
+        
+        <div class="row g-4 mt-4">
+            <div class="col-md-4">
+                <div class="p-4">
+                    <h3 class="h5 fw-bold mb-3" style="color: var(--primary-navy);">Instant Branded Job Board</h3>
+                    <p class="text-muted">Launch your custom-branded recruitment website in minutes, not weeks.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <h3 class="h5 fw-bold mb-3" style="color: var(--primary-navy);">Professional Templates</h3>
+                    <p class="text-muted">Choose from expertly designed themes tailored for recruitment agencies.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <h3 class="h5 fw-bold mb-3" style="color: var(--primary-navy);">Easy Job Management</h3>
+                    <p class="text-muted">Post, edit, and manage vacancies through your intuitive dashboard.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-5 pt-3">
+            <a href="{% url 'public_marketing:about' %}" class="text-decoration-none fw-semibold" style="color: var(--accent-blue);">
+                Learn more about Pillar & Post →
+            </a>
         </div>
     </div>
 </section>

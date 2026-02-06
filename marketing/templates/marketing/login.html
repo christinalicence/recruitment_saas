@@ -4,18 +4,18 @@
 {% block title %}Login | Pillar & Post{% endblock %}
 
 {% block content %}
-<div class="signup-page-wrapper theme-{{ request.tenant.template_choice|default:'executive' }}">
-    <div class="container py-5">
-        <div class="signup-card mx-auto" style="max-width: 500px;">
+<div class="signup-page-wrapper">
+    <div class="container">
+        <div class="signup-card mx-auto login-max-width">
             <div class="text-center mb-4">
                 <span class="feature-label">Client Portal</span>
                 <h1 class="h3 fw-bold mt-2">Welcome Back</h1>
-                <p class="text-muted small">Login to manage your recruitment dashboard</p>
+                <p class="muted-text small">Login to manage your recruitment dashboard</p>
             </div>
 
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} py-2 small">
+                    <div class="system-note-error mb-3">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -24,8 +24,8 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="company_name" class="form-label">Company Name</label>
-                    <input type="text" name="company_name" id="company_name" class="form-control" placeholder="e.g. Test Co" required>
+                    <label for="company_name" class="form-label fw-bold small">Company Name</label>
+                    <input type="text" name="company_name" id="company_name" class="form-control" placeholder="e.g. Acme Recruitment" required>
                 </div>
                 {{ form|crispy }}
                 <div class="mt-4">
@@ -36,8 +36,8 @@
             </form>
 
             <div class="mt-4 pt-3 border-top text-center">
-                <p class="small text-muted mb-0">
-                    Forgot your password? <a href="#" class="text-decoration-none" style="color: var(--brand-primary)">Contact Support</a>
+                <p class="small muted-text mb-0">
+                    Forgot your password? <a href="#" class="brand-link">Contact Support</a>
                 </p>
             </div>
         </div>

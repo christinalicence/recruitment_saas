@@ -2,18 +2,24 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="signup-page-wrapper theme-{{ request.GET.template|default:'executive' }}">
+<div class="signup-page-wrapper">
     <div class="container">
-        <div class="signup-card">
-            <span class="feature-label">Final Step</span>
-            <h2 class="mb-3">Create your account</h2>
-            <p class="text-muted mb-4">You are setting up the <strong>{{ request.GET.template|title }}</strong> theme for <strong>{{ request.GET.company_name }}</strong>.</p>
+        <div class="signup-card mx-auto login-max-width">
+            <div class="text-center mb-4">
+                <span class="feature-label">Final Step</span>
+                <h2 class="h3 fw-bold mt-2">Create your account</h2>
+                <p class="muted-text small">Setting up <strong>{{ request.GET.template|title }}</strong> for <strong>{{ request.GET.company_name }}</strong></p>
+            </div>
             
             <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <button type="submit" class="btn btn-primary w-100 mt-3">Start My 14-Day Free Trial</button>
             </form>
+
+            <div class="mt-4 pt-3 border-top text-center">
+                <p class="small muted-text">By signing up, you agree to our <a href="#" class="brand-link">Terms of Service</a>.</p>
+            </div>
         </div>
     </div>
 </div>

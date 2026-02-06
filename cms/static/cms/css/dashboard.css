@@ -68,11 +68,6 @@
     background-color: var(--brand-primary) !important;
 }
 
-.navbar .navbar-brand, 
-.navbar .nav-link {
-    color: var(--brand-bg) !important; /* Text on primary blocks uses BG color for contrast */
-}
-
 .brand-footer {
     background-color: var(--brand-primary) !important;
     color: var(--brand-bg) !important;

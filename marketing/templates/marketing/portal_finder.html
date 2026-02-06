@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Find Your Portal | Pillar & Post{% endblock %}
 
 {% block content %}
@@ -8,11 +9,11 @@
             <div class="text-center mb-4">
                 <span class="feature-label">Portal Finder</span>
                 <h1 class="h3 brand-title mt-2">Find Your Dashboard</h1>
-                <p class="text-muted">Enter your email to find your company portals</p>
+                <p class="muted-text">Enter your email to find your company portals</p>
             </div>
 
             {% if found_tenants %}
-                <div class="alert alert-success mb-4">
+                <div class="system-note mb-4">
                     <strong>Found {{ found_tenants|length }} portal{% if found_tenants|length > 1 %}s{% endif %} for {{ email }}</strong>
                 </div>
                 
@@ -22,46 +23,30 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h5 class="brand-title mb-1">{{ tenant.name }}</h5>
-                                    <small class="text-muted">{{ tenant.login_url }}</small>
+                                    <small class="muted-text">{{ tenant.login_url }}</small>
                                 </div>
-                                <a href="{{ tenant.login_url }}" class="btn btn-primary btn-sm">
-                                    Login →
-                                </a>
+                                <a href="{{ tenant.login_url }}" class="btn btn-primary btn-sm">Login →</a>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
                 
                 <div class="text-center mt-4 pt-3 border-top">
-                    <a href="{% url 'public_marketing:portal_finder' %}" class="btn btn-outline-secondary">
-                        Search Again
-                    </a>
+                    <a href="{% url 'public_marketing:portal_finder' %}" class="btn btn-outline-secondary">Search Again</a>
                 </div>
             {% else %}
                 <form method="post">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="email" class="form-label fw-bold">Email Address</label>
-                        <input 
-                            type="email" 
-                            class="form-control form-control-lg" 
-                            id="email" 
-                            name="email" 
-                            placeholder="your.email@company.com"
-                            required
-                        >
+                        <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="your.email@company.com" required>
                     </div>
-                    
-                    <button type="submit" class="btn btn-primary w-100">
-                        Find My Portal(s)
-                    </button>
+                    <button type="submit" class="btn btn-primary w-100">Find My Portal(s)</button>
                 </form>
 
                 <div class="mt-4 pt-3 border-top text-center">
-                    <p class="small text-muted mb-2">Don't have an account yet?</p>
-                    <a href="{% url 'public_marketing:template_select' %}" class="btn btn-outline-primary btn-sm">
-                        Create New Portal
-                    </a>
+                    <p class="small muted-text mb-2">Don't have an account yet?</p>
+                    <a href="{% url 'public_marketing:template_select' %}" class="btn btn-outline-primary btn-sm">Create New Portal</a>
                 </div>
             {% endif %}
         </div>

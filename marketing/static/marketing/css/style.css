@@ -1,48 +1,236 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    --brand-primary: #1a2a40;
-    --brand-accent: #0056b3;
-    --brand-bg-light: #f8f9fa;
-    --brand-font: 'Inter', sans-serif;
+    /* Brand Identity */
+:root {
+    --primary-color: #0A2540;
+    --secondary-color: #334E68;
+    --accent-color: #2E5C8A;
+    --main-bg: #ffffff;
+    --alt-bg: #F0F4F8;
+    --main-text: #1a1a1a;
+    --muted-text: #627D98;
+    --border-stroke: #e1e8ed;
+    --sharp-radius: 2px;
+}
 }
 
+/* BASE STYLES */
 body.marketing-site {
-    font-family: var(--brand-font);
-    color: #333;
-    background-color: #fff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--main-text);
+    background-color: var(--main-bg);
+    line-height: 1.6;
 }
 
-/* Primary Button - Single Definition */
-.btn-primary {
-    background-color: var(--brand-primary);
-    border-color: var(--brand-primary);
-    padding: 0.6rem 1.5rem;
+/* NAVIGATION */
+.navbar {
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--border-stroke);
+    background-color: var(--main-bg);
+}
+
+.navbar-brand {
+    font-size: 1.1rem;
+    letter-spacing: 2px; /* Spaced out for a high-end feel */
+    color: var(--primary-color);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.navbar-brand img {
+    max-height: 40px;
+    width: auto;
+    margin-right: 10px;
+}
+
+.nav-link {
+    color: var(--secondary-color);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+/* BUTTONS */
+
+.btn {
+    border-radius: var(--sharp-radius); /* Sharp 2px corners */
+    padding: 0.8rem 1.8rem;
     font-weight: 600;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
+    letter-spacing: 0.5px;
+}
+
+/* Primary Button: Solid Navy with White Text */
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    border: 1px solid var(--primary-color) !important;
+    color: var(--main-bg) !important;
 }
 
 .btn-primary:hover {
-    background-color: #0d1621;
-    border-color: #0d1621;
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(10, 37, 64, 0.15);
 }
 
-/* Marketing Sections */
-.signup-page-wrapper {
-    background-color: var(--brand-bg-light);
-    min-height: 100vh;
+/* Secondary Button: Sharp Border with Navy Text */
+.btn-outline-primary {
+    background-color: transparent !important;
+    border: 1.5px solid var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color) !important;
+    color: var(--main-bg) !important;
+}
+
+/* Secondary/Muted Button (Outline) */
+.btn-outline-secondary {
+    border: 1.5px solid var(--border-stroke) !important;
+    color: var(--secondary-color) !important;
+    background-color: var(--main-bg) !important;
+}
+
+.btn-outline-secondary:hover {
+    border-color: var(--secondary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+/* HERO SECTION */
+.hero-section {
+    position: relative;
+    min-height: 600px;
+    background: linear-gradient(135deg, rgba(10, 37, 64, 0.95) 0%, rgba(46, 92, 138, 0.85) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%230A2540" width="1200" height="800"/><g opacity="0.1" stroke="white"><line x1="0" y1="0" x2="1200" y2="800" /><line x1="200" y1="0" x2="1200" y2="600" /></g></svg>');
+    background-size: cover;
+    background-position: center;
     display: flex;
     align-items: center;
-    padding: 40px 0;
+    padding: 80px 0;
+    color: var(--main-bg);
+
+    .hero-section img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--sharp-radius);
+    box-shadow: 20px 20px 60px rgba(0,0,0,0.1);
+}
 }
 
-.signup-card {
-    background: white;
-    padding: 3rem;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+/* Template Specifics */
+.template-preview-img {
+    height: 160px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--sharp-radius);
+    border: 1px solid var(--border-stroke);
+}
+
+/* FORMS */
+.form-control {
+    border: 1px solid var(--border-stroke);
+    border-radius: var(--sharp-radius);
+    padding: 0.8rem 1rem;
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: none;
+}
+
+/* Success icon in signup */
+.success-icon {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* About page layout */
+.about-container {
+    max-width: 800px;
+}
+
+.feature-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.feature-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-stroke);
+    color: var(--secondary-color);
+}
+
+.feature-list li::before {
+    content: "•";
+    color: var(--accent-color);
+    font-weight: bold;
+    display: inline-block; 
+    width: 1em;
+}
+
+/* PREVIEW PAGE */
+
+.job-card-preview {
+    border: 1px solid var(--border-stroke);
+    padding: 1.5rem;
+    background: var(--main-bg);
+    border-radius: var(--sharp-radius);
+}
+
+.preview-hero-img {
+    border-radius: var(--sharp-radius);
+}
+
+.preview-footer-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: var(--main-bg);
+    border-top: 1px solid var(--border-stroke);
+    padding: 1rem 0;
+    z-index: 1050;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+}
+
+.system-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* LOGIN & SIGNUP PAGES */
+
+.login-max-width {
     max-width: 500px;
-    margin: 0 auto;
+}
+
+/* FOOTER */
+footer {
+    background-color: var(--alt-bg);
+    color: var(--muted-text);
+}
+
+/* --- WARNING CLASSES --- */
+.system-note {
+    background-color: var(--alt-bg);
+    border-left: 4px solid var(--primary-color);
+    padding: 1.5rem;
+    border-radius: var(--sharp-radius);
+}
+
+.system-note-error {
+    background-color: #fff5f5; 
+    border-left: 4px solid #c53030;
+    padding: 0.75rem;
+    font-size: 0.85rem;
 }
