@@ -7,15 +7,15 @@
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="d-flex align-items-center mb-4">
-                <a href="{% url 'cms:manage_jobs' %}" class="btn btn-link text-decoration-none p-0 me-3 text-muted">&larr; Back</a>
-                <h2 class="fw-bold mb-0">{% if form.instance.pk %}Edit{% else %}Create{% endif %} Job Posting</h2>
+                <a href="{% url 'cms:manage_jobs' %}" class="back-link me-3">&larr; Back</a>
+                <h2 class="h4 fw-bold mb-0">{% if form.instance.pk %}Edit{% else %}Create{% endif %} Job Posting</h2>
             </div>
 
             <form method="post" class="needs-validation">
                 {% csrf_token %}
                 
-                <div class="job-form-section shadow-sm border">
-                    <h5 class="fw-bold mb-4">Role Information</h5>
+                <div class="card-brand mb-4">
+                    <h5 class="section-label mb-4">Role Information</h5>
                     <div class="row g-3">
                         <div class="col-12">{{ form.title|as_crispy_field }}</div>
                         <div class="col-md-6">{{ form.location|as_crispy_field }}</div>
@@ -25,14 +25,12 @@
                     </div>
                 </div>
 
-                <div class="job-form-section shadow-sm border border-primary-subtle bg-light-subtle">
-                    <h5 class="fw-bold mb-2">Email Addresses/h5>
-                    <p class="text-muted small mb-4">Set the email addresses that you would like to recieve applications.</p>
+                <div class="card-brand border-primary-subtle bg-light-subtle">
+                    <h5 class="section-label mb-2">Email Addresses</h5>
+                    <p class="text-muted small mb-4">Set the email addresses that you would like to receive applications.</p>
                     
-                    <div class="helper-box mb-4">
-                        <strong><i class="bi bi-info-circle"></i> Note:</strong><br>
-                        If you leave these fields blank, applications will automatically be sent to your 
-                        <strong>Master Email</strong> (used to set up the site).
+                    <div class="system-note mb-4">
+                        <strong>Note:</strong> If left blank, applications are sent to your <strong>Master Email</strong>.
                     </div>
 
                     <div class="row g-3">
@@ -42,8 +40,8 @@
                 </div>
 
                 <div class="d-flex justify-content-end gap-2 mt-4">
-                    <a href="{% url 'cms:manage_jobs' %}" class="btn btn-outline-secondary px-4">Cancel</a>
-                    <button type="submit" class="btn btn-primary px-5 fw-bold">Save Vacancy</button>
+                    <a href="{% url 'cms:manage_jobs' %}" class="btn btn-outline-secondary btn-sm px-4">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-sm px-5 shadow-sm">Save Vacancy</button>
                 </div>
             </form>
         </div>

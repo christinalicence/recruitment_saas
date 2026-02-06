@@ -1,23 +1,33 @@
 /**
  * Changes the preview iframe width based on device selection.
  */
-function setPreviewSize(device) {
+function setPreviewSize(size) {
     const wrapper = document.getElementById('preview-wrapper');
-    const devices = ['desktop', 'tablet', 'mobile'];
-    if (!wrapper) return;
-
-    devices.forEach(d => wrapper.classList.remove(`${d}-mode`));
-    wrapper.classList.add(`${device}-mode`);
-    
-    devices.forEach(d => {
-        const btn = document.getElementById(`btn-${d}`);
+    const buttons = {
+        'desktop': document.getElementById('btn-desktop'),
+        'tablet': document.getElementById('btn-tablet'),
+        'mobile': document.getElementById('btn-mobile')
+    };
+    wrapper.classList.remove('desktop-mode', 'tablet-mode', 'mobile-mode');
+    wrapper.classList.add(size + '-mode');
+    Object.values(buttons).forEach(btn => {
         if (btn) {
-            btn.classList.toggle('active', d === device);
-            btn.classList.toggle('btn-primary', d === device);
-            btn.classList.toggle('btn-outline-secondary', d !== device);
+            btn.classList.remove('active', 'btn-secondary');
+            btn.classList.add('btn-outline-secondary');
         }
     });
+
+    if (buttons[size]) {
+        buttons[size].classList.add('active', 'btn-secondary');
+        buttons[size].classList.remove('btn-outline-secondary');
+    }
 }
+
+// Set default active button on load
+document.addEventListener('DOMContentLoaded', function() {
+    const defaultBtn = document.getElementById('btn-desktop');
+    if (defaultBtn) defaultBtn.classList.add('active', 'btn-secondary');
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const previewFrame = document.getElementById('preview-frame');

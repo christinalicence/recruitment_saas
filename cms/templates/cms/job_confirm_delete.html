@@ -4,30 +4,22 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-5 text-center">
-                    <div class="mb-4">
-                        <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
-                    </div>
-                    
-                    <h2 class="fw-bold mb-3">Delete Job?</h2>
-                    <p class="text-muted mb-4">
-                        Are you sure you want to delete <strong>"{{ job.title }}"</strong>? 
-                        This action cannot be undone.
-                    </p>
+            <div class="card-brand text-center p-5">
+                <i class="bi bi-exclamation-octagon text-danger status-icon-large"></i>
+                
+                <h2 class="h4 fw-bold mb-3">Delete Job Posting?</h2>
+                <p class="text-muted mb-4">
+                    Are you sure you want to delete <strong>"{{ job.title }}"</strong>?<br>
+                    This action is permanent and cannot be undone.
+                </p>
 
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-danger btn-lg fw-bold">
-                                Yes, Delete Post
-                            </button>
-                            <a href="{% url 'cms:manage_jobs' %}" class="btn btn-light btn-lg">
-                                No, Keep It
-                            </a>
-                        </div>
-                    </form>
-                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-executive py-2">Confirm Delete</button>
+                        <a href="{% url 'cms:manage_jobs' %}" class="btn btn-outline-secondary btn-executive py-2">Cancel and Keep</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

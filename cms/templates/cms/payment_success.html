@@ -1,15 +1,22 @@
 {% extends 'cms/base_cms.html' %}
+
 {% block content %}
-<div class="container text-center py-5">
-    <div class="card shadow p-5 border-0">
-        <div class="display-1 text-success mb-4">
-            <i class="bi bi-check-circle-fill"></i>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card-brand text-center p-5">
+                <i class="bi bi-check-all text-success status-icon-large"></i>
+                <span class="feature-label text-success">Transaction Complete</span>
+                <h1 class="h3 fw-bold mt-2">Payment Successful</h1>
+                <p class="text-muted mb-4">Thank you for your subscription. Your Pillar & Post recruitment tools are now fully activated.</p>
+                
+                <hr class="my-4 border-stroke">
+                
+                <div class="d-flex justify-content-center">
+                    <a href="{% url 'cms:dashboard' %}" class="btn btn-primary btn-executive px-5 py-2">Enter Dashboard</a>
+                </div>
+            </div>
         </div>
-        <h1 class="fw-bold">Payment Successful!</h1>
-        <p class="lead text-muted">Thank you for subscribing. Your account is now fully activated.</p>
-        <hr class="my-4">
-        <p>You can now access all recruitment tools and manage your jobs.</p>
-        <a href="{% url 'cms:dashboard' %}" class="btn btn-primary btn-lg px-5">Go to Dashboard</a>
     </div>
 </div>
 {% endblock %}

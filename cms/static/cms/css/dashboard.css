@@ -1,338 +1,143 @@
 :root {
-    --sidebar-width: 260px;
-    --editor-panel-bg: #ffffff;
+    --primary-color: #0A2540;
+    --secondary-color: #334E68;
+    --accent-color: #2E5C8A;
+    --main-bg: #ffffff;
+    --alt-bg: #F0F4F8;
+    --main-text: #1a1a1a;
+    --muted-text: #627D98;
+    --border-stroke: #e1e8ed;
+    --sharp-radius: 2px;
 }
 
-/* Dashboard Specific Layout */
-.card-brand {
+/* --- SITE EDITOR ARCHITECTURE (Preserved) --- */
+.editor-card-container {
+    height: calc(100vh - 120px);
+    border-radius: var(--sharp-radius);
+    border: 1px solid var(--border-stroke);
     background: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border-stroke);
+    background: white;
+}
+
+.editor-scroll-area {
+    flex-grow: 1;
+    overflow-y: auto;
     padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.08);
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.card-brand:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-}
-
-/* Color Swatches for the Identity Card */
-.color-swatch {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    display: inline-block;
-    margin-right: 10px;
-    border: 1px solid rgba(0,0,0,0.1);
-}
-
-/* Editor Specifics */
-.editor-scroll-area {
-    max-height: 70vh;
-    overflow-y: auto;
-    padding-right: 15px;
-    scrollbar-width: thin;
-}
-
-.preview-container {
-    background: #e9ecef;
-    padding: 20px;
-    border-radius: 16px;
-}
-
-/* --- THE EXECUTIVE --- */
-.theme-executive {
-    --brand-primary: var(--brand-primary, #1e3a8a); 
-    --brand-secondary: var(--brand-secondary, #64748b);
-    --brand-bg: var(--brand-bg, #f8fafc);
-    --brand-font: 'Inter', sans-serif;
-}
-
-/* --- THE STARTUP --- */
-.theme-startup {
-    --brand-primary: var(--brand-primary, #ff4f00); 
-    --brand-secondary: var(--brand-secondary, #2d3748);
-    --brand-bg: var(--brand-bg, #ffffff);
-    --brand-font: 'Inter', sans-serif;
-}
-
-/* --- GLOBAL COMPONENT MAPPING --- */
-.agency-site {
-    background-color: var(--brand-bg);
-    color: var(--brand-secondary); /* Secondary color for main body text */
-}
-
-/* PRIMARY COLOR: Used for Nav and Footer "Blocks" */
-.navbar {
-    background-color: var(--brand-primary) !important;
-}
-
-.brand-footer {
-    background-color: var(--brand-primary) !important;
-    color: var(--brand-bg) !important;
-}
-
-.brand-footer h3, .brand-footer h4 {
-    color: var(--brand-bg) !important;
-}
-
-/* SECONDARY COLOR: Used for all text/headings */
-.agency-site h1, 
-.agency-site h2, 
-.agency-site h3, 
-.agency-site h4,
-.hero-section h1 {
-    color: var(--brand-secondary) !important;
-}
-
-/* BUTTONS */
-.btn-primary {
-    background-color: var(--brand-primary) !important;
-    border-color: var(--brand-primary) !important;
-    color: var(--brand-bg) !important;
-}
-
-/* --- Editor UI Enhancements --- */
-.editor-scroll-area {
-    max-height: 75vh;
-    overflow-y: auto;
-    padding-right: 12px;
-    scrollbar-width: thin;
-}
-
-/* Custom Input Group Styling */
-.input-group-custom {
-    margin-bottom: 1.25rem;
-    position: relative;
-}
-
-.input-group-custom label {
-    font-size: 0.8rem;
+.section-label {
     font-weight: 700;
     text-transform: uppercase;
-    color: #6c757d;
-    margin-bottom: 0.4rem;
+    font-size: 0.7rem;
+    color: var(--muted-text);
+    letter-spacing: 1.5px;
+    margin-bottom: 1.5rem;
     display: block;
 }
 
-/* Make the update button look like part of the field */
-.btn-update-preview {
-    border-color: #dee2e6;
-    background-color: #f8fafc;
-    transition: all 0.2s ease;
-}
-
-.btn-update-preview:hover {
-    background-color: #343a40;
-    color: white;
-}
-
-/* Color section specific styling */
-.color-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-    background: #f8fafc;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
-}
-
-/* Device Toggle Styling */
-.preview-controls {
+/* --- PREVIEW & DEVICE SCALING (Preserved) --- */
+.preview-frame-wrapper {
     background: white;
-    padding: 0.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-/* Dashboard CSS Fixes */
-
-/* This forces the desktop preview to look like a desktop even in a 7-column layout */
-.preview-frame-wrapper.desktop-mode iframe {
-    width: 1280px; /* Force internal width */
-    height: 720px;
-    transform: scale(0.65); /* Scale it down to fit the card */
-    transform-origin: top left;
-}
-
-.preview-frame-wrapper.desktop-mode {
-    width: 100%;
-    height: 468px; /* 720 * 0.65 approx */
-    overflow: hidden;
-}
-
-/* Ensure update buttons look clickable and high-contrast */
-.btn-update-preview {
-    background-color: #ffffff !important;
-    color: #212529 !important;
-    border: 1px solid #dee2e6 !important;
-    font-weight: 600;
-}
-
-.btn-update-preview:hover {
-    background-color: #f8f9fa !important;
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-.spin-once {
-    animation: spin 0.5s ease-in-out;
-}
-
-.btn-save-all {
-    background-color: #0d6efd !important;
-    color: #ffffff !important;
-    border: none;
-}
-
-/* Contrast Status Bar */
-.contrast-meter {
-    background: #eee;
-    border-radius: 4px;
-    height: 8px;
-    overflow: hidden;
-    margin-top: 8px;
-}
-
-#contrast-status-text {
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-/* Mobile Toggle Size Fix */
-/* This ensures the mobile mode actually shrinks the iframe content */
-.preview-frame-wrapper.mobile-mode {
-    width: 320px; 
-    height: 580px;
+    border-radius: var(--sharp-radius);
+    border: 1px solid var(--border-stroke);
     margin: 0 auto;
     position: relative;
-    overflow: hidden; /* This clips any 'bleeding' margins */
-    background: #000; 
-    border: 12px solid #222;
-    border-radius: 36px;
-    display: flex;
-    justify-content: center; /* Anchors the content to the center of the 'phone' */
+    overflow: hidden; 
 }
 
-.preview-frame-wrapper.mobile-mode iframe {
-    width: 375px !important; 
-    height: 812px !important;
-    position: absolute;
-    /* Use 'left: 50%' and 'translate(-50%)' for perfect centering regardless of scale */
-    left: 50%;
-    top: 0;
-    transform: scale(0.8) translateX(-50%); 
+#preview-frame {
+    border: none;
+    height: 1000px; /* Vertical room for content */
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     transform-origin: top left;
-    border: none;
-}
-/* --- Professional Upload Cards --- */
-.upload-preview-card {
-    transition: all 0.2s ease;
-    border: 2px dashed #dee2e6 !important;
-    background-color: #fdfdfd;
 }
 
-.upload-preview-card:hover {
-    border-color: #0d6efd !important;
-    background-color: #fff;
+/* Desktop Mode: 1400px scaled to fit 840px */
+.preview-frame-wrapper.desktop-mode {
+    width: 840px; 
+    height: 600px; 
+}
+.desktop-mode #preview-frame {
+    width: 1400px; 
+    transform: scale(0.6); 
 }
 
-/* Style Django's 'Currently' links as subtle buttons */
-.upload-preview-card a {
-    display: inline-block !important;
-    font-size: 0.7rem;
-    color: #6c757d;
-    text-decoration: none;
-    background: #f1f3f5;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-bottom: 8px;
-    border: 1px solid #dee2e6;
+/* Tablet Mode: 768px */
+.preview-frame-wrapper.tablet-mode { 
+    width: 768px; 
+    height: 800px;
+}
+.tablet-mode #preview-frame {
+    width: 768px;
+    transform: scale(1);
 }
 
-.upload-preview-card a:hover {
-    background: #e9ecef;
-    color: #495057;
+/* Mobile Mode: 375px */
+.preview-frame-wrapper.mobile-mode { 
+    width: 375px; 
+    height: 800px;
+}
+.mobile-mode #preview-frame {
+    width: 375px;
+    transform: scale(1);
 }
 
-/* Hide the messy default widget text and checkbox */
-.upload-preview-card .form-check, 
-.upload-preview-card br,
-.upload-preview-card span.text-muted {
-    display: none !important;
-}
-
-/* Style the 'Choose File' button */
-.upload-preview-card input[type=file]::file-selector-button {
-    background-color: #212529;
-    color: white;
-    border: none;
-    padding: 5px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-right: 10px;
-}
-
-.upload-preview-card input[type=file]::file-selector-button:hover {
-    background-color: #000;
-}
-
-/* JOBS DASHBOARD SPECIFIC STYLES */
-
-.job-manage-card {
-    border-radius: 16px;
-    border: none;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+/* --- SHARED EXECUTIVE BRANDING --- */
+.card-brand {
     background: white;
+    padding: 1.5rem;
+    border: 1px solid var(--border-stroke);
+    border-radius: var(--sharp-radius);
 }
 
-.table thead th {
-    background-color: #f8f9fa;
+.feature-label {
+    font-size: 0.7rem;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent-color);
+    display: block;
+}
+
+.btn-executive {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
     font-size: 0.75rem;
-    letter-spacing: 0.5px;
-    color: #6c757d;
-    padding: 1.2rem;
-    border-top: none;
+    padding: 0.6rem 1.25rem;
 }
 
-.table tbody td {
-    padding: 1.2rem;
-    vertical-align: middle;
+/* --- DASHBOARD SPECIFIC METRICS --- */
+.metric-label {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted-text);
+    letter-spacing: 1px;
 }
 
-/* Status Indicators */
-.status-pill {
-    padding: 4px 12px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 600;
+.metric-value {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    line-height: 1;
 }
 
-/* Form Styling */
-.job-form-section {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 12px;
-    margin-bottom: 2rem;
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 2px;
+    text-transform: uppercase;
 }
 
-.form-label {
-    font-weight: 600;
-    color: #495057;
-    margin-bottom: 0.5rem;
-}
-
-.helper-box {
-    background-color: #eef2f7;
-    padding: 1rem;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    color: #475569;
-}
+.badge-active { background: #e6fffa; color: #234e52; border: 1px solid #b2f5ea; }
+.badge-trial { background: #fffaf0; color: #744210; border: 1px solid #feebc8; }

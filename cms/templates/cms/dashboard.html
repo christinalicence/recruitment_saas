@@ -2,62 +2,81 @@
 {% block title %}Dashboard | {{ request.tenant.name }}{% endblock %}
 
 {% block content %}
-<div class="theme-{{ request.tenant.template_choice|default:'executive' }} py-5">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-5">
-            <div>
-                <span class="feature-label">Welcome Back</span>
-                <h1 class="display-5 fw-bold">{{ request.tenant.name }}</h1>
-            </div>
-            <div class="d-flex gap-2">
-                <a href="/" target="_blank" class="btn btn-outline-secondary">View Live Site</a>
-                <a href="{% url 'cms:edit_site' %}" class="btn btn-primary">Edit Design</a>
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-end mb-5">
+        <div>
+            <span class="feature-label">Overview</span>
+            <h1 class="display-5 fw-bold mb-0">{{ request.tenant.name }}</h1>
+        </div>
+        <a href="/" target="_blank" class="btn btn-outline-secondary btn-executive">View Your Site</a>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card-brand h-100 p-4 d-flex flex-column">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between">
+                        <h2 class="h4 fw-bold">Hiring</h2>
+                        <i class="bi bi-briefcase text-muted opacity-50 h3"></i>
+                    </div>
+                    <span class="metric-label">Active Job Posts</span>
+                    <div class="metric-value">{{ jobs.count }}</div>
+                </div>
+                <div class="d-flex gap-2 mt-auto">
+                    <a href="{% url 'cms:manage_jobs' %}" class="btn btn-primary btn-executive flex-grow-1">Manage Jobs</a>
+                    <a href="{% url 'cms:add_job' %}" class="btn btn-outline-primary btn-executive">New Post</a>
+                </div>
             </div>
         </div>
-            <div class="col-md-4">
-                <div class="card-brand h-100 shadow-sm border-0">
-                    <h3 class="h5 fw-bold">Active Jobs</h3>
-                    <p class="display-6 fw-bold mb-3">{{ jobs.count }}</p> 
-                    <div class="d-grid gap-2">
-                        <a href="{% url 'cms:manage_jobs' %}" class="btn btn-primary btn-sm">Manage List</a>
-                        <a href="{% url 'cms:add_job' %}" class="btn btn-outline-primary btn-sm">Post New Job</a>
+
+        <div class="col-md-6">
+            <div class="card-brand h-100 p-4 d-flex flex-column">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between">
+                        <h2 class="h4 fw-bold">Site Design</h2>
+                        <i class="bi bi-palette text-muted opacity-50 h3"></i>
                     </div>
+                    <p class="text-muted mt-3">Update your logos, photos, and brand colors.</p>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card-brand h-100">
-                    <h3 class="h5">Identity</h3>
-                    <p class="text-muted small">Your brand colors and logo.</p>
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="color-swatch" style="background-color: {{ profile.primary_color|default:'#2c3e50' }};"></span>
-                        <code>{{ profile.primary_color|default:'#2c3e50' }}</code>
-                    </div>
-                    <a href="{% url 'cms:edit_site' %}" class="btn btn-outline-primary btn-sm">Update Branding</a>
-                </div>
-            </div>
-            <div class="col-md-4">
-    <div class="card-brand h-100">
-        <h3 class="h5">Subscription & Billing</h3>
-        {% if request.tenant.is_active %}
-            <p class="text-muted small">Your plan is active.</p>
-            <span class="badge bg-success mb-3">Active: Standard Plan</span>
-            <a href="{% url 'customers:customer_portal' %}" class="btn btn-outline-primary btn-sm d-block">Manage Subscription</a>
-        {% else %}
-            <p class="text-muted small">Your trial ends: {{ request.tenant.trial_ends }}</p>
-            <span class="badge bg-warning text-dark mb-3">Trial Mode</span>
-            <a href="{% url 'customers:create_checkout' %}" class="btn btn-primary btn-sm d-block">Upgrade to Standard</a>
-        {% endif %}
-    </div>
-</div>
-            <div class="col-md-4">
-                <div class="card-brand h-100">
-                    <h3 class="h5">Site Status</h3>
-                    <p class="text-muted small">Your site is live at:</p>
-                    <p class="fw-bold text-truncate">{{ request.get_host }}</p>
-                    <span class="badge bg-success">Active</span>
+                <div class="mt-auto">
+                    <a href="{% url 'cms:edit_site' %}" class="btn btn-outline-primary btn-executive w-100">Open Site Editor</a>
                 </div>
             </div>
         </div>
     </div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card-brand p-4 h-100 d-flex flex-column">
+            <h3 class="section-label mb-3">Subscription</h3>
+            
+            {% if request.tenant.is_active %}
+                <div class="d-flex align-items-center justify-content-between mt-auto">
+                    <div class="status-badge badge-active">Plan Active</div>
+                    <a href="{% url 'customers:customer_portal' %}" class="btn btn-link btn-sm text-decoration-none fw-bold p-0">
+                        Update Billing Info &rarr;
+                    </a>
+                </div>
+            {% else %}
+                <div class="status-badge badge-trial mb-3">Trial Mode</div>
+                <a href="{% url 'customers:create_checkout' %}" class="btn btn-primary btn-executive btn-sm mt-auto">
+                    Upgrade to Pro
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card-brand p-4 h-100 d-flex flex-column">
+            <h3 class="section-label mb-2">Your Website Address</h3>
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+                <code class="endpoint-text">{{ request.get_host }}</code>
+                <a href="/" target="_blank" class="btn btn-link btn-sm text-decoration-none fw-bold p-0">
+                    Visit Site &rarr;
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
+
 {% endblock %}
