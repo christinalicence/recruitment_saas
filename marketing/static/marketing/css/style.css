@@ -2,7 +2,6 @@
 
 :root {
     /* Brand Identity */
-:root {
     --primary-color: #0A2540;
     --secondary-color: #334E68;
     --accent-color: #2E5C8A;
@@ -13,7 +12,7 @@
     --border-stroke: #e1e8ed;
     --sharp-radius: 2px;
 }
-}
+
 
 /* BASE STYLES */
 body.marketing-site {
@@ -39,9 +38,17 @@ body.marketing-site {
 }
 
 .navbar-brand img {
-    max-height: 40px;
+    max-height: 32px;
     width: auto;
-    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.navbar-brand span {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--primary-color);
 }
 
 .nav-link {
@@ -67,61 +74,73 @@ body.marketing-site {
 
 /* Primary Button: Solid Navy with White Text */
 .btn-primary {
-    background-color: var(--primary-color) !important;
-    border: 1px solid var(--primary-color) !important;
-    color: var(--main-bg) !important;
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    color: var(--main-bg);
 }
 
 .btn-primary:hover {
-    background-color: var(--accent-color) !important;
-    border-color: var(--accent-color) !important;
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(10, 37, 64, 0.15);
 }
 
 /* Secondary Button: Sharp Border with Navy Text */
 .btn-outline-primary {
-    background-color: transparent !important;
-    border: 1.5px solid var(--primary-color) !important;
-    color: var(--primary-color) !important;
+    background-color: transparent;
+    border: 1.5px solid var(--primary-color);
+    color: var(--primary-color);
 }
 
 .btn-outline-primary:hover {
-    background-color: var(--primary-color) !important;
-    color: var(--main-bg) !important;
+    background-color: var(--primary-color);
+    color: var(--main-bg);
 }
 
 /* Secondary/Muted Button (Outline) */
 .btn-outline-secondary {
-    border: 1.5px solid var(--border-stroke) !important;
-    color: var(--secondary-color) !important;
-    background-color: var(--main-bg) !important;
+    border: 1.5px solid var(--border-stroke);
+    color: var(--secondary-color);
+    background-color: var(--main-bg)
 }
 
 .btn-outline-secondary:hover {
-    border-color: var(--secondary-color) !important;
-    color: var(--primary-color) !important;
+    border-color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
 /* HERO SECTION */
 .hero-section {
     position: relative;
     min-height: 600px;
-    background: linear-gradient(135deg, rgba(10, 37, 64, 0.95) 0%, rgba(46, 92, 138, 0.85) 100%),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%230A2540" width="1200" height="800"/><g opacity="0.1" stroke="white"><line x1="0" y1="0" x2="1200" y2="800" /><line x1="200" y1="0" x2="1200" y2="600" /></g></svg>');
     background-size: cover;
     background-position: center;
+    background-color: var(--secondary-color);
     display: flex;
     align-items: center;
-    padding: 80px 0;
+    padding: 40px 0;
     color: var(--main-bg);
+}
 
-    .hero-section img {
+.hero-section img {
     max-width: 100%;
     height: auto;
     border-radius: var(--sharp-radius);
     box-shadow: 20px 20px 60px rgba(0,0,0,0.1);
 }
+
+.hero-img-sm {
+    max-width: 90%;
+    height: auto;
+    border-radius: var(--sharp-radius);
+    box-shadow: 15px 15px 0px var(--alt-bg); 
+    filter: grayscale(10%); 
+}
+
+.hero-section h1 {
+    color: var(--main-bg);
+    line-height: 1.1;
 }
 
 /* Template Specifics */
@@ -153,26 +172,23 @@ body.marketing-site {
 
 /* About page layout */
 .about-container {
-    max-width: 800px;
+    max-width: 1100px;
+}
+
+.about-img-styled {
+    border-radius: var(--sharp-radius);
+    filter: grayscale(10%);
+    width: 100%;
+    height: auto;
 }
 
 .feature-list {
-    list-style: none;
-    padding-left: 0;
+    margin-bottom: 2rem;
 }
 
 .feature-list li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border-stroke);
-    color: var(--secondary-color);
-}
-
-.feature-list li::before {
-    content: "•";
-    color: var(--accent-color);
-    font-weight: bold;
-    display: inline-block; 
-    width: 1em;
+    font-size: 1.05rem;
+    padding: 0.8rem 0; 
 }
 
 /* PREVIEW PAGE */
@@ -233,4 +249,23 @@ footer {
     border-left: 4px solid #c53030;
     padding: 0.75rem;
     font-size: 0.85rem;
+}
+
+/* TEMPLATE PREVIEW OVERRIDES */
+
+.agency-site .btn-primary {
+    background-color: var(--brand-primary, var(--primary-color)) !important;
+    color: var(--brand-bg, #ffffff) !important; 
+}
+
+.agency-site h1, 
+.agency-site h2, 
+.agency-site h3 {
+    color: var(--brand-primary, var(--primary-color));
+    font-family: var(--brand-font, inherit);
+}
+
+.agency-site .job-card-preview {
+    background-color: var(--brand-bg, #ffffff);
+    color: var(--brand-secondary, var(--secondary-color));
 }

@@ -10,14 +10,19 @@
     
     {% block extra_css %}{% endblock %}
 </head>
-<body class="marketing-site"> 
-    <nav class="navbar navbar-expand-lg sticky-top border-bottom bg-white">
-        <div class="container">
-            {# Logo logic #}
-            {% if request.tenant.schema_name == 'public' %}
-                <a class="navbar-brand fw-bold" href="{% url 'public_marketing:landing' %}">PILLAR & POST</a>
-            {% else %}
-                <a class="navbar-brand fw-bold" href="/">PILLAR & POST</a>
+<nav class="navbar navbar-expand-lg sticky-top border-bottom bg-white">
+    <div class="container">
+        {# Logo logic #}
+        {% if request.tenant.schema_name == 'public' %}
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'public_marketing:landing' %}">
+                <img src="/media/logos/pp-logo.png" alt="Pillar & Post Logo">
+                <span class="ms-2">PILLAR & POST</span>
+            </a>
+        {% else %}
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/media/logos/pp-logo.png" alt="Pillar & Post Logo">
+                <span class="ms-2">PILLAR & POST</span>
+            </a>
             {% endif %}
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
