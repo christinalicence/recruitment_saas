@@ -126,10 +126,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "cms" / "static",
 ]
 
-# --- MEDIA FILES ---
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-
 
 # --- CRISPY FORMS ---
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -144,18 +140,20 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET')
 }
 
-# Toggle between local and Cloudinary
-USE_CLOUDINARY = os.getenv('USE_CLOUDINARY', 'False') == 'True'
+# Use the modern STORAGES dictionary (Django 4.2+)
+# This forces Cloudinary for EVERYTHING uploaded via a model ImageField
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
-# ADD THESE PRINTS TO YOUR TERMINAL
-print(f"--- DEBUG: USE_CLOUDINARY is {USE_CLOUDINARY} ---")
-print(f"--- DEBUG: CLOUD_NAME is {os.getenv('CLOUDINARY_CLOUD_NAME')} ---")
-
-if USE_CLOUDINARY:
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    print("--- SUCCESS: Cloudinary Storage Backend Loaded ---")
-else:
-    print("--- WARNING: Cloudinary NOT Loaded, using local storage ---")
+# Keep these local for your default/fallback images
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Stripe Settings
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')

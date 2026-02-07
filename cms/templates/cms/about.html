@@ -30,9 +30,7 @@
                 <div class="col-lg-6 {% if profile.template_choice == 'boutique' %}order-1{% endif %}">
                     <div class="about-image-wrapper">
                         {% if profile.team_photo or profile.get_team_photo %}
-                            <img src="{% if profile.team_photo %}{{ profile.team_photo.url }}{% else %}{{ profile.get_team_photo }}{% endif %}" 
-                                 class="about-image" 
-                                 alt="Our Team at {{ profile.display_name }}">
+                            <img src="{{ profile.get_team_photo }}" class="about-image" alt="Our Team">
                         {% else %}
                             <div class="about-image-placeholder">
                                 <span class="placeholder-text">Team Photo</span>

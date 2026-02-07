@@ -9,6 +9,8 @@ from django.core.mail import send_mail
 from .models import CompanyProfile, Job
 from .forms import CompanyProfileForm, JobForm
 
+from cloudinary.exceptions import BadRequest
+
 def get_profile_defaults(request):
     """
     Centralized helper to provide professional recruitment content 
@@ -33,51 +35,58 @@ def get_profile_defaults(request):
 
 def home(request):
     """The main public landing page for the tenant site."""
-    profile, _ = CompanyProfile.objects.get_or_create(
-        display_name=request.tenant.name,
-        defaults=get_profile_defaults(request)
-    )
-    return render(request, "cms/home.html", {
-        "profile": profile,
+    # Logic: Look for the profile using the unique slug (schema_name)
+    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    
+    if not profile:
+        # If it doesn't exist, create it using the correct field name 'tenant_slug'
+        profile = CompanyProfile.objects.create(
+            tenant_slug=request.tenant.schema_name,
+            **get_profile_defaults(request)
+        )
+    return render(request, "cms/home.html", {'profile': profile})
+
+def job_list(request):
+    """The public list of all open roles."""
+    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    jobs = Job.objects.all().order_by('-created_at')
+    return render(request, "cms/job_list.html", {
+        'jobs': jobs,
+        'profile': profile
     })
 
 def about(request):
-    profile, _ = CompanyProfile.objects.get_or_create(
-        display_name=request.tenant.name,
-        defaults=get_profile_defaults(request)
-    )
-    return render(request, "cms/about.html", {"profile": profile})
-
-def job_list(request):
-    """The public list of all jobs for this tenant."""
-    profile, _ = CompanyProfile.objects.get_or_create(
-        display_name=request.tenant.name,
-        defaults=get_profile_defaults(request)
-    )
-    jobs = Job.objects.all()
+    """Safety-proofed about page with proper profile lookup."""
+    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
     
-    return render(request, "cms/job_list.html", {
-        'profile': profile,
-        'jobs': jobs
+    if not profile:
+        profile = CompanyProfile.objects.create(
+            tenant_slug=request.tenant.schema_name,
+            **get_profile_defaults(request)
+        )
+        
+    return render(request, "cms/about.html", {'profile': profile})
+
+def job_detail(request, pk):
+    """The public detail page for a single job."""
+    job = get_object_or_404(Job, pk=pk)
+    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    return render(request, "cms/job_detail.html", {
+        'job': job,
+        'profile': profile
     })
-
-def job_detail(request, job_id):
-    profile, _ = CompanyProfile.objects.get_or_create(
-        display_name=request.tenant.name,
-        defaults=get_profile_defaults(request)
-    )
-    job = get_object_or_404(Job, id=job_id)
-    return render(request, "cms/job_detail.html", {"profile": profile, "job": job})
-
 
 # --- DASHBOARD / EDITOR VIEWS ---
 
 @login_required
 def dashboard(request):
-    profile, _ = CompanyProfile.objects.get_or_create(
-        display_name=request.tenant.name,
-        defaults=get_profile_defaults(request)
-    )
+    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    
+    if not profile:
+        profile = CompanyProfile.objects.create(
+            tenant_slug=request.tenant.schema_name,
+            **get_profile_defaults(request)
+        )
 
     jobs = Job.objects.all() 
     
@@ -89,21 +98,38 @@ def dashboard(request):
 
 @login_required
 def edit_site(request):
-    profile, created = CompanyProfile.objects.get_or_create(...)
+    """
+    Site Editor: Maintains all preview logic, prevents MultipleObjectsReturned,
+    and catches Cloudinary 'File Too Large' errors.
+    """
+    # 1. Logic: Look for the profile using the unique slug
+    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    
+    # 2. Logic: Fallback creation if this is a brand new tenant
+    if not profile:
+        profile = CompanyProfile.objects.create(
+            tenant_slug=request.tenant.schema_name,
+            **get_profile_defaults(request)
+        )
 
     if request.method == 'POST':
+        # 3. Logic: Overwrite existing instance with form data
         form = CompanyProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Success! Your changes are now live.") # Success message
-            return redirect('cms:edit_site')
-        else:
-            # This captures the "silent" failure and makes it a message
-            messages.error(request, "Wait! We couldn't save. Please check the form for errors.")
-            print(form.errors) # Still good for debugging!
+            try:
+                form.save()
+                messages.success(request, "Site updated successfully!")
+                return redirect('cms:edit_site')
+            except BadRequest as e:
+                # 4. Logic: Specific catch for Cloudinary 10MB limit
+                messages.error(request, "Upload failed: Image is too large (Max 10MB). Please resize and try again.")
+            except Exception as e:
+                # 5. Logic: Generic catch for any other connection issues
+                messages.error(request, "A server error occurred during the upload.")
     else:
         form = CompanyProfileForm(instance=profile)
 
+    # 6. Logic: Context must keep 'form' and 'profile' for preview-manager.js
     return render(request, 'cms/edit_site.html', {
         'form': form,
         'profile': profile,
@@ -243,13 +269,17 @@ def delete_job(request, pk):
 
 
 def public_job_list(request):
-    """The public page where candidates browse all jobs for this tenant."""
-    # This matches the name expected by your urls.py
-    profile, _ = CompanyProfile.objects.get_or_create(
-        display_name=request.tenant.name,
-        defaults=get_profile_defaults(request)
-    )
+    """The public page where candidates browse all jobs."""
+    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    
+    if not profile:
+        profile = CompanyProfile.objects.create(
+            tenant_slug=request.tenant.schema_name,
+            **get_profile_defaults(request)
+        )
+
     jobs = Job.objects.filter(tenant=request.tenant).order_by('-created_at')
+    
     return render(request, "cms/job_list.html", {
         'profile': profile,
         'jobs': jobs
@@ -258,7 +288,9 @@ def public_job_list(request):
 def job_detail(request, pk):
     """The public detail page for a single job."""
     job = get_object_or_404(Job, pk=pk)
-    profile = CompanyProfile.objects.get(display_name=request.tenant.name)
+    
+    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    
     return render(request, "cms/job_detail.html", {
         'job': job,
         'profile': profile
@@ -270,16 +302,15 @@ def job_detail(request, pk):
 def apply_to_job(request, pk):
     """Triggers the direct email to the tenant."""
     job = get_object_or_404(Job, pk=pk)
-    profile = CompanyProfile.objects.get(tenant=request.tenant)
+    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
     
     if request.method == 'POST':
-        # Logic: Priority 1 = Job Custom Emails, Priority 2 = Company Master Email
         recipients = []
         if job.custom_recipient_1:
             recipients.append(job.custom_recipient_1)
             if job.custom_recipient_2:
                 recipients.append(job.custom_recipient_2)
-        elif profile.master_application_email:
+        elif profile and profile.master_application_email:
             recipients.append(profile.master_application_email)
 
         if recipients:
@@ -289,6 +320,8 @@ def apply_to_job(request, pk):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=recipients,
             )
-            messages.success(request, "Application sent directly to the recruiter!")
+            messages.success(request, "Application sent successfully!")
         
         return redirect('cms:job_detail', pk=pk)
+    
+    return redirect('cms:job_detail', pk=pk)

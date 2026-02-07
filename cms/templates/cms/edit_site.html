@@ -8,62 +8,120 @@
         <div class="row g-4">
             
             <div class="col-lg-5 col-xl-4">
-                <div class="card editor-card-container">
-                    
-                    <div class="editor-header">
+                <div class="card editor-card-container shadow-sm">
+                    <div class="editor-header d-flex justify-content-between align-items-center">
                         <div>
                             <a href="{% url 'cms:dashboard' %}" class="back-link">&larr; Dashboard</a>
                             <h1 class="h5 mb-0 fw-bold">Site Editor</h1>
                         </div>
-                        <button type="submit" form="editor-form" class="btn btn-primary btn-sm px-4 shadow-sm">
-                            Save All
-                        </button>
+                        <button type="submit" form="editor-form" class="btn btn-primary btn-sm px-4 shadow-sm">Save All</button>
                     </div>
 
                     <div class="editor-scroll-area">
+                        {% if form.errors %}
+                            <div class="alert alert-danger py-2 small">
+                                <strong>Please fix the errors below.</strong>
+                            </div>
+                        {% endif %}
+
                         <form method="post" enctype="multipart/form-data" id="editor-form">
                             {% csrf_token %}
+                            
                             <div class="editor-section">
-                                <h6 class="section-label">Site Layout</h6>
-                                {{ form|crispy }}
+                                <h6 class="section-label">Site Template</h6>
+                                {{ form.template_choice|as_crispy_field }}
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="editor-section" id="section-branding">
+    <h6 class="section-label">Identity & Colors</h6>
+    {{ form.display_name|as_crispy_field }}
+    {{ form.logo|as_crispy_field }}
+    
+    <div class="color-picker-stack mt-3">
+        <div class="mb-3">{{ form.primary_color|as_crispy_field }}</div>
+        <div class="mb-3">{{ form.secondary_color|as_crispy_field }}</div>
+        <div class="mb-3">{{ form.background_color|as_crispy_field }}</div>
+    </div>
+
+    <div class="contrast-checker-card mt-3 p-3 border rounded bg-light">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="small fw-bold">Readability (Primary vs. Background)</span>
+            <span id="contrast-status-badge" class="badge bg-secondary">Waiting...</span>
+        </div>
+        <div class="progress mb-2" style="height: 8px;">
+            <div id="contrast-bar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+        </div>
+        <p id="contrast-status-text" class="small text-muted mb-0 mt-2">Check visibility of your primary brand color on your chosen background.</p>
+    </div>
+</div>
+
+                            <hr class="my-4">
+
+                            <div class="editor-section" id="section-home" data-section="home">
+                                <h6 class="section-label">Home Page Hero</h6>
+                                {{ form.hero_title|as_crispy_field }}
+                                {{ form.hero_text|as_crispy_field }}
+                                {{ form.hero_image|as_crispy_field }}
+                                <div class="mb-3">
+                                    <img id="id_hero_image-preview" src="{% if profile.hero_image %}{{ profile.hero_image.url }}{% endif %}" class="img-thumbnail hero-preview-img {% if not profile.hero_image %}d-none{% endif %}">
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="editor-section" id="section-about" data-section="about">
+                                <h6 class="section-label">About Us</h6>
+                                {{ form.about_title|as_crispy_field }}
+                                {{ form.about_content|as_crispy_field }}
+                                {{ form.team_photo|as_crispy_field }}
+                                <div class="mb-3">
+                                    <img id="team_photo-preview" src="{% if profile.team_photo %}{{ profile.team_photo.url }}{% endif %}" class="img-thumbnail team-preview-img {% if not profile.team_photo %}d-none{% endif %}">
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="editor-section" id="section-jobs" data-section="jobs">
+                                <h6 class="section-label">Job Board</h6>
+                                {{ form.jobs_header_text|as_crispy_field }}
+                                {{ form.master_application_email|as_crispy_field }}
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="editor-section" id="section-contact">
+                                <h6 class="section-label">Footer & Socials</h6>
+                                {{ form.contact_email|as_crispy_field }}
+                                {{ form.contact_phone|as_crispy_field }}
+                                {{ form.address|as_crispy_field }}
+                                {{ form.linkedin_url|as_crispy_field }}
+                                {{ form.facebook_url|as_crispy_field }}
                             </div>
                         </form>
-                    </div>
-                </div>
+                    </div> </div>
             </div>
 
             <div class="col-lg-7 col-xl-8">
                 <div class="preview-sticky-container">
-                    <div class="preview-toolbar">
-                        <span class="toolbar-label">Live Preview</span>
+                    <div class="preview-toolbar d-flex justify-content-between align-items-center mb-3">
+                        <span class="small fw-bold text-uppercase text-muted">Preview Window</span>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('desktop')" id="btn-desktop">Desktop</button>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="setPreviewSize('desktop')" id="btn-desktop">Desktop</button>
                             <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('tablet')" id="btn-tablet">Tablet</button>
                             <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setPreviewSize('mobile')" id="btn-mobile">Mobile</button>
                         </div>
                     </div>
-                    
-                    <div id="preview-wrapper" class="preview-frame-wrapper desktop-mode mx-auto shadow-sm">
+                    <div id="preview-wrapper" class="preview-frame-wrapper desktop-mode shadow-sm mx-auto">
                         <iframe src="{% url 'cms:live_preview' %}" id="preview-frame"></iframe>
                     </div>
                 </div>
             </div>
 
-        </div>
-    </div>
-</div>
-
-<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 9999;">
-    <div id="messageToast" class="toast align-items-center text-white border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body fw-bold" id="toastMessage"></div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    </div>
-</div>
-{% endblock %}
+        </div> </div> </div> {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'cms/js/preview-manager.js' %}"></script>
 <script src="{% static 'cms/js/contrast-checker.js' %}"></script>
+<script src="{% static 'cms/js/preview-manager.js' %}"></script>
 {% endblock %}

@@ -6,8 +6,7 @@ class CompanyProfileForm(forms.ModelForm):
     class Meta:
         model = CompanyProfile
         fields = [
-            'template_choice',
-            'display_name', 'logo',
+            'template_choice', 'display_name', 'logo',
             'master_application_email',
             'primary_color', 'secondary_color', 'background_color',
             'hero_title', 'hero_text', 'hero_image',
@@ -17,6 +16,22 @@ class CompanyProfileForm(forms.ModelForm):
             'linkedin_url', 'facebook_url',
         ]
         
+        labels = {
+            'master_application_email': 'Main Email For Job Applications',
+            'template_choice': 'Choose Your Site Style',
+            'display_name': 'Company Name',
+            'hero_title': 'Main Headline',
+            'hero_text': 'Introduction Sub-text',
+            'jobs_header_text': 'Job Page title and intro text',
+        }
+
+        help_texts = {
+            'master_application_email': 'Applications will be sent here unless specified otherwise on a specific job post.',
+            'logo': 'Max size 10MB. Cloudinary supported.',
+            'team_photo': 'Max size 10MB. Recommended 1200x800px.',
+            'hero_image': 'Max size 10MB. High resolution recommended.',
+        }
+
         widgets = {
             'primary_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
             'secondary_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),

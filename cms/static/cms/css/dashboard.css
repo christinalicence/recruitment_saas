@@ -1,3 +1,4 @@
+/* --- EXISTING DASHBOARD STYLES --- */
 :root {
     --primary-color: #0A2540;
     --secondary-color: #334E68;
@@ -10,7 +11,13 @@
     --sharp-radius: 2px;
 }
 
-/* --- SITE EDITOR ARCHITECTURE (Preserved) --- */
+.cms-page-wrapper {
+    min-height: calc(100vh - 72px);
+    background-color: var(--alt-bg);
+    padding-top: 1.5rem;
+}
+
+/* --- SITE EDITOR ARCHITECTURE --- */
 .editor-card-container {
     height: calc(100vh - 120px);
     border-radius: var(--sharp-radius);
@@ -42,7 +49,7 @@
     display: block;
 }
 
-/* --- PREVIEW & DEVICE SCALING (Preserved) --- */
+/* --- PREVIEW & DEVICE SCALING --- */
 .preview-frame-wrapper {
     background: white;
     border-radius: var(--sharp-radius);
@@ -54,90 +61,47 @@
 
 #preview-frame {
     border: none;
-    height: 1000px; /* Vertical room for content */
+    height: 1000px; 
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     transform-origin: top left;
 }
 
-/* Desktop Mode: 1400px scaled to fit 840px */
-.preview-frame-wrapper.desktop-mode {
-    width: 840px; 
-    height: 600px; 
-}
-.desktop-mode #preview-frame {
-    width: 1400px; 
-    transform: scale(0.6); 
-}
+.preview-frame-wrapper.desktop-mode { width: 840px; height: 600px; }
+.desktop-mode #preview-frame { width: 1400px; transform: scale(0.6); }
 
-/* Tablet Mode: 768px */
-.preview-frame-wrapper.tablet-mode { 
-    width: 768px; 
-    height: 800px;
-}
-.tablet-mode #preview-frame {
-    width: 768px;
-    transform: scale(1);
-}
+.preview-frame-wrapper.tablet-mode { width: 768px; height: 800px; }
+.tablet-mode #preview-frame { width: 768px; transform: scale(1); }
 
-/* Mobile Mode: 375px */
-.preview-frame-wrapper.mobile-mode { 
-    width: 375px; 
-    height: 800px;
-}
-.mobile-mode #preview-frame {
-    width: 375px;
-    transform: scale(1);
-}
+.preview-frame-wrapper.mobile-mode { width: 375px; height: 800px; }
+.mobile-mode #preview-frame { width: 375px; transform: scale(1); }
 
-/* --- SHARED EXECUTIVE BRANDING --- */
-.card-brand {
-    background: white;
+/* --- EDITOR COMPONENT STYLING --- */
+.logo-preview-img { max-height: 80px; margin-bottom: 10px; }
+.hero-preview-img { max-height: 150px; width: 100%; object-fit: cover; margin-bottom: 10px; }
+.team-preview-img { max-height: 120px; margin-bottom: 10px; }
+
+.logo-fallback-box {
     padding: 1.5rem;
     border: 1px solid var(--border-stroke);
+    text-align: center;
     border-radius: var(--sharp-radius);
-}
-
-.feature-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--accent-color);
-    display: block;
-}
-
-.btn-executive {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 700;
-    font-size: 0.75rem;
-    padding: 0.6rem 1.25rem;
-}
-
-/* --- DASHBOARD SPECIFIC METRICS --- */
-.metric-label {
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    font-weight: 700;
+    background-color: var(--alt-bg);
+    font-size: 0.8rem;
     color: var(--muted-text);
-    letter-spacing: 1px;
 }
 
-.metric-value {
-    font-size: 3.5rem;
-    font-weight: 800;
-    color: var(--primary-color);
-    line-height: 1;
+.contrast-checker-box {
+    padding: 1rem;
+    background-color: var(--alt-bg);
+    border: 1px solid var(--border-stroke);
+    border-radius: var(--sharp-radius);
+    margin-top: 10px;
 }
 
-.status-badge {
-    display: inline-block;
-    padding: 0.35rem 0.75rem;
-    font-size: 0.7rem;
-    font-weight: 700;
-    border-radius: 2px;
-    text-transform: uppercase;
+.toast-container-custom {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
 }
-
-.badge-active { background: #e6fffa; color: #234e52; border: 1px solid #b2f5ea; }
-.badge-trial { background: #fffaf0; color: #744210; border: 1px solid #feebc8; }
