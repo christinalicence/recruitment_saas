@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django_tenants.utils import schema_context
 from customers.models import Client, Domain, Plan
 from .forms import TenantSignupForm, TenantLoginForm
+from django.templatetags.static import static
 
 
 def tenant_signup(request):
@@ -151,11 +152,11 @@ def template_select(request):
 
 def template_preview(request, template_id):
     name = request.GET.get('company_name', 'Your Company')
-    
+
     stock_images = {
-        'executive': 'hero/default_executive.jpg',
-        'boutique': 'hero/default_boutique.jpg',
-        'startup': 'hero/default_startup.jpg',
+        'executive': 'marketing/images/default_executive.jpg',
+        'boutique': 'marketing/images/default_boutique.jpg',
+        'startup': 'marketing/images/default_startup.jpg',
     }
 
     dummy_jobs = [
@@ -164,10 +165,13 @@ def template_preview(request, template_id):
         {'title': 'Creative Account Manager', 'location': 'New York', 'salary': '$90k - $120k', 'summary': 'Bridging the gap between design and clients...'}
     ]
 
+    image_filename = stock_images.get(template_id, stock_images['executive'])
+    hero_url = static(image_filename)
+
     return render(request, "marketing/preview_main.html", {
         'template_id': template_id,
         'company_name': name,
-        'hero_image': f"/media/{stock_images.get(template_id, stock_images['executive'])}",
+        'hero_image': hero_url,
         'jobs': dummy_jobs
     })
 

@@ -19,12 +19,10 @@
             {% for template in templates %}
 <div class="col-md-4">
     <div class="template-card theme-{{ template.id }} h-100">
-        
-        <img src="/media/hero/default_{{ template.id }}.jpg" 
-             class="img-fluid rounded mb-3" 
-             style="height: 160px; width: 100%; object-fit: cover;" 
-             alt="{{ template.name }}">
-
+        <img src="{% static 'marketing/images/default_'|add:template.id|add:'.jpg' %}" 
+            class="img-fluid rounded mb-3" 
+            style="height: 160px; width: 100%; object-fit: cover;" 
+            alt="{{ template.name }}">
         <span class="feature-label">{{ template.name }}</span>
         <p class="small text-muted mb-4">{{ template.description }}</p>
         

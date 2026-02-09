@@ -8,24 +8,25 @@
 {% block content %}
 <div class="theme-{{ template_id }} agency-site">
     <header class="hero-section">
-        <div class="container">
-            <div class="row align-items-center {% if template_id == 'startup' %}text-center{% endif %}">
-                <div class="{% if template_id == 'startup' %}col-12{% else %}col-lg-6{% endif %}">
-                    <h1 class="display-3 fw-bold mb-4">{{ company_name }}</h1>
-                    <p class="lead mb-5">Redefining recruitment with a {{ template_id|title }} approach.</p>
-                    <div class="d-flex gap-3 {% if template_id == 'startup' %}justify-content-center{% endif %}">
-                        <button class="btn btn-primary btn-lg px-5">Join Us</button>
-                        <button class="btn btn-outline-secondary btn-lg px-5">Learn More</button>
-                    </div>
+    <div class="container">
+        {# This line centers everything only if it's the startup template #}
+        <div class="row align-items-center {% if template_id == 'startup' %}text-center{% endif %}">
+            
+            <div class="{% if template_id == 'startup' %}col-12{% else %}col-lg-6{% endif %}">
+                <h1 class="display-3 fw-bold mb-4">{{ company_name }}</h1>
+                <p class="lead mb-5">Professional recruitment solutions using our {{ template_id|title }} framework.</p>
+                <div class="d-flex gap-3 {% if template_id == 'startup' %}justify-content-center{% endif %}">
+                    <button class="btn btn-primary btn-lg px-5">Join Us</button>
+                    <button class="btn btn-outline-secondary btn-lg px-5">Learn More</button>
                 </div>
-                {% if template_id != 'startup' %}
-                <div class="col-lg-6 d-none d-lg-block">
-                    <img src="{{ hero_image }}" class="img-fluid shadow-lg preview-hero-img" alt="Template Preview">
-                </div>
-                {% endif %}
             </div>
+            <div class="{% if template_id == 'startup' %}col-12 mt-5{% else %}col-lg-6{% endif %} d-none d-lg-block">
+                <img src="{{ hero_image }}" class="img-fluid shadow-lg preview-hero-img" alt="Template Preview">
+            </div>
+            
         </div>
-    </header>
+    </div>
+</header>
 
     <section class="py-5 bg-white">
         <div class="container">
