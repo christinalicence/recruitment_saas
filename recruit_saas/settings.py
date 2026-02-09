@@ -25,9 +25,9 @@ SHARED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',
-    'cloudinary',      
     'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary',
     'marketing',
     'crispy_forms',
     'crispy_bootstrap5',
@@ -124,14 +124,8 @@ TEMPLATES = [
 ]
 
 # --- STATIC FILES ---
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "marketing" / "static",
-    BASE_DIR / "cms" / "static",
-]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = []
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # --- CRISPY FORMS ---
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -147,6 +141,9 @@ CLOUDINARY_STORAGE = {
 }
 
 # Use the modern STORAGES dictionary (Django 4.2+)
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -156,6 +153,7 @@ STORAGES = {
     },
 }
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Keep these local for your default/fallback images
 MEDIA_URL = '/media/'
