@@ -66,19 +66,17 @@ MIDDLEWARE = [
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # --- COOKIES & CSRF ---
-# We comment these out for localhost development to avoid 403 errors.
-# SESSION_COOKIE_DOMAIN = ".localhost"
-# CSRF_COOKIE_DOMAIN = ".localhost"
 
 # Ensure Django trusts the subdomain origins
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://*.localhost:8000",
+    "https://*.herokuapp.com",
 ]
 
 # Security settings for local development
-CSRF_COOKIE_HTTPONLY = False  # Allows Django's CSRF middleware to see it
+CSRF_COOKIE_HTTPONLY = False  
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
@@ -131,7 +129,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "marketing" / "static",
     BASE_DIR / "cms" / "static",
 ]
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # --- CRISPY FORMS ---
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -147,7 +145,6 @@ CLOUDINARY_STORAGE = {
 }
 
 # Use the modern STORAGES dictionary (Django 4.2+)
-# This forces Cloudinary for EVERYTHING uploaded via a model ImageField
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -157,7 +154,6 @@ STORAGES = {
     },
 }
 
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 
 # Keep these local for your default/fallback images
 MEDIA_URL = '/media/'
