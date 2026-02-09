@@ -7,9 +7,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['.localhost', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [
+            '.herokuapp.com',
+            '.localhost',
+            '127.0.0.1',
+            'localhost',
+        ]
 
 # --- SHARED & TENANT APPS ---
 SHARED_APPS = [
@@ -47,6 +52,7 @@ INSTALLED_APPS = SHARED_APPS + [
 MIDDLEWARE = [
     'recruit_saas.debug_middleware.CustomTenantMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -147,9 +153,11 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 
 # Keep these local for your default/fallback images
 MEDIA_URL = '/media/'
