@@ -9,8 +9,7 @@ from django.core.mail import send_mail
 
 
 def create_checkout_session(request):
-    """Initiates the Stripe Checkout process."""
-    client = request.tenant
+    client = request.tenant 
     
     if not client.stripe_customer_id:
         customer = stripe.Customer.create(
@@ -21,29 +20,34 @@ def create_checkout_session(request):
         client.stripe_customer_id = customer.id
         client.save()
 
-    domain = client.domains.first().domain
+    # Determine protocol based on environment, keep local development on http
+    protocol = "https" if not settings.DEBUG else "http"
+    current_host = request.get_host() 
     
     session = stripe.checkout.Session.create(
         customer=client.stripe_customer_id,
         payment_method_types=['card'],
         line_items=[{'price': client.plan.stripe_price_id, 'quantity': 1}],
         mode='subscription',
-        success_url=f"http://{domain}:8000/billing/success/",
-        cancel_url=f"http://{domain}:8000/billing/cancel/",
+        success_url=f"{protocol}://{current_host}/customers/success/",
+        cancel_url=f"{protocol}://{current_host}/customers/cancel/",
         metadata={'tenant_id': client.id}
+    )
+    
+    return redirect(session.url, code=303)
+
+
+def customer_portal(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    # Use the current tenant's host dynamically
+    return_url = f"https://{request.get_host()}/dashboard/"
+    
+    session = stripe.billing_portal.Session.create(
+        customer=request.tenant.stripe_customer_id,
+        return_url=return_url,
     )
     return redirect(session.url, code=303)
 
-def customer_portal(request):
-    """Sends the user to Stripe's Billing Portal to manage cards/cancellation."""
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    if not request.tenant.stripe_customer_id:
-        return redirect('customers:create_checkout')
-    session = stripe.billing_portal.Session.create(
-        customer=request.tenant.stripe_customer_id,
-        return_url=f"http://{request.get_host()}/dashboard/",
-    )
-    return redirect(session.url, code=303)
 
 @csrf_exempt
 def stripe_webhook(request):

@@ -58,9 +58,11 @@ class SubscriptionGuardMiddleware:
         allowed_paths = [
             reverse('customers:create_checkout'),
             reverse('customers:stripe_webhook'),
+            reverse('customers:payment_success'),
+            reverse('customers:payment_cancel'),
             '/login/', 
             '/logout/',
-            '/billing/portal/',
+            '/customers/portal/',
         ]
 
         if any(request.path.startswith(path) for path in allowed_paths):
