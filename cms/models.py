@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.templatetags.static import static
 
+
 class CompanyProfile(models.Model):
     tenant_slug = models.CharField(max_length=63, unique=True, editable=False, null=True)
     TEMPLATE_CHOICES = [
