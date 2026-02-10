@@ -83,7 +83,7 @@ def tenant_login(request):
             login(request, user)
             return redirect('cms:dashboard')
         messages.error(request, "Invalid email or password.")
-    return render(request, "marketing/tenant_login.html", {'form': form})
+    return render(request, "marketing/login.html", {'form': form})
 
 def tenant_logout(request):
     logout(request)
