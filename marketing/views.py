@@ -8,9 +8,13 @@ from django.templatetags.static import static
 from customers.models import Client, Domain, Plan
 from .forms import TenantSignupForm, TenantLoginForm
 
+def about_page(request):
+    """The about page for getpillarpost.com"""
+    return render(request, "marketing/about.html")
 
 def landing_page(request):
     """The main home page for getpillarpost.com"""
+
     return render(request, "marketing/landing.html")
 
 def tenant_signup(request):
