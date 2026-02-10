@@ -9,4 +9,5 @@ urlpatterns = [
     path("preview/<str:template_id>/", views.template_preview, name="template_preview"),
     path("signup/", views.tenant_signup, name="tenant_signup"),
     path('customers/', include('customers.urls')),
+    path("about/", views.company_about, name="about")
 ]

@@ -8,8 +8,8 @@ from django.templatetags.static import static
 from customers.models import Client, Domain, Plan
 from .forms import TenantSignupForm, TenantLoginForm
 
-def about_page(request):
-    """The about page for getpillarpost.com"""
+def company_about(request):
+    """The main marketing about page for Pillar & Post (getpillarpost.com)"""
     return render(request, "marketing/about.html")
 
 def landing_page(request):
