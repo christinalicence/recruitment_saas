@@ -10,6 +10,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
+            '.getpillarpost.com',
             '.herokuapp.com',
             '.localhost',
             '127.0.0.1',
@@ -67,14 +68,13 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # --- COOKIES & CSRF ---
 
-# Ensure Django trusts the subdomain origins
 CSRF_TRUSTED_ORIGINS = [
+    "https://*.getpillarpost.com",
+    "https://getpillarpost.com",
+    "https://*.herokuapp.com", #
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "http://*.localhost:8000",
-    "https://*.herokuapp.com",
 ]
-
 # Security settings for local development
 CSRF_COOKIE_HTTPONLY = False  
 SESSION_COOKIE_HTTPONLY = True

@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 from django_tenants.utils import schema_context
 from customers.models import Client, Domain, Plan
-from .forms import TenantSignupForm, TenantLoginForm
-from django.templatetags.static import static
-
+from .forms import TenantSignupForm
 
 def tenant_signup(request):
-    """Public signup - creates tenant with automated email and standard user."""
+    """Public signup - creates tenant and admin user."""
+    # Get template from URL (passed from the preview page)
     template_id = request.GET.get('template', 'executive')
+    
+    # Pre-fill company name if they typed it on the previous page
     initial_data = {'company_name': request.GET.get('company_name', '')}
     form = TenantSignupForm(request.POST or None, initial=initial_data)
 
@@ -19,63 +20,50 @@ def tenant_signup(request):
         admin_email = form.cleaned_data["admin_email"]
         password = form.cleaned_data["password"]
         
-        standard_plan = Plan.objects.filter(name="Standard").first()
-        
-        # 2. Create Tenant with the automated notification email
-        tenant, created = Client.objects.get_or_create(
-            name=company_name,
-            defaults={
-                'is_active': False, # Start as False to test trial/paywall
-                'template_choice': template_id,
-                'plan': standard_plan,
-                'notification_email_1': admin_email # <--- This fixes the email issue!
-            }
-        )
-        
-        # 3. Create Domain (Standard logic)
-        host_full = request.get_host()
-        base_domain = host_full.split(':')[0]
-        if base_domain in ["127.0.0.1", "localhost"]:
-            base_domain = "localhost"
-            
-        full_domain = f"{tenant.schema_name}.{base_domain}"
-        Domain.objects.get_or_create(
-            domain=full_domain,
-            defaults={'tenant': tenant, 'is_primary': True}
-        )
-        
-        # 4. Create standard user inside the Tenant Schema
-        with schema_context(tenant.schema_name):
-            tenant_user, t_created = User.objects.get_or_create(
-                username=admin_email,
-                defaults={
-                    'email': admin_email,
-                    'is_staff': False,      
-                    'is_superuser': False 
-                }
-            )
-            if t_created:
-                tenant_user.set_password(password)
-                tenant_user.save()
-            
-            # Create CompanyProfile for their dashboard to manage
-            from cms.models import CompanyProfile
-            CompanyProfile.objects.get_or_create(
-                id=1,
-                defaults={'display_name': company_name}
-            )
-        
-        # 5. Show success page
-        port = f":{host_full.split(':')[1]}" if ":" in host_full else ""
-        login_url = f"http://{full_domain}{port}/login/"
-        
-        return render(request, "marketing/signup_success.html", {
-            "login_url": login_url,
-            "company_name": company_name,
-            "email": admin_email
-        })
+        # 1. Generate URLs and Schema names
+        tenant_slug = slugify(company_name) # "Acme Corp" -> "acme-corp"
+        domain_name = f"{tenant_slug}.getpillarpost.com"
+        schema_name = tenant_slug.replace('-', '_') # "acme_corp" (DBs hate dashes)
 
-    return render(request, "marketing/signup.html", {"form": form})
+        # 2. Check for duplicates BEFORE creating anything
+        if Domain.objects.filter(domain=domain_name).exists():
+            messages.error(request, f"The name '{company_name}' is already taken. Please try another.")
+            return render(request, "marketing/tenant_signup.html", {'form': form})
+
+        # 3. Get the Plan (Make sure this exists in your Heroku DB!)
+        standard_plan = Plan.objects.filter(name="Standard").first()
+
+        # 4. Create the Tenant
+        tenant = Client.objects.create(
+            schema_name=schema_name,
+            name=company_name,
+            template_choice=template_id,
+            plan=standard_plan,
+            notification_email_1=admin_email,
+            is_active=True # Active for testing; change to False if implementing trial later
+        )
+
+        # 5. Create the Domain link
+        Domain.objects.create(
+            domain=domain_name,
+            tenant=tenant,
+            is_primary=True
+        )
+
+        # 6. Create the Admin User inside the new tenant's schema
+        with schema_context(tenant.schema_name):
+            # We use create_superuser so they have full access to their dashboard
+            User.objects.create_superuser(
+                username=admin_email,
+                email=admin_email,
+                password=password
+            )
+
+        messages.success(request, f"Success! Your site is ready.")
+        # Redirect directly to their new login page
+        return redirect(f"https://{domain_name}/login/")
+
+    return render(request, "marketing/tenant_signup.html", {'form': form})
 
 
 def portal_finder(request):
