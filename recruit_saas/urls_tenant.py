@@ -10,7 +10,7 @@ urlpatterns = [
     
     path('', include('cms.urls')),
 
-    path('about/', marketing_views.company_about, name='about'), 
+    path('about/', marketing_views.company_about, name='about'),
 
     path('choose-template/', marketing_views.template_select, name='template_select'),
     path('find-portal/', marketing_views.portal_finder, name='portal_finder'),

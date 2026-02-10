@@ -36,6 +36,7 @@ class Client(TenantMixin):
 
     # This is the field we are adding to force Django to wake up
     dummy_field = models.BooleanField(default=False)
+    dummy_field2 = models.BooleanField(default=False)
 
     auto_create_schema = True
 
