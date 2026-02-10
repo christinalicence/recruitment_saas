@@ -8,44 +8,57 @@ from django.templatetags.static import static
 from customers.models import Client, Domain, Plan
 from .forms import TenantSignupForm, TenantLoginForm
 
+
+def landing_page(request):
+    """The main home page for getpillarpost.com"""
+    return render(request, "marketing/landing.html")
+
 def tenant_signup(request):
+    """Public signup - creates tenant and standard client user."""
     template_id = request.GET.get('template', 'executive')
-    form = TenantSignupForm(request.POST or None)
+    initial_data = {'company_name': request.GET.get('company_name', '')}
+    form = TenantSignupForm(request.POST or None, initial=initial_data)
 
     if request.method == "POST" and form.is_valid():
         company_name = form.cleaned_data["company_name"]
         admin_email = form.cleaned_data["admin_email"]
         password = form.cleaned_data["password"]
         
+        # 1. Production Naming Logic
         tenant_slug = slugify(company_name)
         domain_name = f"{tenant_slug}.getpillarpost.com"
         schema_name = tenant_slug.replace('-', '_')
 
+        # 2. Prevent Crashes
         if Domain.objects.filter(domain=domain_name).exists():
-            messages.error(request, "That name is taken.")
+            messages.error(request, f"The name '{company_name}' is already taken.")
             return render(request, "marketing/tenant_signup.html", {'form': form})
 
-        # Safety: Ensure the 'Standard' plan exists in the DB
+        # 3. Get/Create Plan (Prevents crash if Plan table is empty)
         standard_plan, _ = Plan.objects.get_or_create(name="Standard")
 
+        # 4. Create Tenant (Kept notification_email_1 and template_choice)
         tenant = Client.objects.create(
             schema_name=schema_name,
             name=company_name,
             template_choice=template_id,
             plan=standard_plan,
             notification_email_1=admin_email,
-            is_active=True 
+            is_active=True # Set to True so you can log in immediately
         )
 
+        # 5. Create Domain
         Domain.objects.create(domain=domain_name, tenant=tenant, is_primary=True)
 
+        # 6. Create User in the new schema (Standard User)
         with schema_context(tenant.schema_name):
-            User.objects.create_user( # Standard client user
+            User.objects.create_user(
                 username=admin_email,
                 email=admin_email,
                 password=password
             )
 
+        messages.success(request, f"Success! Your site is ready at {domain_name}")
         return redirect(f"https://{domain_name}/login/")
 
     return render(request, "marketing/tenant_signup.html", {'form': form})
@@ -64,6 +77,7 @@ def tenant_login(request):
 
 def tenant_logout(request):
     logout(request)
+    # Redirect to the main public landing page
     return redirect('public_marketing:landing')
 
 def template_select(request):
@@ -75,6 +89,7 @@ def template_select(request):
     return render(request, "marketing/template_select.html", {'templates': templates})
 
 def template_preview(request, template_id):
+    """Logic kept exactly as originally provided"""
     name = request.GET.get('company_name', 'Your Company')
     stock_images = {
         'executive': 'marketing/images/default_executive.jpg',
@@ -82,10 +97,12 @@ def template_preview(request, template_id):
         'startup': 'marketing/images/default_startup.jpg',
     }
     dummy_jobs = [
-        {'title': 'Senior Strategy Consultant', 'location': 'London', 'salary': '£85k+', 'summary': 'Strategy lead...'},
-        {'title': 'Lead Frontend Engineer', 'location': 'Remote', 'salary': '€70k+', 'summary': 'React build...'},
+        {'title': 'Senior Strategy Consultant', 'location': 'London, UK', 'salary': '£85k - £110k', 'summary': 'Leading a team of analysts...'},
+        {'title': 'Lead Frontend Engineer', 'location': 'Remote', 'salary': '€70k - €95k', 'summary': 'Building scalable React components...'},
+        {'title': 'Creative Account Manager', 'location': 'New York', 'salary': '$90k - $120k', 'summary': 'Bridging the gap between design and clients...'}
     ]
     image_filename = stock_images.get(template_id, stock_images['executive'])
+    
     return render(request, "marketing/preview_main.html", {
         'template_id': template_id,
         'company_name': name,
