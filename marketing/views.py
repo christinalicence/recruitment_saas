@@ -61,12 +61,6 @@ def tenant_signup(request):
                 email=admin_email,
                 password=password
             )
-        
-        # Create plan 
-        standard_plan, created = Plan.objects.get_or_create(
-            name="Standard", 
-            defaults={'max_jobs': 6} # Match the default in your model
-)
 
         messages.success(request, f"Success! Your site is ready at {domain_name}")
         return redirect(f"https://{domain_name}/login/")
@@ -120,16 +114,31 @@ def template_preview(request, template_id):
         'jobs': dummy_jobs
     })
 
+
 def portal_finder(request):
-    """Allows users to find their tenant portal by company name."""
+    """Allows users to find their tenant portal by admin email."""
+    found_tenants = []
+    email = None
+
     if request.method == "POST":
-        company_name = request.POST.get('company_name')
-        if company_name:
-            tenant_slug = slugify(company_name)
-            domain_name = f"{tenant_slug}.getpillarpost.com"
-            # Check if it exists before redirecting
-            if Domain.objects.filter(domain=domain_name).exists():
-                return redirect(f"https://{domain_name}/login/")
-            messages.error(request, "We couldn't find a portal with that name.")
-    
-    return render(request, "marketing/portal_finder.html")
+        email = request.POST.get('email') # Match the template input name
+        if email:
+            # Filter Clients where this email is the notification contact
+            tenants = Client.objects.filter(notification_email_1__iexact=email)
+            
+            for tenant in tenants:
+                # Get the primary domain for each tenant
+                domain = tenant.domains.filter(is_primary=True).first()
+                if domain:
+                    found_tenants.append({
+                        'name': tenant.name,
+                        'login_url': f"https://{domain.domain}/login/"
+                    })
+            
+            if not found_tenants:
+                messages.error(request, "No portals found for that email address.")
+
+    return render(request, "marketing/portal_finder.html", {
+        'found_tenants': found_tenants,
+        'email': email
+    })

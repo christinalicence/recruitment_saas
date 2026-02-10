@@ -23,23 +23,13 @@
 
             <form method="post">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="company_name" class="form-label fw-bold small">Company Name</label>
-                    <input type="text" name="company_name" id="company_name" class="form-control" placeholder="e.g. Acme Recruitment" required>
-                </div>
                 {{ form|crispy }}
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary w-100">
-                        Sign In →
+                        Sign In
                     </button>
                 </div>
             </form>
-
-            <div class="mt-4 pt-3 border-top text-center">
-                <p class="small muted-text mb-0">
-                    Forgot your password? <a href="#" class="brand-link">Contact Support</a>
-                </p>
-            </div>
         </div>
     </div>
 </div>
