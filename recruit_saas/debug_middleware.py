@@ -54,7 +54,7 @@ class SubscriptionGuardMiddleware:
             return self.get_response(request)
 
         # 2. Paths that are ALWAYS allowed (Login, Logout, and Billing)
-        # We use reverse() to ensure we match the dynamic tenant URL structure
+        # FIXED: These are now properly indented inside __call__
         allowed_paths = [
             reverse('customers:create_checkout'),
             reverse('customers:stripe_webhook'),
@@ -65,7 +65,7 @@ class SubscriptionGuardMiddleware:
             '/logout/',
         ]
 
-        # Check if the current path matches any of our allowed paths
+        # FIXED: This block is now properly indented
         if any(request.path.startswith(path) for path in allowed_paths):
             return self.get_response(request)
 

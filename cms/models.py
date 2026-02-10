@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.templatetags.static import static
 
 class CompanyProfile(models.Model):
     tenant_slug = models.CharField(max_length=63, unique=True, editable=False, null=True)
@@ -61,18 +62,17 @@ class CompanyProfile(models.Model):
     facebook_url = models.URLField(max_length=200, blank=True)
 
     def get_hero_image(self):
-        """Returns the uploaded hero image URL or a local default based on template."""
+        """Returns uploaded hero or the specific default for the chosen theme."""
         if self.hero_image:
-            # Cloudinary automatically handles resizing if configured
             return self.hero_image.url
-        return f"{settings.MEDIA_URL}hero/default_{self.template_choice}.jpg"
+        filename = f'marketing/images/default_{self.template_choice}.jpg'
+        return static(filename)
 
     def get_team_photo(self):
-        """Returns the uploaded team photo URL or the local default."""
+        """Returns uploaded team photo or the default about image."""
         if self.team_photo:
-            # Cloudinary automatically handles resizing if configured
             return self.team_photo.url
-        return f"{settings.MEDIA_URL}team/default_team.jpg"
+        return static('marketing/images/default_about.jpg')
 
     def __str__(self):
         return self.display_name

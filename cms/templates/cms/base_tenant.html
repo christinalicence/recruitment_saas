@@ -28,9 +28,10 @@
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'cms:home' %}">
                 {% if profile.logo %}
-                    <img src="{{ profile.logo.url }}" alt="{{ profile.display_name }} logo" class="navbar-logo me-2">
+                    <img src="{{ profile.logo.url }}" alt="{{ profile.display_name }}" style="max-height: 40px;">
+                {% else %}
+                    <span class="brand-text">{{ profile.display_name|upper }}</span>
                 {% endif %}
-                <span class="navbar-brand-text">{{ profile.company_name|default:profile.display_name }}</span>
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
