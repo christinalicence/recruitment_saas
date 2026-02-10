@@ -109,3 +109,17 @@ def template_preview(request, template_id):
         'hero_image': static(image_filename),
         'jobs': dummy_jobs
     })
+
+def portal_finder(request):
+    """Allows users to find their tenant portal by company name."""
+    if request.method == "POST":
+        company_name = request.POST.get('company_name')
+        if company_name:
+            tenant_slug = slugify(company_name)
+            domain_name = f"{tenant_slug}.getpillarpost.com"
+            # Check if it exists before redirecting
+            if Domain.objects.filter(domain=domain_name).exists():
+                return redirect(f"https://{domain_name}/login/")
+            messages.error(request, "We couldn't find a portal with that name.")
+    
+    return render(request, "marketing/portal_finder.html")
