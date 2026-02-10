@@ -36,7 +36,7 @@ def tenant_signup(request):
         # 2. Prevent Crashes
         if Domain.objects.filter(domain=domain_name).exists():
             messages.error(request, f"The name '{company_name}' is already taken.")
-            return render(request, "marketing/tenant_signup.html", {'form': form})
+            return render(request, "marketing/signup.html", {'form': form})
 
         # 3. Get/Create Plan (Prevents crash if Plan table is empty)
         standard_plan, _ = Plan.objects.get_or_create(name="Standard")
@@ -61,11 +61,17 @@ def tenant_signup(request):
                 email=admin_email,
                 password=password
             )
+        
+        # Create plan 
+        standard_plan, created = Plan.objects.get_or_create(
+            name="Standard", 
+            defaults={'max_jobs': 6} # Match the default in your model
+)
 
         messages.success(request, f"Success! Your site is ready at {domain_name}")
         return redirect(f"https://{domain_name}/login/")
 
-    return render(request, "marketing/tenant_signup.html", {'form': form})
+    return render(request, "marketing/signup.html", {'form': form})
 
 def tenant_login(request):
     form = TenantLoginForm(request.POST or None)
