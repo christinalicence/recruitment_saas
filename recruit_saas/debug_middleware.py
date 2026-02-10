@@ -54,22 +54,22 @@ class SubscriptionGuardMiddleware:
             return self.get_response(request)
 
         # 2. Paths that are ALWAYS allowed (Login, Logout, and Billing)
-        # Otherwise, they can't pay to get back in!
+        # We use reverse() to ensure we match the dynamic tenant URL structure
         allowed_paths = [
             reverse('customers:create_checkout'),
             reverse('customers:stripe_webhook'),
             reverse('customers:payment_success'),
             reverse('customers:payment_cancel'),
+            reverse('customers:customer_portal'),
             '/login/', 
             '/logout/',
-            '/customers/portal/',
         ]
 
+        # Check if the current path matches any of our allowed paths
         if any(request.path.startswith(path) for path in allowed_paths):
             return self.get_response(request)
 
         # 3. If not active AND trial has expired, redirect to checkout
-        # This uses the @property we just created in the model
         if not request.tenant.is_active and not request.tenant.is_on_trial:
             return redirect(reverse('customers:create_checkout'))
 
