@@ -1,30 +1,23 @@
-# Python
+# Python / Django
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Virtual environments
 .venv/
-venv/
-env/
-
-# Django
 *.log
 local_settings.py
 db.sqlite3
+db.sqlite3-journal
 media/
 staticfiles/
 
-# Django migrations 
-**/migrations/*.py
-!**/migrations/__init__.py
-
-# Environment variables
+# Environment / Secrets
 .env
+.env.local
 .env.*
 !.env.example
+secrets.json
 
-# VS Code
+# VS Code / IDE
 .vscode/
 *.code-workspace
 
@@ -34,14 +27,12 @@ staticfiles/
 .LSOverride
 ._*
 
-
-# Testing / Coverage
+# Testing
 .coverage
 htmlcov/
 .pytest_cache/
 
-
-# Build / packaging
+# Build
 build/
 dist/
 *.egg-info/
