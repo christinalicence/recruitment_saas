@@ -52,3 +52,14 @@ domain.save()
 
 
 There are issues with testing locally and when deployed caused by the movements bewteen subdomains. The tests written for local dev are often not compatbile
+
+
+The testing ethos is to do as much as possible with automated tests. This is to guarantee data security, which is vital for the site, and to future proof it.
+
+I tried to use test driven development, but came across some herdals with this. The biggest one is the multi tenant environment. I found myself writing tests that I knew would break when I deployed. I was hesitent to do too much of the development work on the deployed site because I was experimenting a lot with different css combinations and I didn't want my github repo to be too cluttered.
+
+# Automated Testing
+
+# Manual Testing
+
+# User Testing
