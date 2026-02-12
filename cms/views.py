@@ -64,15 +64,6 @@ def about(request):
         
     return render(request, "cms/about.html", {'profile': profile})
 
-def job_detail(request, pk):
-    """The public detail page for a single job."""
-    job = get_object_or_404(Job, pk=pk)
-    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    return render(request, "cms/job_detail.html", {
-        'job': job,
-        'profile': profile
-    })
-
 
 @login_required
 def dashboard(request):
