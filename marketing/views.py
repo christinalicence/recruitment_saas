@@ -20,8 +20,13 @@ def landing_page(request):
 def tenant_signup(request):
     """Public signup - creates tenant and standard client user."""
     template_id = request.GET.get('template', 'executive')
-    initial_data = {'company_name': request.GET.get('company_name', '')}
-    form = TenantSignupForm(request.POST or None, initial=initial_data)
+    name_from_url = request.GET.get('company_name', '')
+    form = TenantSignupForm(request.POST or None,)
+    
+    if name_from_url:
+        form.fields['company_name'].widget.attrs.update({
+            'placeholder': name_from_url
+        })
 
     if request.method == "POST" and form.is_valid():
         company_name = form.cleaned_data["company_name"]

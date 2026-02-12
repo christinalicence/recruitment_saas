@@ -31,15 +31,12 @@ def get_profile_defaults(request):
         'jobs_header_text': "Explore our current openings.",
     }
 
-# --- PUBLIC VIEWS ---
 
 def home(request):
     """The main public landing page for the tenant site."""
-    # Logic: Look for the profile using the unique slug (schema_name)
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
     
     if not profile:
-        # If it doesn't exist, create it using the correct field name 'tenant_slug'
         profile = CompanyProfile.objects.create(
             tenant_slug=request.tenant.schema_name,
             **get_profile_defaults(request)
@@ -76,7 +73,6 @@ def job_detail(request, pk):
         'profile': profile
     })
 
-# --- DASHBOARD / EDITOR VIEWS ---
 
 @login_required
 def dashboard(request):
@@ -102,10 +98,8 @@ def edit_site(request):
     Site Editor: Maintains all preview logic, prevents MultipleObjectsReturned,
     and catches Cloudinary 'File Too Large' errors.
     """
-    # 1. Logic: Look for the profile using the unique slug
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
     
-    # 2. Logic: Fallback creation if this is a brand new tenant
     if not profile:
         profile = CompanyProfile.objects.create(
             tenant_slug=request.tenant.schema_name,
@@ -113,7 +107,6 @@ def edit_site(request):
         )
 
     if request.method == 'POST':
-        # 3. Logic: Overwrite existing instance with form data
         form = CompanyProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             try:
@@ -121,15 +114,12 @@ def edit_site(request):
                 messages.success(request, "Site updated successfully!")
                 return redirect('cms:edit_site')
             except BadRequest as e:
-                # 4. Logic: Specific catch for Cloudinary 10MB limit
                 messages.error(request, "Upload failed: Image is too large (Max 10MB). Please resize and try again.")
             except Exception as e:
-                # 5. Logic: Generic catch for any other connection issues
                 messages.error(request, "A server error occurred during the upload.")
     else:
         form = CompanyProfileForm(instance=profile)
 
-    # 6. Logic: Context must keep 'form' and 'profile' for preview-manager.js
     return render(request, 'cms/edit_site.html', {
         'form': form,
         'profile': profile,
@@ -147,9 +137,7 @@ def live_preview(request):
             **get_profile_defaults(request)
         }
     )
-    
-    # Override the profile object attributes with GET params for the preview
-    # This keeps it as an object so .url methods still work!
+
     profile.template_choice = request.GET.get('template_choice', profile.template_choice)
     profile.display_name = request.GET.get('display_name', profile.display_name)
     profile.primary_color = request.GET.get('primary_color', profile.primary_color)
@@ -159,67 +147,19 @@ def live_preview(request):
     profile.hero_text = request.GET.get('hero_text', profile.hero_text)
 
     return render(request, "cms/home.html", {
-        'profile': profile, # Now passing the updated object
+        'profile': profile,
         'latest_jobs': Job.objects.all()[:3]
     })
 
-# --- STRIPE INTEGRATION FOR CMS ---#
-
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
-
-def create_checkout_session(request):
-    """Initiates the Stripe Checkout process."""
-    client = request.tenant 
-    
-    # 1. Ensure the customer exists in Stripe
-    if not client.stripe_customer_id:
-        customer = stripe.Customer.create(
-            email=request.user.email,
-            name=client.name,
-            metadata={'tenant_id': client.id}
-        )
-        client.stripe_customer_id = customer.id
-        client.save()
-
-    # 2. Get the specific tenant domain (e.g., 'python.localhost')
-    domain = client.domains.first().domain 
-    
-    # 3. Create the ONE session with your new pretty URLs
-    session = stripe.checkout.Session.create(
-        customer=client.stripe_customer_id,
-        payment_method_types=['card'],
-        line_items=[{'price': client.plan.stripe_price_id, 'quantity': 1}],
-        mode='subscription',
-        # Note: Added the 'cms' prefix to match your urls.py namespace
-        success_url=f"http://{domain}:8000/billing/success/",
-        cancel_url=f"http://{domain}:8000/billing/cancel/",
-        metadata={'tenant_id': client.id}
-    )
-    
-    return redirect(session.url, code=303)
-
-def customer_portal(request):
-    """Redirects active subscribers to manage their own billing."""
-    session = stripe.billing_portal.Session.create(
-        customer=request.tenant.stripe_customer_id,
-        return_url=f"{settings.SITE_URL}/dashboard/",
-    )
-    return redirect(session.url, code=303)
-
 
 def payment_success(request):
-    """Render the success page after a successful Stripe payment."""
+    """Just renders the pretty success HTML"""
     return render(request, 'cms/payment_success.html')
 
+
 def payment_cancel(request):
-    """Render the cancel page if a user exits Stripe Checkout."""
+    """Just renders the pretty cancel HTML"""
     return render(request, 'cms/payment_cancel.html')
-
-from django.core.mail import send_mail
-
-# --- TENANT CONSOLE VIEWS --- JOBS
 
 
 @login_required
@@ -284,6 +224,7 @@ def public_job_list(request):
         'profile': profile,
         'jobs': jobs
     })
+
 
 def job_detail(request, pk):
     """The public detail page for a single job."""

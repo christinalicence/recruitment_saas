@@ -44,29 +44,31 @@
             </div>
         </div>
     </div>
-
 <div class="row g-4">
-    <div class="card">
-        <h3>Subscription Status</h3>
-        {% if request.tenant.is_active %}
-            <p>Your subscription is active. Billing is handled monthly.</p>
-            <a href="{% url 'customers:customer_portal' %}" class="btn btn-primary">
-                Manage Subscription & Invoices
-            </a>
-        {% else %}
-            <p>You are currently on your 14-day free trial.</p>
-            <p>Trial ends in: {{ request.tenant.trial_ends|timeuntil }}</p>
-            <a href="{% url 'customers:create_checkout' %}" class="btn btn-success">
-                Upgrade to Standard Plan ($X/mo)
-            </a>
-        {% endif %}
+    <div class="col-md-6">
+        <div class="card-brand p-4 h-100 d-flex flex-column">
+            <h3 class="h4 fw-bold mb-3">Subscription Status</h3>
+            {% if request.tenant.is_active %}
+                <p class="text-muted small">Your subscription is active. Billing is handled monthly.</p>
+                <a href="{% url 'customers:customer_portal' %}" class="btn btn-primary w-100 mt-auto">
+                    Manage Subscription & Invoices
+                </a>
+            {% else %}
+                <p class="text-muted small">You are currently on your 14-day free trial.</p>
+                <p class="fw-bold text-primary">Trial ends in: {{ request.tenant.trial_ends|timeuntil }}</p>
+                <a href="{% url 'customers:create_checkout' %}" class="btn btn-success w-100 mt-auto">
+                    Upgrade to Standard Plan
+                </a>
+            {% endif %}
+        </div>
     </div>
 
     <div class="col-md-6">
         <div class="card-brand p-4 h-100 d-flex flex-column">
             <h3 class="section-label mb-2">Your Website Address</h3>
-            <div class="d-flex justify-content-between align-items-center mt-auto">
-                <code class="endpoint-text">{{ request.get_host }}</code>
+            <p class="text-muted small mb-4">This is the public address of your recruitment site.</p>
+            <div class="d-flex justify-content-between align-items-center mt-auto p-2 bg-light rounded">
+                <code class="endpoint-text text-primary">{{ request.get_host }}</code>
                 <a href="/" target="_blank" class="btn btn-link btn-sm text-decoration-none fw-bold p-0">
                     Visit Site &rarr;
                 </a>
@@ -74,5 +76,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
