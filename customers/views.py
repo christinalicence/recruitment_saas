@@ -1,4 +1,3 @@
-from http import client
 import stripe
 import os
 from django.http import HttpResponse

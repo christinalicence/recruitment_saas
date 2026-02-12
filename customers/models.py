@@ -58,3 +58,7 @@ class Client(TenantMixin):
     def __str__(self):
         return self.name
 
+
+# The Domain model is required by django-tenants
+class Domain(DomainMixin):
+    pass
