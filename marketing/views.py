@@ -20,46 +20,43 @@ def landing_page(request):
 def tenant_signup(request):
     """Public signup - creates tenant and standard client user."""
     template_id = request.GET.get('template', 'executive')
-    name_from_url = request.GET.get('company_name', '')
-    form = TenantSignupForm(request.POST or None,)
-    
+    name_from_url = request.GET.get('company_name', '').strip()
+
+    initial_data = {}
     if name_from_url:
-        form.fields['company_name'].widget.attrs.update({
-            'placeholder': name_from_url
-        })
+        initial_data['company_name'] = name_from_url
+    form = TenantSignupForm(request.POST or None, initial=initial_data)
 
     if request.method == "POST" and form.is_valid():
         company_name = form.cleaned_data["company_name"]
         admin_email = form.cleaned_data["admin_email"]
         password = form.cleaned_data["password"]
-        
-        # 1. Production Naming Logic
         tenant_slug = slugify(company_name)
         domain_name = f"{tenant_slug}.getpillarpost.com"
         schema_name = tenant_slug.replace('-', '_')
 
-        # 2. Prevent Crashes
+        #  prevent duplicate domain/tenant creation
         if Domain.objects.filter(domain=domain_name).exists():
             messages.error(request, f"The name '{company_name}' is already taken.")
-            return render(request, "marketing/signup.html", {'form': form})
+            # Pass template_id back so the UI doesn't break
+            return render(request, "marketing/signup.html", {
+                'form': form, 
+                'template_id': template_id
+            })
 
-        # 3. Get/Create Plan (Prevents crash if Plan table is empty)
         standard_plan, _ = Plan.objects.get_or_create(name="Standard")
 
-        # 4. Create Tenant (Kept notification_email_1 and template_choice)
         tenant = Client.objects.create(
             schema_name=schema_name,
             name=company_name,
             template_choice=template_id,
             plan=standard_plan,
             notification_email_1=admin_email,
-            is_active=True # Set to True so you can log in immediately
+            is_active=True 
         )
 
-        # 5. Create Domain
         Domain.objects.create(domain=domain_name, tenant=tenant, is_primary=True)
 
-        # 6. Create User in the new schema (Standard User)
         with schema_context(tenant.schema_name):
             User.objects.create_user(
                 username=admin_email,

@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from customers import views as customer_views
 
 app_name = 'cms'
 
@@ -28,4 +29,5 @@ urlpatterns = [
     # Payment Success/Cancel (for Stripe redirects)
     path('billing/success/', views.payment_success, name='payment_success'),
     path('billing/cancel/', views.payment_cancel, name='payment_cancel'),
+    path('billing/portal/', customer_views.create_checkout_session, name='customer_portal'),
 ]   
