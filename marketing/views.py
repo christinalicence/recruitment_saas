@@ -121,13 +121,10 @@ def portal_finder(request):
     email = None
 
     if request.method == "POST":
-        email = request.POST.get('email') # Match the template input name
+        email = request.POST.get('email')
         if email:
-            # Filter Clients where this email is the notification contact
             tenants = Client.objects.filter(notification_email_1__iexact=email)
-            
             for tenant in tenants:
-                # Get the primary domain for each tenant
                 domain = tenant.domains.filter(is_primary=True).first()
                 if domain:
                     found_tenants.append({

@@ -77,21 +77,41 @@ def stripe_webhook(request):
         )
     except Exception as e:
         return HttpResponse(status=400)
+    
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         tenant_id = session.get('metadata', {}).get('tenant_id')
-        
         if tenant_id:
             client = Client.objects.get(id=tenant_id)
             client.is_active = True
             client.save()
 
-    send_mail(
+            send_mail(
                 subject="Subscription Active!",
                 message=f"Hi {client.name}, your Standard Plan is now active.",
                 from_email="billing@recruit-saas.com",
                 recipient_list=[client.notification_email_1 or "admin@recruit-saas.com"],
                 fail_silently=False,
             )
+
+    elif event['type'] == 'invoice.payment_failed':
+        session = event['data']['object']
+        customer_id = session.get('customer')
+        
+        if customer_id:
+            try:
+                client = Client.objects.get(stripe_customer_id=customer_id)
+                client.is_active = False 
+                client.save()
+                
+                send_mail(
+                    subject="Payment Failed!",
+                    message=f"Hi {client.name}, your payment has failed. Please update billing to avoid service interruption.",
+                    from_email="billing@recruit-saas.com",
+                    recipient_list=[client.notification_email_1 or "admin@recruit-saas.com"],
+                    fail_silently=False,
+                )
+            except Client.DoesNotExist:
+                pass
 
     return HttpResponse(status=200)
