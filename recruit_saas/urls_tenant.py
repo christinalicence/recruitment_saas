@@ -15,7 +15,7 @@ urlpatterns = [
     path('choose-template/', marketing_views.template_select, name='template_select'),
     path('find-portal/', marketing_views.portal_finder, name='portal_finder'),
     
-    path('billing/', include('customers.urls', namespace='customers')),
+    path('billing/', include('customers.urls')),
     path('admin/', admin.site.urls),
 ]
 

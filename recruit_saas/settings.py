@@ -99,7 +99,7 @@ TENANT_DOMAIN_MODEL = "customers.Domain"
 
 # --- URL ROUTING ---
 ROOT_URLCONF = 'recruit_saas.urls'
-PUBLIC_SCHEMA_URLCONF = 'recruit_saas.urls'
+PUBLIC_SCHEMA_URLCONF = 'recruit_saas.urls_public'
 TENANT_URLCONF = 'recruit_saas.urls_tenant'
 
 LOGIN_URL = "/login/"
