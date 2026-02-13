@@ -93,6 +93,11 @@ DATABASES = {
     )
 }
 
+# Use a separate test database to avoid conflicts with development data
+DATABASES['default']['TEST'] = {
+    'NAME': 'test_recruitment_v6',
+}
+
 DATABASE_ROUTERS = ("django_tenants.routers.TenantSyncRouter",)
 TENANT_MODEL = "customers.Client"
 TENANT_DOMAIN_MODEL = "customers.Domain"

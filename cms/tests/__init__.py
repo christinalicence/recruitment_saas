@@ -1,1 +1,0 @@
-from customers.tests import TenantCleanupTestCase
