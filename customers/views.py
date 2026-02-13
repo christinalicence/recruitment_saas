@@ -1,11 +1,9 @@
-from xmlrpc import client
 import stripe
 import os
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.shortcuts import redirect
-from urllib3 import request
 from .models import Client
 from django.core.mail import send_mail
 
@@ -32,8 +30,8 @@ def create_checkout_session(request):
         payment_method_types=['card'],
         line_items=[{'price': client.plan.stripe_price_id, 'quantity': 1}],
         mode='subscription',
-        success_url=f"{protocol}://{current_host}/customers/success/",
-        cancel_url=f"{protocol}://{current_host}/customers/cancel/",
+        success_url=f"{protocol}://{current_host}/billing/success/",
+        cancel_url=f"{protocol}://{current_host}/billing/cancel/",
         metadata={'tenant_id': client.id}
     )
     

@@ -71,7 +71,7 @@ def tenant_signup(request):
         try:
             send_mail(
                 subject="Welcome to PillarPost!",
-                message=f"Hi {company_name}, your portal is ready at: {portal_url}\n\nLogin: {admin_email}",
+                message=f"Hi {company_name}, your portal is ready at: {portal_url}",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[admin_email],
                 fail_silently=False, 
@@ -100,7 +100,7 @@ def tenant_login(request):
 def tenant_logout(request):
     logout(request)
     # Redirect to the main public landing page
-    return redirect('public_marketing:landing')
+    return redirect("https://getpillarpost.com/")
 
 def template_select(request):
     templates = [

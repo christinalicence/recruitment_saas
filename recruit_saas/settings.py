@@ -104,6 +104,7 @@ TENANT_URLCONF = 'recruit_saas.urls_tenant'
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
+LOGOUT_REDIRECT_URL = 'https://getpillarpost.com/'
 
 # --- TEMPLATES ---
 TEMPLATES = [
