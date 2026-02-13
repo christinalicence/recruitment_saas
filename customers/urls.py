@@ -10,10 +10,7 @@ urlpatterns = [
     
     # The customer management portal
     path('portal/', views.customer_portal, name='customer_portal'),
-    
-    # The secret handshake for Stripe
     path('stripe-webhook/', views.stripe_webhook, name='stripe_webhook'),
-
     path('success/', cms_views.payment_success, name='payment_success'),
     path('cancel/', cms_views.payment_cancel, name='payment_cancel'),
 ]

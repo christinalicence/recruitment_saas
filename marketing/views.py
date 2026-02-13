@@ -7,15 +7,18 @@ from django_tenants.utils import schema_context
 from django.templatetags.static import static
 from customers.models import Client, Domain, Plan
 from .forms import TenantSignupForm, TenantLoginForm
+from django.core.mail import send_mail
+from django.conf import settings
 
 def company_about(request):
     """The main marketing about page for Pillar & Post (getpillarpost.com)"""
     return render(request, "marketing/about.html")
 
+
 def landing_page(request):
     """The main home page for getpillarpost.com"""
-
     return render(request, "marketing/landing.html")
+
 
 def tenant_signup(request):
     """Public signup - creates tenant and standard client user."""
@@ -63,11 +66,24 @@ def tenant_signup(request):
                 email=admin_email,
                 password=password
             )
-
+        # Send a welcome email with the portal URL and login instructions
+        portal_url = f"https://{domain_name}/login/"
+        try:
+            send_mail(
+                subject="Welcome to PillarPost!",
+                message=f"Hi {company_name}, your portal is ready at: {portal_url}\n\nLogin: {admin_email}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[admin_email],
+                fail_silently=False, 
+            )
+        except Exception as e:
+            print(f"EMAIL ERROR: {e}")
+            messages.warning(request, "Your portal is ready, but we had trouble sending the welcome email. Please note your login details below.")
         messages.success(request, f"Success! Your site is ready at {domain_name}")
         return redirect(f"https://{domain_name}/login/")
 
     return render(request, "marketing/signup.html", {'form': form})
+
 
 def tenant_login(request):
     form = TenantLoginForm(request.POST or None)

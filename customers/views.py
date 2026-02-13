@@ -1,9 +1,11 @@
+from xmlrpc import client
 import stripe
 import os
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.shortcuts import redirect
+from urllib3 import request
 from .models import Client
 from django.core.mail import send_mail
 
@@ -64,34 +66,39 @@ def customer_portal(request):
 
 @csrf_exempt
 def stripe_webhook(request):
-    """Server-to-server communication from Stripe to confirm payment."""
+    """Handle incoming Stripe webhooks to update tenant subscription status."""
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
     endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
     event = None
 
     try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
-        )
-    except Exception as e:
+        event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
+    except Exception:
         return HttpResponse(status=400)
     
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         tenant_id = session.get('metadata', {}).get('tenant_id')
+        
         if tenant_id:
             client = Client.objects.get(id=tenant_id)
             client.is_active = True
             client.save()
 
-            send_mail(
-                subject="Subscription Active!",
-                message=f"Hi {client.name}, your Standard Plan is now active.",
-                from_email="billing@recruit-saas.com",
-                recipient_list=[client.notification_email_1 or "admin@recruit-saas.com"],
-                fail_silently=False,
-            )
+            domain = client.domains.filter(is_primary=True).first()
+            portal_url = f"https://{domain.domain}/login/" if domain else "https://getpillarpost.com"
+
+            try:
+                send_mail(
+                    subject="Subscription Active!",
+                    message=f"Hi {client.name},\n\nYour Standard Plan is now active! You can access your portal here: {portal_url}",
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[client.notification_email_1],
+                    fail_silently=False,
+                )
+            except Exception as e:
+                print(f"Stripe Success Email Failed: {e}")
 
     elif event['type'] == 'invoice.payment_failed':
         session = event['data']['object']
@@ -103,14 +110,16 @@ def stripe_webhook(request):
                 client.is_active = False 
                 client.save()
                 
-                send_mail(
-                    subject="Payment Failed!",
-                    message=f"Hi {client.name}, your payment has failed. Please update billing to avoid service interruption.",
-                    from_email="billing@recruit-saas.com",
-                    recipient_list=[client.notification_email_1 or "admin@recruit-saas.com"],
-                    fail_silently=False,
-                )
+                try:
+                    send_mail(
+                        subject="Action Required: Payment Failed",
+                        message=f"Hi {client.name}, we were unable to process your payment. Please log in to update your billing.",
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[client.notification_email_1],
+                        fail_silently=False,
+                    )
+                except Exception as e:
+                    print(f"Stripe Failure Email Failed: {e}")
             except Client.DoesNotExist:
                 pass
-
     return HttpResponse(status=200)
