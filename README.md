@@ -57,6 +57,8 @@ The marketing site is designed to be trustworthy, conservative and give the idea
 
 ## Technologies used, and why
 
+I have tried to put together a tech stack that is future proof for trying to launch this product. There are quite a lot of compatability issues for this project, which should be explained if any other developers wanted to work on this project. These are outlined, along with the different technical choices, below.
+
 ### Django Tenants
 
 To allow companies to use their own subdomains. Eventually, if the site goes live they should be able to transfer these to bespoke domains.
@@ -67,22 +69,22 @@ There are quite a lot of 'quirks' in the coding, things that help this system wo
 
 ### Stripe
 
-Selected because they handle all of payment, including sensitive data. It handles the subscriptions automatically. 
+Selected because they handle all of payment, including sensitive data. It handles the subscriptions automatically. It handles all the payments data meaning P&P doesn't need a record. This is inline with the ethos of only saving necessary data.
 
 ### Cloudfayre
 
-The domain www.getpillarpost.com was purchased through Couldfayre because they provide good valur for domains. They are also use a domain licensing system that makes the subdomains quite simple and immediately able to use. Heroku does have this option, but at a far more expensive tier.
+The domain www.getpillarpost.com was purchased through Couldfayre because they provide good value for domains. They are also use a domain licensing system that makes the subdomains quite simple and immediately able to use. Heroku does have this option, but at a far more expensive tier.
 
-I needed to buy a domain for this project becuase deploying via a heroku domain wouldn't support the subdomains.
+I needed to buy a domain for this project becuase deploying via a heroku domain wouldn't support the subdomains. 
 
 ### Cloudinary
 
 Cloudinary is used to store all pictures, both on the marketing site and ones that clients upload.
-Selected because their resizing is user firendly, although there are size limits written in to this project for images to stop storage getting too filled up and keep things running smoothly.
+It was selected because their resizing is user firendly, although there are size limits written in to this project for images to stop storage getting too filled up and keep things running smoothly.
 
 ### Neon for Postgres DB        
 
-This is set up on the free tier, Django Tenants doesn't work with SQL Lite, so I needed to set up a compatible database.
+This is set up on the free tier, Django Tenants doesn't work with SQL Lite, so I needed to set up a compatible database. Note for Tenants the db needs to be unpooled - pooling means that there are always connections open which are shared, while this speeds up use and keeps it cheaper it isn't compatible with how Django Tenants locks down different schemas.
 
 ### Brevo for Email Provider
 
@@ -114,15 +116,19 @@ User Flow (signed up, going to their unique domain)
 ## Features
 
 ### Email Portal Finder
-This feature is on the landing page of the marketing site. If someone is already a user it allows them to be redirected to the correct subdomain for them to log in to their site. The clients will also be emailed this subdomian when they sign up
+This feature is on the landing page of the marketing site. If someone is already a user it allows them to be redirected to the correct subdomain for them to log in to their site. The clients will also be emailed this subdomian when they sign up. Because of the subdomain logic it isn't possible just to have a login link from the homepage - the login needs to be in the correct subdomain.
 
 ### Client's Dashboard
 
-This is on each client's unquie subdomain. It allows them to manage their websites, jobs and subscriptions. The client's don't have seperate admin access created for them on sign up, everything is managed from here.
+This is on each client's unquie subdomain. It allows them to manage their websites, jobs and subscriptions. The client's don't have seperate admin access created for them on sign up, everything is managed from here. This was to avoid giving access to things that might cause problems with their sites.
 
 ### Billings and Payments
 
+There is a link in the dashboard to the payments section. This is all handled by Stripe.
+
 ### Site Editor
+
+This is the fun part of the site, where clients can change text, colours and pictures on their sites.
 
 #### Template Changer
 There is a choice of 3 templates, with distinctly different looks.

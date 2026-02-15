@@ -30,9 +30,9 @@
                     <h1 class="display-5 fw-bold mt-3 mb-4">{{ job.title }}</h1>
                     
                     <div class="d-flex gap-3 mb-5 flex-wrap">
-                        <span class="badge bg-light text-dark border p-2">📍 {{ job.location }}</span>
-                        <span class="badge bg-light text-dark border p-2">💰 {{ job.salary }}</span>
-                        <span class="badge bg-light text-dark border p-2">🕒 {{ job.posted_at|timesince }} ago</span>
+                        <span class="badge bg-light text-dark border p-2">{{ job.location }}</span>
+                        <span class="badge bg-light text-dark border p-2">{{ job.salary }}</span>
+                        <span class="badge bg-light text-dark border p-2">{{ job.posted_at|timesince }} ago</span>
                     </div>
 
                     <div class="job-content lead mb-5">

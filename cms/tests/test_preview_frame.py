@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 from django_tenants.utils import schema_context
 from customers.models import Client as TenantClient, Domain
 from cms.models import CompanyProfile
-from customers.tests import TenantCleanupTestCase
+from customers.tests import TenantTestCase
 
 
-class PreviewFrameTest(TenantCleanupTestCase):
+class PreviewFrameTest(TenantTestCase):
     """
     Tests for the live preview functionality in the site editor.
     """

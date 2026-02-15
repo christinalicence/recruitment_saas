@@ -1,9 +1,9 @@
 from django_tenants.utils import schema_context, get_public_schema_name
 from customers.models import Client as TenantClient
-from customers.tests import TenantCleanupTestCase
+from customers.tests import TenantTestCase
 from cms.models import Job
 
-class SchemaIsolationTest(TenantCleanupTestCase):
+class SchemaIsolationTest(TenantTestCase):
     def test_firm_data_isolation(self):
         with schema_context(get_public_schema_name()):
             firm_a = TenantClient.objects.create(schema_name='firm-a', name='Sterling Search')

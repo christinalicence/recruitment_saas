@@ -43,14 +43,6 @@ def home(request):
         )
     return render(request, "cms/home.html", {'profile': profile})
 
-def job_list(request):
-    """The public list of all open roles."""
-    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    jobs = Job.objects.all().order_by('-created_at')
-    return render(request, "cms/job_list.html", {
-        'jobs': jobs,
-        'profile': profile
-    })
 
 def about(request):
     """Safety-proofed about page with proper profile lookup."""

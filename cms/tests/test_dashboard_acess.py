@@ -2,10 +2,10 @@ from django.test import override_settings
 from django.urls import reverse, clear_url_caches
 from django_tenants.utils import schema_context, get_public_schema_name
 from customers.models import Client as TenantClient, Domain
-from customers.tests import TenantCleanupTestCase
+from customers.tests import TenantTestCase
 
 @override_settings(ROOT_URLCONF='recruit_saas.urls_tenant')
-class DashboardAccessTest(TenantCleanupTestCase):
+class DashboardAccessTest(TenantTestCase):
     def setUp(self):
         clear_url_caches()
         super().setUp()

@@ -6,10 +6,9 @@ from cms.views import get_profile_defaults
 from urllib3 import request
 from customers.models import Client as TenantClient, Domain
 from cms.models import CompanyProfile
-from customers.tests import TenantCleanupTestCase
+from django_tenants.test.cases import TenantTestCase
 
-
-class DashboardSecurityTest(TenantCleanupTestCase):
+class DashboardSecurityTest(TenantTestCase):
     """
     Tests to ensure users cannot access other tenants' dashboards.
     """
@@ -61,7 +60,7 @@ class DashboardSecurityTest(TenantCleanupTestCase):
                 username='user@b.com', email='user@b.com', password='password123'
             )
 
-            
+
     @override_settings(ROOT_URLCONF='recruit_saas.urls_tenant')
     def test_cross_tenant_access_is_forbidden(self):
         """

@@ -93,14 +93,20 @@ DATABASES = {
     )
 }
 
-# Use a separate test database to avoid conflicts with development data
+DATABASES["default"]["OPTIONS"] = {
+    "options": "-c search_path=public"
+}
+
 DATABASES['default']['TEST'] = {
     'NAME': 'test_recruitment_v6',
 }
 
+
 DATABASE_ROUTERS = ("django_tenants.routers.TenantSyncRouter",)
 TENANT_MODEL = "customers.Client"
 TENANT_DOMAIN_MODEL = "customers.Domain"
+DEFAULT_SCHEMA_NAME = "public"
+
 
 # --- URL ROUTING ---
 ROOT_URLCONF = 'recruit_saas.urls'
