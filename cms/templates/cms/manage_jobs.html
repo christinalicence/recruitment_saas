@@ -5,12 +5,20 @@
 <div class="container-fluid px-4 py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <span class="feature-label">Recruitment Control</span>
+            <span class="feature-label">Jobs</span>
             <h1 class="h3 fw-bold mb-0">Job Postings</h1>
+            <p class="text-muted small mb-0">Usage: {{ jobs.count }} / 6 jobs</p>
         </div>
-        <a href="{% url 'cms:add_job' %}" class="btn btn-primary btn-sm d-flex align-items-center gap-2 shadow-sm">
-            Post New Job
-        </a>
+
+        {% if jobs.count < 6 %}
+            <a href="{% url 'cms:add_job' %}" class="btn btn-primary btn-sm d-flex align-items-center gap-2 shadow-sm">
+                Post New Job
+            </a>
+        {% else %}
+            <button class="btn btn-secondary btn-sm" disabled title="Limit reached">
+                Post New Job (Limit Reached)
+            </button>
+        {% endif %}
     </div>
 
     <div class="job-manage-card">
@@ -52,7 +60,9 @@
                     <tr>
                         <td colspan="5" class="text-center py-5">
                             <p class="text-muted mb-3">No active vacancies posted yet.</p>
-                            <a href="{% url 'cms:add_job' %}" class="btn btn-sm btn-primary px-4">Create Your First Job</a>
+                            {% if jobs.count < 6 %}
+                                <a href="{% url 'cms:add_job' %}" class="btn btn-sm btn-primary px-4">Create Your First Job</a>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}

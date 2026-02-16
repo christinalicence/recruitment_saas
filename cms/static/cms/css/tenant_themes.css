@@ -330,3 +330,14 @@ body {
     background: #cbd5e1;
     border-radius: 10px;
 }
+
+/* Job Details*/
+.job-main-text {
+    line-height: 1.8;
+    color: #334155;
+}
+
+.job-description-content .lead {
+    border-left: 4px solid var(--brand-primary);
+    padding-left: 1rem;
+}

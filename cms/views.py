@@ -191,6 +191,8 @@ def delete_job(request, pk):
     return render(request, 'cms/job_confirm_delete.html', {'job': job})
 
 
+# --- PUBLIC FACING VIEWS ---
+
 def public_job_list(request):
     """The public page where candidates browse all jobs."""
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
@@ -209,22 +211,18 @@ def public_job_list(request):
     })
 
 
-def job_detail(request, pk):
-    """The public detail page for a single job."""
+def public_job_detail(request, pk):
+    """Public advertisement page for candidates."""
     job = get_object_or_404(Job, pk=pk)
-    
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
     
-    return render(request, "cms/job_detail.html", {
+    return render(request, "cms/public_job_detail.html", {
         'job': job,
         'profile': profile
     })
 
-
-# --- PUBLIC CANDIDATE VIEWS ---
-
 def apply_to_job(request, pk):
-    """Triggers the direct email to the tenant."""
+    """Handles the application email trigger."""
     job = get_object_or_404(Job, pk=pk)
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
     
@@ -232,20 +230,20 @@ def apply_to_job(request, pk):
         recipients = []
         if job.custom_recipient_1:
             recipients.append(job.custom_recipient_1)
-            if job.custom_recipient_2:
-                recipients.append(job.custom_recipient_2)
-        elif profile and profile.master_application_email:
+        if job.custom_recipient_2:
+            recipients.append(job.custom_recipient_2)
+            
+        # Fallback to master email if job-specific ones aren't set
+        if not recipients and profile and profile.master_application_email:
             recipients.append(profile.master_application_email)
 
         if recipients:
             send_mail(
-                subject=f"Application: {job.title} - {request.POST.get('full_name')}",
-                message=f"New applicant for {job.title}.\n\nName: {request.POST.get('full_name')}\nEmail: {request.POST.get('email')}",
+                subject=f"New Application: {job.title}",
+                message=f"A candidate has applied for the {job.title} role via the website.",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=recipients,
             )
-            messages.success(request, "Application sent successfully!")
+            messages.success(request, "Thank you! Your application has been sent.")
         
-        return redirect('cms:job_detail', pk=pk)
-    
-    return redirect('cms:job_detail', pk=pk)
+    return redirect('cms:public_job_detail', pk=job.pk)
