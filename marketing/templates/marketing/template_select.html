@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load tenant_tags %}
 {% block title %}Select Your Design | Pillar & Post{% endblock %}
 
 {% block content %}
@@ -26,7 +27,7 @@
         <span class="feature-label">{{ template.name }}</span>
         <p class="small text-muted mb-4">{{ template.description }}</p>
         
-        <a href="{% public_url 'template_preview' %}{{ template.id }}/" class="btn btn-primary">Live Preview</a>
+        <a href="{% public_url 'template_preview' template_id=template.id %}">Preview</a>
         
         <a href="{% public_url 'tenant_signup' %}?template={{ template.id }}" class="small text-muted text-center d-block dynamic-link">Skip to Signup</a>
     </div>

@@ -16,6 +16,7 @@ ALLOWED_HOSTS = [
     'recruitmentsaas.herokuapp.com',
     '.herokuapp.com',
     'localhost',
+    '.localhost',
     '127.0.0.1',
 ]
 
@@ -129,6 +130,9 @@ TEMPLATES = [
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
+            'libraries': {
+                'tenant_tags': 'marketing.templatetags.tenant_tags',
+            },
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',

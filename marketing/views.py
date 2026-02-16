@@ -9,6 +9,7 @@ from customers.models import Client, Domain, Plan
 from .forms import TenantSignupForm, TenantLoginForm
 from django.core.mail import send_mail
 from django.conf import settings
+from .services import TenantService
 
 def company_about(request):
     """The main marketing about page for Pillar & Post (getpillarpost.com)"""
@@ -21,52 +22,35 @@ def landing_page(request):
 
 
 def tenant_signup(request):
-    """Public signup - creates tenant and standard client user."""
+    """Public signup - refactored to use TenantService while preserving all logic."""
     template_id = request.GET.get('template', 'executive')
     name_from_url = request.GET.get('company_name', '').strip()
 
     initial_data = {}
     if name_from_url:
         initial_data['company_name'] = name_from_url
+        
     form = TenantSignupForm(request.POST or None, initial=initial_data)
 
     if request.method == "POST" and form.is_valid():
         company_name = form.cleaned_data["company_name"]
         admin_email = form.cleaned_data["admin_email"]
         password = form.cleaned_data["password"]
-        tenant_slug = slugify(company_name)
-        domain_name = f"{tenant_slug}.getpillarpost.com"
-        schema_name = tenant_slug.replace('-', '_')
 
-        #  prevent duplicate domain/tenant creation
-        if Domain.objects.filter(domain=domain_name).exists():
+        tenant, domain_name = TenantService.create_onboarding_tenant(
+            company_name=company_name,
+            admin_email=admin_email,
+            password=password,
+            template_id=template_id
+        )
+
+        if not tenant:
             messages.error(request, f"The name '{company_name}' is already taken.")
-            # Pass template_id back so the UI doesn't break
             return render(request, "marketing/signup.html", {
                 'form': form, 
                 'template_id': template_id
             })
 
-        standard_plan, _ = Plan.objects.get_or_create(name="Standard")
-
-        tenant = Client.objects.create(
-            schema_name=schema_name,
-            name=company_name,
-            template_choice=template_id,
-            plan=standard_plan,
-            notification_email_1=admin_email,
-            is_active=True 
-        )
-
-        Domain.objects.create(domain=domain_name, tenant=tenant, is_primary=True)
-
-        with schema_context(tenant.schema_name):
-            User.objects.create_user(
-                username=admin_email,
-                email=admin_email,
-                password=password
-            )
-        # Send a welcome email with the portal URL and login instructions
         portal_url = f"https://{domain_name}/login/"
         try:
             send_mail(
@@ -78,11 +62,15 @@ def tenant_signup(request):
             )
         except Exception as e:
             print(f"EMAIL ERROR: {e}")
-            messages.warning(request, "Your portal is ready, but we had trouble sending the welcome email. Please note your login details below.")
+            messages.warning(
+                request, 
+                "Your portal is ready, but we had trouble sending the welcome email. Please note your login details below."
+            )
+
         messages.success(request, f"Success! Your site is ready at {domain_name}")
         return redirect(f"https://{domain_name}/login/")
 
-    return render(request, "marketing/signup.html", {'form': form})
+    return render(request, "marketing/signup.html", {'form': form, 'template_id': template_id})
 
 
 def tenant_login(request):
@@ -99,14 +87,12 @@ def tenant_login(request):
 
 def tenant_logout(request):
     logout(request)
-    # Get the base domain (e.g., getpillarpost.com)
     host = request.get_host().split(':')[0]
     parts = host.split('.')
     if len(parts) >= 2:
         base_domain = '.'.join(parts[-2:])
-        # Force redirect to the main marketing homepage
         return redirect(f"https://www.{base_domain}/")
-    return redirect('/') # Fallback
+    return redirect('/')
 
 def template_select(request):
     templates = [
