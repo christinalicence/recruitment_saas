@@ -47,7 +47,7 @@
                 <p class="text-muted mb-0">Access your recruitment dashboard to manage jobs and candidates.</p>
             </div>
             <div class="col-md-6">
-                <form method="post" action="{% url 'public_marketing:portal_finder' %}" class="d-flex gap-2">
+                <form method="post" action="{% public_url 'portal_finder' %}" class="d-flex gap-2">
                     {% csrf_token %}
                     <input 
                         type="email" 
