@@ -99,8 +99,14 @@ def tenant_login(request):
 
 def tenant_logout(request):
     logout(request)
-    # Redirect to the main public landing page
-    return redirect("https://getpillarpost.com/")
+    # Get the base domain (e.g., getpillarpost.com)
+    host = request.get_host().split(':')[0]
+    parts = host.split('.')
+    if len(parts) >= 2:
+        base_domain = '.'.join(parts[-2:])
+        # Force redirect to the main marketing homepage
+        return redirect(f"https://www.{base_domain}/")
+    return redirect('/') # Fallback
 
 def template_select(request):
     templates = [

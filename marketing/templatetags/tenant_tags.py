@@ -16,12 +16,13 @@ def public_url(context, view_name):
     # 2. Try the "Normal" way first (if we are currently on the public site)
     if hasattr(request, 'tenant') and request.tenant.schema_name == 'public':
         try:
-            return reverse(f'public_marketing:{base_view_name}')
+            # Try without the namespace first
+            return reverse(base_view_name)
         except NoReverseMatch:
             try:
-                return reverse(base_view_name)
+                return reverse(f'public_marketing:{base_view_name}')
             except NoReverseMatch:
-                pass 
+                return f"/{base_view_name}/"
 
     # 3. The "Resilient" Fallback (If we're on a tenant or resolver fails)
     paths = {
