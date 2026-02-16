@@ -7,15 +7,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = False
+DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-            '.getpillarpost.com',
-            '.herokuapp.com',
-            '.localhost',
-            '127.0.0.1',
-            'localhost',
-        ]
+    'getpillarpost.com',
+    'www.getpillarpost.com',
+    '.getpillarpost.com',
+    'recruitmentsaas.herokuapp.com',
+    '.herokuapp.com',
+    'localhost',
+    '127.0.0.1',
+]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # --- SHARED & TENANT APPS ---
 SHARED_APPS = [
@@ -90,6 +94,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
         engine="django_tenants.postgresql_backend",
+        ssl_require=os.getenv('DATABASE_SSL', 'True') == 'True'
     )
 }
 
