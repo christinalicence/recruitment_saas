@@ -1,20 +1,29 @@
 from django.test import override_settings
 from django.urls import reverse, clear_url_caches
 from django_tenants.utils import schema_context, get_public_schema_name
-from customers.models import Client as TenantClient, Domain
-from customers.tests import TenantTestCase
+from django_tenants.test.cases import TenantTestCase
 
-@override_settings(ROOT_URLCONF='recruit_saas.urls_tenant')
 class DashboardAccessTest(TenantTestCase):
+    @classmethod
+    def setup_tenant(cls, tenant):
+        tenant.schema_name = 'access_test'
+        return tenant
+
+    @classmethod
+    def setup_domain(cls, domain):
+        domain.domain = 'access-test.localhost'
+        return domain
+
     def setUp(self):
         clear_url_caches()
-        super().setUp()
-        with schema_context(get_public_schema_name()):
-            self.tenant = TenantClient.objects.create(schema_name='test-co', name='Test Co')
-            Domain.objects.create(domain='test-co.localhost', tenant=self.tenant, is_primary=True)
 
+
+    @override_settings(ROOT_URLCONF='recruit_saas.urls_tenant')
     def test_dashboard_requires_login(self):
         dashboard_url = reverse('cms:dashboard')
-        # 302 is correct here because an unauthenticated user should be redirected to login
-        response = self.client.get(dashboard_url, HTTP_HOST='test-co.localhost')
+        response = self.client.get(dashboard_url, HTTP_HOST='access-test.localhost')
         self.assertEqual(response.status_code, 302)
+
+    @classmethod
+    def tearDownClass(cls):
+        pass

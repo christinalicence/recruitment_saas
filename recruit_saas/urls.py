@@ -6,8 +6,8 @@ from customers.views import stripe_webhook
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('marketing.urls')),
-    path('billing/stripe-webhook/', stripe_webhook, name='stripe_webhook'),
+    path('', include('marketing.urls', namespace='public_marketing')),
+    path('customers/stripe-webhook/', stripe_webhook, name='stripe_webhook'),
 ]
 
 if settings.DEBUG:

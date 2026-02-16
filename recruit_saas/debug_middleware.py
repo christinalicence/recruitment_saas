@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 
 class CustomTenantMiddleware(TenantMainMiddleware):
     def get_tenant(self, domain_model, hostname):
-        # Strip port for database lookup
+        # Strip port for database lookup to prevent host mismatch errors
         hostname_no_port = hostname.split(':')[0]
         
         try:
@@ -21,9 +21,8 @@ class CustomTenantMiddleware(TenantMainMiddleware):
         # 1. Let the parent find the tenant and set the schema
         super().process_request(request)
         
-        # 2. FORCE the URLconf swap
-        # If we aren't in public, use the Tenant URLs
-        if request.tenant and request.tenant.schema_name != 'public':
+        # 2. Safety check: Swap URLconf only if a tenant exists and isn't public
+        if hasattr(request, 'tenant') and request.tenant and request.tenant.schema_name != 'public':
             request.urlconf = settings.TENANT_URLCONF
         else:
             request.urlconf = settings.PUBLIC_SCHEMA_URLCONF
@@ -35,42 +34,47 @@ class CustomTenantMiddleware(TenantMainMiddleware):
         patch_vary_headers(response, ('Host',))
         if settings.DEBUG and hasattr(request, 'tenant'):
             tenant_name = getattr(request.tenant, 'name', 'Public')
-            schema_name = getattr(request.tenant, 'schema_name', 'public')
-            # Added URLConf to the log so you can see it working
+            # Log the active tenant and URLconf for debugging purposes
             print(f"DEBUG: Host={request.get_host()} | Tenant={tenant_name} | URLConf={getattr(request, 'urlconf', 'Default')}")
         
         return response
     
 
 class SubscriptionGuardMiddleware:
-    """Middleware to block access to inactive tenants except for billing paths."""
+    """Blocks access to inactive tenants except for billing/auth paths."""
     
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # 1. Ignore the public marketing site
-        if not request.tenant or request.tenant.schema_name == 'public':
+        # 1. If it's the public schema or no tenant attached, let it through
+        if not hasattr(request, 'tenant') or request.tenant.schema_name == 'public':
             return self.get_response(request)
 
         # 2. Paths that are ALWAYS allowed (Login, Logout, and Billing)
-        # FIXED: These are now properly indented inside __call__
+        # We use a mix of reverse and hardcoded paths to ensure Stripe can always reach you
         allowed_paths = [
             reverse('customers:create_checkout'),
-            reverse('customers:stripe_webhook'),
             reverse('customers:payment_success'),
             reverse('customers:payment_cancel'),
             reverse('customers:customer_portal'),
             '/login/', 
             '/logout/',
+            '/customers/stripe-webhook/', # Matches your Stripe Dashboard setting
         ]
 
-        # FIXED: This block is now properly indented
+        # If the request is for an allowed path, continue without checking subscription status
         if any(request.path.startswith(path) for path in allowed_paths):
             return self.get_response(request)
 
-        # 3. If not active AND trial has expired, redirect to checkout
+        # 3. Guard: If the tenant is inactive AND their trial has ended, force a redirect to checkout
         if not request.tenant.is_active and not request.tenant.is_on_trial:
             return redirect(reverse('customers:create_checkout'))
 
         return self.get_response(request)
+
+    def process_request(self, request):
+        # This hook is used for additional tenant-level debug logic
+        if hasattr(request, 'tenant') and request.tenant and request.tenant.schema_name != 'public':
+            # Add any specific tenant-only debug logic here if needed in the future
+            pass
