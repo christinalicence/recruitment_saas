@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Error | Pillar & Post{% endblock %}
+
+{% block content %}
+<section class="py-5 mt-5">
+    <div class="container text-center">
+        <div class="signup-card mx-auto login-max-width py-5">
+            <h1 class="display-4 fw-bold mb-3 brand-title">500</h1>
+            <h2 class="h4 mb-4">Internal Server Error</h2>
+            
+            <div class="system-note mb-4">
+                <p class="mb-0">Something went wrong on our end.</p>
+            </div>
+            
+            <p class="muted-text mb-4 small">Please try refreshing the page or come back in a few minutes.</p>
+            
+            <a href="/" class="btn btn-primary px-4">Return Home</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

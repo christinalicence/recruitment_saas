@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Pillar & Post | Professional Recruitment Websites{% endblock %}
 {% load static %}
+{% load tenant_tags %}
 
 <!-- Hero Section -->
 {% block content %}
@@ -15,7 +16,7 @@
                 <h1 class="display-4 fw-bold mb-3">Professional Recruitment Websites</h1>
                 <p class="lead mb-4">Built for credibility. Ready for growth.</p>
                 <div class="d-flex justify-content-lg-start justify-content-center gap-3">
-                    <a href="{% url 'public_marketing:template_select' %}" class="btn btn-primary px-5">Get Started</a>
+                    <a href="{% public_url 'template_select' %}" class="btn btn-primary px-5">Get Started</a>
                 </div>
             </div>
         </div>
@@ -95,7 +96,7 @@
         </div>
         
         <div class="mt-5 pt-3">
-            <a href="{% url 'public_marketing:about' %}" class="text-decoration-none fw-semibold" style="color: var(--accent-blue);">
+            <a href="{% public_url 'about' %}" class="text-decoration-none fw-semibold" ...>
                 Learn more about Pillar & Post →
             </a>
         </div>

@@ -54,7 +54,7 @@
                 <span class="system-badge">{{ template_id|title }} Template</span>
                 <p class="mb-0 small muted-text">Colors and fonts are 100% customizable.</p>
             </div>
-            <a href="{% url 'public_marketing:tenant_signup' %}?template={{ template_id }}&company_name={{ company_name|urlencode }}" 
+            <a href="{% public_url 'tenant_signup' %}?template={{ template_id }}&company_name={{ company_name|urlencode }}" 
                class="btn btn-primary px-4 fw-bold">
                 Continue with this Design →
             </a>

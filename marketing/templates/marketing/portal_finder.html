@@ -32,7 +32,7 @@
                 {% endfor %}
                 
                 <div class="text-center mt-4 pt-3 border-top">
-                    <a href="{% url 'public_marketing:portal_finder' %}" class="btn btn-outline-secondary">Search Again</a>
+                    <a href="{% public_url 'portal_finder' %}" class="btn btn-outline-secondary">Search Again</a>
                 </div>
             {% else %}
                 <form method="post">
@@ -46,7 +46,7 @@
 
                 <div class="mt-4 pt-3 border-top text-center">
                     <p class="small muted-text mb-2">Don't have an account yet?</p>
-                    <a href="{% url 'public_marketing:template_select' %}" class="btn btn-outline-primary btn-sm">Create New Portal</a>
+                    <a href="{% public_url 'template_select' %}" class="btn btn-outline-primary btn-sm">Create New Portal</a>
                 </div>
             {% endif %}
         </div>
