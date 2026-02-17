@@ -3,13 +3,7 @@ from .models import CompanyProfile, Job
 from django.core.exceptions import ValidationError
 
 
-# ─── Character limits (chosen to keep all three themes looking good) ──────────
-# hero_title:         60  — fits on one line at all viewport sizes
-# hero_text:         160  — two comfortable lines of sub-heading copy
-# homepage_body_text: 400 — paragraph beneath the hero image
-# about_title:       100  — heading size, should stay short
-# about_content:    1200  — generous body copy for the about section
-# jobs_header_text:  120  — short intro above the job cards
+# Character limits for key fields to maintain design integrity across themes.
 CHAR_LIMITS = {
     'hero_title':          60,
     'hero_text':          160,
@@ -54,16 +48,14 @@ class CompanyProfileForm(forms.ModelForm):
         }
 
         widgets = {
-            'primary_color':    forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
-            'secondary_color':  forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
-            'background_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
-            'hero_text':         forms.Textarea(attrs={'rows': 3,  'data-maxchars': CHAR_LIMITS['hero_text']}),
-            'homepage_body_text':forms.Textarea(attrs={'rows': 4,  'data-maxchars': CHAR_LIMITS['homepage_body_text']}),
-            'about_content':     forms.Textarea(attrs={'rows': 5,  'data-maxchars': CHAR_LIMITS['about_content']}),
-            'address':           forms.Textarea(attrs={'rows': 3,  'placeholder': 'e.g. 123 Recruiter Way,\nLondon,\nNW1 1AA'}),
-            'hero_title':        forms.TextInput(attrs={'data-maxchars': CHAR_LIMITS['hero_title']}),
-            'about_title':       forms.TextInput(attrs={'data-maxchars': CHAR_LIMITS['about_title']}),
-            'jobs_header_text':  forms.Textarea(attrs={'rows': 2,  'data-maxchars': CHAR_LIMITS['jobs_header_text']}),
+            'primary_color':     forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
+            'secondary_color':   forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
+            'background_color':  forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
+            'hero_text':         forms.Textarea(attrs={'rows': 3}),
+            'homepage_body_text':forms.Textarea(attrs={'rows': 4}),
+            'about_content':     forms.Textarea(attrs={'rows': 5}),
+            'address':           forms.Textarea(attrs={'rows': 3, 'placeholder': 'e.g. 123 Recruiter Way,\nLondon,\nNW1 1AA'}),
+            'jobs_header_text':  forms.Textarea(attrs={'rows': 2}),
         }
 
     def __init__(self, *args, **kwargs):

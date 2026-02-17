@@ -77,11 +77,13 @@
                                     and the sub-text to one or two sentences.
                                 </p>
 
-                                {{ form.hero_title|as_crispy_field }}
-                                <p class="char-hint text-muted small">Recommended: under 60 characters</p>
+                                <div class="counted-field" data-maxchars="60">
+                                    {{ form.hero_title|as_crispy_field }}
+                                </div>
 
-                                {{ form.hero_text|as_crispy_field }}
-                                <p class="char-hint text-muted small">Recommended: under 160 characters</p>
+                                <div class="counted-field" data-maxchars="160">
+                                    {{ form.hero_text|as_crispy_field }}
+                                </div>
 
                                 {{ form.hero_image|as_crispy_field }}
                                 <div class="mb-3">
@@ -100,8 +102,9 @@
                                     A short paragraph shown below the hero image. Use it to introduce 
                                     your agency, specialisms, or a brief value proposition.
                                 </p>
-                                {{ form.homepage_body_text|as_crispy_field }}
-                                <p class="char-hint text-muted small">Recommended: under 400 characters</p>
+                                <div class="counted-field" data-maxchars="400">
+                                    {{ form.homepage_body_text|as_crispy_field }}
+                                </div>
                             </div>
 
                             <hr class="my-4">
@@ -109,11 +112,13 @@
                             {# ── ABOUT US ── #}
                             <div class="editor-section" id="section-about">
                                 <h6 class="section-label">About Us Page</h6>
-                                {{ form.about_title|as_crispy_field }}
-                                <p class="char-hint text-muted small">Recommended: under 100 characters</p>
+                                <div class="counted-field" data-maxchars="100">
+                                    {{ form.about_title|as_crispy_field }}
+                                </div>
 
-                                {{ form.about_content|as_crispy_field }}
-                                <p class="char-hint text-muted small">Recommended: under 1,200 characters</p>
+                                <div class="counted-field" data-maxchars="1200">
+                                    {{ form.about_content|as_crispy_field }}
+                                </div>
 
                                 {{ form.team_photo|as_crispy_field }}
                                 <div class="mb-3">
@@ -128,8 +133,9 @@
                             {# ── JOB PAGE ── #}
                             <div class="editor-section" id="section-jobs">
                                 <h6 class="section-label">Job Board</h6>
-                                {{ form.jobs_header_text|as_crispy_field }}
-                                <p class="char-hint text-muted small">Recommended: under 120 characters</p>
+                                <div class="counted-field" data-maxchars="120">
+                                    {{ form.jobs_header_text|as_crispy_field }}
+                                </div>
 
                                 {{ form.master_application_email|as_crispy_field }}
                             </div>

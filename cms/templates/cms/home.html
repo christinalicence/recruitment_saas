@@ -5,31 +5,45 @@
 
 {% block content %}
 <div class="theme-{{ profile.template_choice|default:'executive' }} agency-site">
-    
+
     {# HERO SECTION #}
     <section class="hero-section">
         <div class="container">
             <div class="row align-items-center {% if profile.template_choice == 'startup' %}flex-column-reverse flex-lg-row{% endif %}">
-                
-<div class="row align-items-center">
-    <div class="col-12 col-lg-7 order-2 order-lg-1">
-        <div class="hero-content">
-            <h1 class="hero-title">{{ profile.hero_title }}</h1>
-            <p class="hero-text">{{ profile.hero_text|linebreaksbr }}</p>
-            <div class="hero-actions">
-                <a href="{% url 'cms:job_list' %}" class="btn btn-primary btn-lg">View All Jobs</a>
-                <a href="{% url 'cms:about' %}" class="btn btn-outline-dark btn-lg">Our Team</a>
+
+                <div class="col-12 col-lg-7 order-2 order-lg-1">
+                    <div class="hero-content">
+                        <h1 class="hero-title">{{ profile.hero_title }}</h1>
+                        <p class="hero-text">{{ profile.hero_text|linebreaksbr }}</p>
+                        <div class="hero-actions">
+                            <a href="{% url 'cms:job_list' %}" class="btn btn-primary btn-lg">View All Jobs</a>
+                            <a href="{% url 'cms:about' %}" class="btn btn-outline-dark btn-lg">Our Team</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-5 order-1 order-lg-2 mb-5 mb-lg-0">
+                    <div class="hero-image-wrapper">
+                        <img src="{{ profile.get_hero_image }}" class="hero-img-styled">
+                    </div>
+                </div>
+
+            </div>{# /row #}
+        </div>{# /container #}
+    </section>
+
+    {# HOMEPAGE BODY TEXT #}
+    {% if profile.homepage_body_text %}
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <p class="lead text-muted">{{ profile.homepage_body_text|linebreaksbr }}</p>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="col-12 col-lg-5 order-1 order-lg-2 mb-5 mb-lg-0">
-        <div class="hero-image-wrapper">
-            <img src="{{ profile.get_hero_image }}" class="hero-img-styled">
-        </div>
-    </div>
-</div>
     </section>
-    
+    {% endif %}
+
 </div>
 {% endblock %}

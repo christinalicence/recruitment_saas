@@ -50,25 +50,27 @@ function setupImagePreview(inputId, previewId, fallbackId) {
 
 // character counters
 
-function setupCharCounter(inputEl) {
-    const max = parseInt(inputEl.dataset.maxchars, 10);
-    if (!max) return;
+function setupCharCounter(wrapperEl) {
+    const max     = parseInt(wrapperEl.dataset.maxchars, 10);
+    const inputEl = wrapperEl.querySelector('input, textarea');
+    if (!max || !inputEl) return;
 
-    const wrapper = inputEl.closest('.mb-3') || inputEl.parentElement;
     const counter = document.createElement('div');
-    counter.className = 'char-counter text-end small mt-1';
-    wrapper.appendChild(counter);
+    counter.className = 'char-counter text-end small mt-1 mb-2';
+    wrapperEl.appendChild(counter);
 
     function update() {
-        const remaining = max - inputEl.value.length;
-        counter.textContent = `${inputEl.value.length} / ${max}`;
+        const len       = inputEl.value.length;
+        const remaining = max - len;
+        counter.textContent = `${len} / ${max}`;
         counter.classList.toggle('text-danger', remaining < 0);
         counter.classList.toggle('text-warning', remaining >= 0 && remaining < Math.round(max * 0.1));
         counter.classList.toggle('text-muted',   remaining >= Math.round(max * 0.1));
     }
 
     inputEl.addEventListener('input', update);
-    update(); // run on load so existing values show correctly
+    update(); // show count immediately on page load
+}
 }
 
 // initialization

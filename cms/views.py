@@ -26,6 +26,11 @@ def get_profile_defaults(request):
             "We specialize in finding the perfect match between high-growth companies "
             "and industry-leading professionals."
         ),
+        'homepage_body_text': (
+            "Whether you're a business looking for your next key hire, or a professional "
+            "ready for a new challenge, we're here to make the right introduction. "
+            "Our consultants bring deep sector knowledge and a personal approach to every search."
+        ),
         'about_title': "Expertise. Integrity. Results.",
         'about_content': "With over a decade of experience in specialized recruitment...",
         'jobs_header_text': "Explore our current openings.",
