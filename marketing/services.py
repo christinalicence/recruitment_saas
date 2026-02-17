@@ -2,6 +2,7 @@ from django.utils.text import slugify
 from django_tenants.utils import schema_context
 from django.core.management import call_command
 from customers.models import Client, Domain, Plan
+from django.contrib.auth.models import User
 
 
 class TenantService:
