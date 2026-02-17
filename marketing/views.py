@@ -68,15 +68,16 @@ def tenant_signup(request):
             )
 
         messages.success(request, f"Success! Your site is ready at {domain_name}")
-        return redirect(f"https://{domain_name}/login/")
+        return redirect(f"https://{domain_name}/login/?email={admin_email}")
 
     return render(request, "marketing/signup.html", {'form': form, 'template_id': template_id})
 
 
 def tenant_login(request):
-    form = TenantLoginForm(request.POST or None)
+    email_hint = request.GET.get('email', '')
+    form = TenantLoginForm(request.POST or None, initial={'email': email_hint})
     if request.method == "POST" and form.is_valid():
-        email = form.cleaned_data['email']
+        email = form.cleaned_data['email'] 
         password = form.cleaned_data['password']
         user = authenticate(request, username=email, password=password)
         if user:
@@ -84,6 +85,7 @@ def tenant_login(request):
             return redirect('cms:dashboard')
         messages.error(request, "Invalid email or password.")
     return render(request, "marketing/login.html", {'form': form})
+
 
 def tenant_logout(request):
     logout(request)

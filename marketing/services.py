@@ -8,7 +8,7 @@ class TenantService:
     @staticmethod
     def create_onboarding_tenant(company_name, admin_email, password, template_id='executive'):
         """
-        Industry standard service for atomic tenant provisioning.
+        Creates a new tenant with the given company name and email.
         """
         tenant_slug = slugify(company_name)
         domain_name = f"{tenant_slug}.getpillarpost.com"
@@ -32,5 +32,10 @@ class TenantService:
 
         with schema_context(tenant.schema_name):
             call_command('migrate', verbosity=0, interactive=False)
+            # Create a standard user (No admin rights)
+            User.objects.create_user(
+                username=admin_email, 
+                email=admin_email, 
+                password=password
 
         return tenant, domain_name
