@@ -34,8 +34,10 @@ class TenantService:
             call_command('migrate', verbosity=0, interactive=False)
             # Create a standard user (No admin rights)
             User.objects.create_user(
-                username=admin_email, 
-                email=admin_email, 
+                username=admin_email,
+                email=admin_email,
                 password=password
+            )
 
         return tenant, domain_name
+    
