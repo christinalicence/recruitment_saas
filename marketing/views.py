@@ -76,14 +76,20 @@ def tenant_signup(request):
 def tenant_login(request):
     email_hint = request.GET.get('email', '')
     form = TenantLoginForm(request.POST or None, initial={'email': email_hint})
+    
     if request.method == "POST" and form.is_valid():
         email = form.cleaned_data['email'] 
         password = form.cleaned_data['password']
-        user = authenticate(request, username=email, password=password)
-        if user:
-            login(request, user)
-            return redirect('cms:dashboard')
+        tenant = request.tenant 
+
+        with schema_context(tenant.schema_name):
+            user = authenticate(request, username=email, password=password)
+            if user:
+                login(request, user)
+                return redirect('cms:dashboard')
+        
         messages.error(request, "Invalid email or password.")
+    
     return render(request, "marketing/login.html", {'form': form})
 
 
