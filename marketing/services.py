@@ -4,13 +4,9 @@ from django.core.management import call_command
 from customers.models import Client, Domain, Plan
 from django.contrib.auth.models import User
 
-
 class TenantService:
     @staticmethod
     def create_onboarding_tenant(company_name, admin_email, password, template_id='executive'):
-        """
-        Creates a new tenant with the given company name and email.
-        """
         tenant_slug = slugify(company_name)
         domain_name = f"{tenant_slug}.getpillarpost.com"
         schema_name = tenant_slug.replace('-', '_')
@@ -31,14 +27,18 @@ class TenantService:
 
         Domain.objects.create(domain=domain_name, tenant=tenant, is_primary=True)
 
+        # Move into the new tenant's schema
         with schema_context(tenant.schema_name):
+            # 1. Run migrations to create the User table
             call_command('migrate', verbosity=0, interactive=False)
-            # Create a standard user (No admin rights)
-            User.objects.create_user(
-                username=admin_email,
+            
+            # 2. Create the user explicitly
+            new_user = User.objects.create_user(
+                username=admin_email, # Use email as username for consistency
                 email=admin_email,
                 password=password
             )
+            new_user.is_active = True
+            new_user.save() # Explicitly save to ensure it hits the DB
 
         return tenant, domain_name
-    

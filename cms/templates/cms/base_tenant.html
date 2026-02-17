@@ -49,10 +49,19 @@
             </div>
         </div>
     </nav>
-
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+<main>
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show shadow-sm" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+</main>
 <footer class="footer mt-auto py-5 border-top bg-white">
     <div class="container">
         <div class="row g-4">
@@ -85,12 +94,12 @@
                 <ul class="list-unstyled small text-muted mb-0">
                     {% if profile.contact_email %}
                         <li class="mb-2 d-flex align-items-center">
-                            <span class="me-2 text-primary opacity-75">📧</span> {{ profile.contact_email }}
+                            <span class="me-2 text-primary opacity-75"> {{ profile.contact_email }}
                         </li>
                     {% endif %}
                     {% if profile.contact_phone %}
                         <li class="mb-2 d-flex align-items-center">
-                            <span class="me-2 text-primary opacity-75">📞</span> {{ profile.contact_phone }}
+                            <span class="me-2 text-primary opacity-75">{{ profile.contact_phone }}
                         </li>
                     {% endif %}
                     <li class="mt-3">

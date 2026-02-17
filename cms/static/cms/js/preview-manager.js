@@ -1,92 +1,94 @@
 /**
- * Changes the preview iframe width based on device selection.
+ * preview-manager.js
+ * Handles: device toggle, local image previews, character counters.
+ * Preview updates on Save only — no live iframe sync.
  */
+
+// Device toggle
+
 function setPreviewSize(size) {
     const wrapper = document.getElementById('preview-wrapper');
-    const buttons = {
-        'desktop': document.getElementById('btn-desktop'),
-        'tablet': document.getElementById('btn-tablet'),
-        'mobile': document.getElementById('btn-mobile')
-    };
-    
     if (!wrapper) return;
 
     wrapper.classList.remove('desktop-mode', 'tablet-mode', 'mobile-mode');
     wrapper.classList.add(size + '-mode');
 
-    Object.values(buttons).forEach(btn => {
-        if (btn) btn.classList.replace('btn-secondary', 'btn-outline-secondary');
+    ['desktop', 'tablet', 'mobile'].forEach(s => {
+        const btn = document.getElementById('btn-' + s);
+        if (!btn) return;
+        if (s === size) {
+            btn.classList.remove('btn-outline-secondary');
+            btn.classList.add('btn-secondary');
+        } else {
+            btn.classList.remove('btn-secondary');
+            btn.classList.add('btn-outline-secondary');
+        }
     });
-
-    if (buttons[size]) {
-        buttons[size].classList.replace('btn-outline-secondary', 'btn-secondary');
-    }
 }
 
-/**
- * Handles instant local thumbnail updates
- */
-const setupImagePreview = (inputId, previewId, fallbackId) => {
-    const input = document.getElementById(inputId);
-    const preview = document.getElementById(previewId);
-    const fallback = document.getElementById(fallbackId);
+// Image previews
 
-    if (input && preview) {
-        input.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.src = e.target.result;
-                    preview.classList.remove('d-none');
-                    if (fallback) fallback.classList.add('d-none');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+function setupImagePreview(inputId, previewId, fallbackId) {
+    const input    = document.getElementById(inputId);
+    const preview  = document.getElementById(previewId);
+    const fallback = fallbackId ? document.getElementById(fallbackId) : null;
+
+    if (!input || !preview) return;
+
+    input.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.classList.remove('d-none');
+            if (fallback) fallback.classList.add('d-none');
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// character counters
+
+function setupCharCounter(inputEl) {
+    const max = parseInt(inputEl.dataset.maxchars, 10);
+    if (!max) return;
+
+    const wrapper = inputEl.closest('.mb-3') || inputEl.parentElement;
+    const counter = document.createElement('div');
+    counter.className = 'char-counter text-end small mt-1';
+    wrapper.appendChild(counter);
+
+    function update() {
+        const remaining = max - inputEl.value.length;
+        counter.textContent = `${inputEl.value.length} / ${max}`;
+        counter.classList.toggle('text-danger', remaining < 0);
+        counter.classList.toggle('text-warning', remaining >= 0 && remaining < Math.round(max * 0.1));
+        counter.classList.toggle('text-muted',   remaining >= Math.round(max * 0.1));
     }
-};
+
+    inputEl.addEventListener('input', update);
+    update(); // run on load so existing values show correctly
+}
+
+// initialization
 
 document.addEventListener('DOMContentLoaded', () => {
-    const previewFrame = document.getElementById('preview-frame');
-    
-    // 1. Image Previews
-    setupImagePreview('id_logo', 'logo-preview', 'logo-text-fallback');
+
+    // Image previews
+    setupImagePreview('id_logo',       'logo-preview',       'logo-text-fallback');
     setupImagePreview('id_hero_image', 'id_hero_image-preview');
     setupImagePreview('id_team_photo', 'team_photo-preview');
 
-    // 2. Color Sync to Iframe
-    const colorFields = ['primary', 'secondary', 'background'];
-    colorFields.forEach(type => {
-        const el = document.getElementById(`id_${type}_color`);
-        if (el) {
-            el.addEventListener('input', (e) => {
-                if (previewFrame && previewFrame.contentWindow) {
-                    previewFrame.contentWindow.postMessage({
-                        type: 'updateColor',
-                        colorType: type,
-                        value: e.target.value
-                    }, '*');
-                }
-            });
-        }
-    });
+    // Character counters — finds every field with data-maxchars
+    document.querySelectorAll('[data-maxchars]').forEach(setupCharCounter);
 
-    // 3. Theme Switcher Sync
-    document.querySelectorAll('input[name="template_choice"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            if (previewFrame && previewFrame.contentWindow) {
-                previewFrame.contentWindow.postMessage({
-                    type: 'updateTheme',
-                    theme: e.target.value
-                }, '*');
-            }
-        });
-    });
-
-    // 4. Success Toast (Cleaned up logic)
+    // Success toast
     const toastEl = document.getElementById('messageToast');
-    if (toastEl && toastEl.querySelector('.toast-body').innerText.trim().length > 0) {
-        new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+    if (toastEl) {
+        const body = toastEl.querySelector('.toast-body');
+        if (body && body.innerText.trim().length > 0) {
+            new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+        }
     }
 });

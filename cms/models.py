@@ -32,6 +32,10 @@ class CompanyProfile(models.Model):
     hero_title = models.CharField(max_length=200, default="Great Careers Await")
     hero_text = models.TextField(blank=True, help_text="The main pitch to candidates")
     hero_image = models.ImageField(upload_to='hero/', null=True, blank=True)
+    homepage_body_text = models.TextField(
+    blank=True,
+    help_text="Short paragraph shown below the hero section on the homepage."
+)
     
     # About Us
     about_title = models.CharField(max_length=200, default="Our Story", blank=True)
