@@ -46,22 +46,24 @@
     </div>
 <div class="row g-4">
     <div class="col-md-6">
-        <div class="card-brand p-4 h-100 d-flex flex-column">
-            <h3 class="h4 fw-bold mb-3">Subscription Status</h3>
-            {% if request.tenant.is_active %}
-                <p class="text-muted small">Your subscription is active. Billing is handled monthly.</p>
-                <a href="{% url 'customers:customer_portal' %}" class="btn btn-primary">
-                    Manage Subscription
-                </a>
-            {% else %}
-                <p class="text-muted small">You are currently on your 14-day free trial.</p>
-                <p class="fw-bold text-primary">Trial ends in: {{ request.tenant.trial_ends|timeuntil }}</p>
-                <a href="{% url 'customers:create_checkout' %}" class="btn btn-success w-100 mt-auto">
-                    Upgrade to Standard Plan
-                </a>
-            {% endif %}
-        </div>
+    <div class="card-brand p-4 h-100 d-flex flex-column">
+        <h3 class="h4 fw-bold mb-3">Subscription Status</h3>
+        
+        {% if request.tenant.stripe_customer_id %}
+            <p class="text-muted small">Your subscription is active. Billing is handled monthly.</p>
+            <a href="{% url 'customers:customer_portal' %}" class="btn btn-primary w-100 mt-auto">
+                Manage Subscription & Invoices
+            </a>
+        {% else %}
+            <p class="text-muted small">You are currently on your 14-day free trial.</p>
+            <p class="fw-bold text-primary">Trial ends in: {{ request.tenant.trial_ends|timeuntil }}</p>
+            
+            <a href="{% url 'customers:create_checkout' %}" class="btn btn-success w-100 mt-auto">
+                Upgrade to Standard Plan
+            </a>
+        {% endif %}
     </div>
+</div>
 
     <div class="col-md-6">
         <div class="card-brand p-4 h-100 d-flex flex-column">
