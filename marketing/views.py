@@ -45,12 +45,15 @@ def tenant_signup(request):
         )
 
         if not tenant:
-            messages.error(request, f"The name '{company_name}' is already taken.")
+            if domain_name:
+                messages.error(request, f"The name '{company_name}' is already taken.")
+            else:
+                messages.error(request, "We encountered a temporary issue. Please try again.")
             return render(request, "marketing/signup.html", {
                 'form': form, 
                 'template_id': template_id
             })
-
+        
         portal_url = f"https://{domain_name}/login/"
         try:
             send_mail(
