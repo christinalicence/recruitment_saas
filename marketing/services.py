@@ -1,7 +1,8 @@
 from django.utils.text import slugify
 from django_tenants.utils import schema_context
-from django.contrib.auth.models import User
+from django.core.management import call_command
 from customers.models import Client, Domain, Plan
+
 
 class TenantService:
     @staticmethod
@@ -24,16 +25,12 @@ class TenantService:
             template_choice=template_id,
             plan=standard_plan,
             notification_email_1=admin_email,
-            is_active=True 
+            is_active=True
         )
 
         Domain.objects.create(domain=domain_name, tenant=tenant, is_primary=True)
 
         with schema_context(tenant.schema_name):
-            User.objects.create_user(
-                username=admin_email,
-                email=admin_email,
-                password=password
-            )
-        
+            call_command('migrate', verbosity=0, interactive=False)
+
         return tenant, domain_name

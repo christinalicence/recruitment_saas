@@ -1,4 +1,3 @@
-import stripe
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -10,6 +9,7 @@ from .models import CompanyProfile, Job
 from .forms import CompanyProfileForm, JobForm
 
 from cloudinary.exceptions import BadRequest
+
 
 def get_profile_defaults(request):
     """
@@ -151,6 +151,7 @@ def manage_jobs(request):
     jobs = Job.objects.filter(tenant=request.tenant).order_by('-created_at')
     return render(request, 'cms/manage_jobs.html', {'jobs': jobs})
 
+
 @login_required
 def add_job(request):
     """The form to create a new job."""
@@ -171,6 +172,7 @@ def add_job(request):
         form = JobForm()
     return render(request, 'cms/job_form.html', {'form': form})
 
+
 @login_required
 def edit_job(request, pk):
     """The form to edit an existing job."""
@@ -184,6 +186,7 @@ def edit_job(request, pk):
     else:
         form = JobForm(instance=job)
     return render(request, 'cms/job_form.html', {'form': form})
+
 
 @login_required
 def delete_job(request, pk):
@@ -201,15 +204,12 @@ def delete_job(request, pk):
 def public_job_list(request):
     """The public page where candidates browse all jobs."""
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    
     if not profile:
         profile = CompanyProfile.objects.create(
             tenant_slug=request.tenant.schema_name,
             **get_profile_defaults(request)
         )
-
     jobs = Job.objects.filter(tenant=request.tenant).order_by('-created_at')
-    
     return render(request, "cms/job_list.html", {
         'profile': profile,
         'jobs': jobs
@@ -217,27 +217,29 @@ def public_job_list(request):
 
 
 def public_job_detail(request, pk):
-    """Public advertisement page for candidates."""
     job = get_object_or_404(Job, pk=pk)
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    
+    if not profile:
+        profile = CompanyProfile.objects.create(
+            tenant_slug=request.tenant.schema_name,
+            **get_profile_defaults(request)
+        )
     return render(request, "cms/public_job_detail.html", {
         'job': job,
         'profile': profile
     })
 
+
 def apply_to_job(request, pk):
     """Handles the application email trigger."""
     job = get_object_or_404(Job, pk=pk)
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    
     if request.method == 'POST':
         recipients = []
         if job.custom_recipient_1:
             recipients.append(job.custom_recipient_1)
         if job.custom_recipient_2:
             recipients.append(job.custom_recipient_2)
-            
         # Fallback to master email if job-specific ones aren't set
         if not recipients and profile and profile.master_application_email:
             recipients.append(profile.master_application_email)
@@ -249,6 +251,5 @@ def apply_to_job(request, pk):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=recipients,
             )
-            messages.success(request, "Thank you! Your application has been sent.")
-        
+            messages.success(request, "Thank you! Your application has been sent.")    
     return redirect('cms:public_job_detail', pk=job.pk)

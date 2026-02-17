@@ -99,10 +99,6 @@ DATABASES = {
     )
 }
 
-DATABASES["default"]["OPTIONS"] = {
-    "options": "-c search_path=public"
-}
-
 DATABASES['default']['TEST'] = {
     'NAME': 'test_recruitment_v6',
 }
@@ -112,6 +108,7 @@ DATABASE_ROUTERS = ("django_tenants.routers.TenantSyncRouter",)
 TENANT_MODEL = "customers.Client"
 TENANT_DOMAIN_MODEL = "customers.Domain"
 DEFAULT_SCHEMA_NAME = "public"
+AUTO_CREATE_SCHEMA = True
 
 
 # --- URL ROUTING ---
