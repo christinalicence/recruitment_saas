@@ -16,7 +16,7 @@
             <div class="card-brand h-100 p-4 d-flex flex-column">
                 <div class="mb-4">
                     <div class="d-flex justify-content-between">
-                        <h2 class="h4 fw-bold">Hiring</h2>
+                        <h2 class="h4 fw-bold">Job Adverts</h2>
                         <i class="bi bi-briefcase text-muted opacity-50 h3"></i>
                     </div>
                     <span class="metric-label">Active Job Posts</span>
@@ -50,8 +50,8 @@
             <h3 class="h4 fw-bold mb-3">Subscription Status</h3>
             {% if request.tenant.is_active %}
                 <p class="text-muted small">Your subscription is active. Billing is handled monthly.</p>
-                <a href="{% url 'customers:customer_portal' %}" class="btn btn-primary w-100 mt-auto">
-                    Manage Subscription & Invoices
+                <a href="{% url 'customers:customer_portal' %}" class="btn btn-primary">
+                    Manage Subscription
                 </a>
             {% else %}
                 <p class="text-muted small">You are currently on your 14-day free trial.</p>

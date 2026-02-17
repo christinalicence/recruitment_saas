@@ -3,7 +3,8 @@ import os
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.contrib import messages
 from .models import Client
 from django.core.mail import send_mail
 
@@ -41,26 +42,18 @@ def create_checkout_session(request):
 def customer_portal(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     client = request.tenant 
-    if not client.stripe_customer_id:
-        customer = stripe.Customer.create(
-            email=request.user.email,
-            name=client.name,
-            metadata={'tenant_id': client.id}
-        )
-        client.stripe_customer_id = customer.id
-        client.save()
+    protocol = "https" if not settings.DEBUG else "http"
+    return_url = f"{protocol}://{request.get_host()}/dashboard/"
 
-    return_url = f"https://{request.get_host()}/dashboard/"
-    
     try:
         session = stripe.billing_portal.Session.create(
             customer=client.stripe_customer_id,
             return_url=return_url,
         )
         return redirect(session.url, code=303)
-    except stripe.error.StripeError as e:
-        return redirect('customers:create_checkout')
-
+    except Exception as e:
+        messages.error(request, f"Stripe Portal Error: {str(e)}")
+        return redirect('cms:dashboard')
 
 @csrf_exempt
 def stripe_webhook(request):

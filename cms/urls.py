@@ -25,9 +25,4 @@ urlpatterns = [
     path('preview/', views.live_preview, name='live_preview'),
     path('dashboard/jobs/edit/<int:pk>/', views.edit_job, name='edit_job'),
     path('dashboard/jobs/delete/<int:pk>/', views.delete_job, name='delete_job'),
-
-    # Payment Success/Cancel (for Stripe redirects)
-    path('billing/success/', views.payment_success, name='payment_success'),
-    path('billing/cancel/', views.payment_cancel, name='payment_cancel'),
-    path('billing/portal/', customer_views.create_checkout_session, name='customer_portal'),
 ]   
