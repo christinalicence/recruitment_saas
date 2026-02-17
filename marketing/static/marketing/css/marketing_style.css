@@ -250,22 +250,3 @@ footer {
     padding: 0.75rem;
     font-size: 0.85rem;
 }
-
-/* TEMPLATE PREVIEW OVERRIDES */
-
-.agency-site .btn-primary {
-    background-color: var(--brand-primary, var(--primary-color)) !important;
-    color: var(--brand-bg, #ffffff) !important; 
-}
-
-.agency-site h1, 
-.agency-site h2, 
-.agency-site h3 {
-    color: var(--brand-primary, var(--primary-color));
-    font-family: var(--brand-font, inherit);
-}
-
-.agency-site .job-card-preview {
-    background-color: var(--brand-bg, #ffffff);
-    color: var(--brand-secondary, var(--secondary-color));
-}

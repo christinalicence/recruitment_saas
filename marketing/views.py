@@ -83,13 +83,13 @@ def tenant_login(request):
     if request.method == "POST" and form.is_valid():
         email = form.cleaned_data['email'] 
         password = form.cleaned_data['password']
-        tenant = request.tenant 
-
-        with schema_context(tenant.schema_name):
-            user = authenticate(request, username=email, password=password)
-            if user:
-                login(request, user)
-                return redirect('cms:dashboard')
+        
+        # Authenticate OUTSIDE schema_context - auth happens at request level
+        user = authenticate(request, username=email, password=password)
+        
+        if user and user.is_active:
+            login(request, user)
+            return redirect('cms:dashboard')
         
         messages.error(request, "Invalid email or password.")
     
