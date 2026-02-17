@@ -154,6 +154,14 @@ def manage_jobs(request):
 @login_required
 def add_job(request):
     """The form to create a new job."""
+    job_count = Job.objects.count()
+    if job_count >= 6:
+        messages.warning(request, "Job limit reached. Delete a post to add a new one.")
+        return redirect('cms:manage_jobs')
+
+    if request.method == 'POST':
+        form = JobForm(request.POST)
+        if form.is_valid():
     if request.method == 'POST':
         form = JobForm(request.POST)
         if form.is_valid():

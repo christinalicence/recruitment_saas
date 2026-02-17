@@ -53,6 +53,12 @@ The marketing site is designed to be trustworthy, conservative and give the idea
 
 ### Wireframes
 
+### Accessibility
+
+Aceessibility has been thought about a great deal during design for this site. See the Lighthouse and Wave reports in Testing.md for our results.
+
+I also included a colour contrast checker which uses ratios 
+
 ## Technical Design 
 
 ## Technologies used, and why
@@ -169,12 +175,12 @@ Things we need are customer data - the data about who they are, and the data abo
 ### 404s caused by multitenancy
 
 
-
-
 Persistant Bug
 Getting a 404 error when trying to hit a subdomain, because django's middleware didn't use the correct url file (it kept hitting the one at the root rather than the one in the marketing app). Solved locally through adapting some bespoke middleware code. This is likely to need more attention during deployment.
 
 Another subdomain issue is getting 403 errors when trying to get to the dashboard/properly looged on. This has been solved in local dev with the settings look like 
+
+The subdomains also caused lots of complications while putting together tests, but we got there in the end! As a developer you have to keep in mind the rigid rules about jumping between different public/tenant areas of the site.
 
 Seperate base.html and css files for the marketing site, the dashboard/editor and the tenant sites. This keeps the files cleaner and stops them trying to link to other subdomains in the navbar causing 403 issues.
 
@@ -243,6 +249,7 @@ About us P&P Photo by <a href="https://unsplash.com/@albrb?utm_source=unsplash&u
 
 default about us Photo by <a href="https://unsplash.com/@essentialprints?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">James Healy</a> on <a href="https://unsplash.com/photos/aim-high-fly-higher-photo-frame-WZ-YnvCCLug?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
       
+Favicons made at www.favicon.io
 
 
 ## Notes on Development
@@ -252,3 +259,12 @@ I tried to approach this project with a 'real world' mindset, so I have tried to
 Using a multidomain site bought challenges I hadn't necessarily anticipated, such as having to buy a domain because Heroku doesn't support this type of set up. 
 
 I also changed my thinking on aesthetics quite seriously from the beginning of development to the end, this was to make the tenant themes more tangibly different when you viewed them. I feel that this is something experience will help with, being able to picture the design concept better when it is actually developed.
+
+## Future Considerations
+
+### Premium Tier
+
+The intention is to introduce 3 tiers. One, fairly cheap minimal one where people use theit P&P subdomian. A standard tier, where people use their domain and have their own favicons, but a limit of 6 jobs. The premium tier would have unlimited jobs, with a search function on that page. I'm also considering building an AI 'helper' for the recruiters to help them write their job adverts.
+
+
+## Deployment Steps
