@@ -162,9 +162,6 @@ def add_job(request):
     if request.method == 'POST':
         form = JobForm(request.POST)
         if form.is_valid():
-    if request.method == 'POST':
-        form = JobForm(request.POST)
-        if form.is_valid():
             job = form.save(commit=False)
             job.tenant = request.tenant # Link the job to the current tenant
             job.save()

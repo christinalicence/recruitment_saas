@@ -40,11 +40,19 @@
             </div>
         </div>
     </nav>
-
     <main>
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show shadow-sm" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
-
     <footer class="py-5 mt-5 border-top bg-light text-center">
         <div class="container">
             <p class="text-muted mb-0">&copy; {% now "Y" %} Pillar & Post.</p>

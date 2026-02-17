@@ -12,15 +12,6 @@
                 <h1 class="h3 fw-bold mt-2">Welcome Back</h1>
                 <p class="muted-text small">Login to manage your recruitment dashboard</p>
             </div>
-
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="system-note-error mb-3">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-
             <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
