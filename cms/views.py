@@ -236,25 +236,61 @@ def public_job_detail(request, pk):
 
 
 def apply_to_job(request, pk):
-    """Handles the application email trigger."""
     job = get_object_or_404(Job, pk=pk)
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    
     if request.method == 'POST':
-        recipients = []
-        if job.custom_recipient_1:
-            recipients.append(job.custom_recipient_1)
-        if job.custom_recipient_2:
-            recipients.append(job.custom_recipient_2)
-        # Fallback to master email if job-specific ones aren't set
-        if not recipients and profile and profile.master_application_email:
-            recipients.append(profile.master_application_email)
+        form = JobApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Recipients logic (Bespoke Job Email vs Master Email)
+            recipients = []
+            if job.custom_recipient_1:
+                recipients.append(job.custom_recipient_1)
+            if job.custom_recipient_2:
+                recipients.append(job.custom_recipient_2)
+            if not recipients and profile and profile.master_application_email:
+                recipients.append(profile.master_application_email)
 
-        if recipients:
-            send_mail(
-                subject=f"New Application: {job.title}",
-                message=f"A candidate has applied for the {job.title} role via the website.",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=recipients,
-            )
-            messages.success(request, "Thank you! Your application has been sent.")    
-    return redirect('cms:public_job_detail', pk=job.pk)
+            if recipients:
+                candidate_name = form.cleaned_data.get('full_name') or "Anonymous"
+                candidate_email = form.cleaned_data.get('email')
+                candidate_phone = form.cleaned_data.get('phone') or "Not provided"
+                
+                # The Body
+                email_body = (
+                    f"You have a new application for: {job.title}\n"
+                    f"------------------------------------------\n"
+                    f"CANDIDATE DETAILS:\n"
+                    f"Name:  {candidate_name}\n"
+                    f"Email: {candidate_email or 'Not provided'}\n"
+                    f"Phone: {candidate_phone}\n\n"
+                    f"The candidate's CV is attached to this email.\n"
+                    f"------------------------------------------\n"
+                    f"NOTE: This is an automated notification. To contact the candidate, "
+                    f"simply hit 'Reply' to this email or use the details above."
+                )
+
+                from django.core.mail import EmailMessage
+                email_msg = EmailMessage(
+                    subject=f"New Application: {job.title} - {candidate_name}",
+                    body=email_body,
+                    from_email=settings.DEFAULT_FROM_EMAIL,  # hello@getpillarpost.com
+                    to=recipients,
+                )
+
+                # reply-to logic: if candidate provided an email, set it as the reply-to address
+                if candidate_email:
+                    email_msg.reply_to = [candidate_email]
+
+                if request.FILES.get('cv'):
+                    cv_file = request.FILES['cv']
+                    email_msg.attach(cv_file.name, cv_file.read(), cv_file.content_type)
+
+                email_msg.send()
+                messages.success(request, "Your application has been sent successfully.")
+            else:
+                messages.error(request, "System Error: No recipient email is configured.")
+                
+            return redirect('cms:public_job_detail', pk=pk)
+    
+    return redirect('cms:public_job_detail', pk=pk)

@@ -8,7 +8,23 @@
             <span class="feature-label">Overview</span>
             <h1 class="display-5 fw-bold mb-0">{{ request.tenant.name }}</h1>
         </div>
-        <a href="/" target="_blank" class="btn btn-outline-secondary btn-executive">View Your Site</a>
+        
+        <div class="d-flex gap-3 align-items-center">
+            {# EXACT ORIGINAL LOGIC PRESERVED #}
+            {% if request.tenant.is_active %}
+                {# No button here - as per your original file #}
+            {% elif request.tenant.is_on_trial %}
+                <a href="{% url 'customers:create_checkout' %}" class="btn btn-primary btn-executive">
+                    Upgrade to Standard Plan
+                </a>
+            {% else %}
+                <a href="{% url 'customers:create_checkout' %}" class="btn btn-success btn-executive">
+                    Upgrade Now
+                </a>
+            {% endif %}
+
+            <a href="/" target="_blank" class="btn btn-outline-secondary btn-executive">View Your Site</a>
+        </div>
     </div>
 
     <div class="row g-4 mb-4">
@@ -44,47 +60,35 @@
             </div>
         </div>
     </div>
-<div class="row g-4">
-    <div class="col-md-6">
-    <div class="card-brand h-100 p-4 d-flex flex-column">
-    <h3 class="section-label mb-2">Subscription Plan</h3>
-    
-    <div class="mt-auto">
-        {# 1. ONLY show Manage if they are ACTIVE #}
-        {% if request.tenant.is_active %}
-            <p class="text-success small">Standard Plan Active</p>
-            <a href="{% url 'customers:customer_portal' %}" class="btn btn-primary w-100 mt-auto">
-                Manage Subscription
-            </a>
 
-        {# 2. If NOT active but still ON TRIAL, show the Upgrade button #}
-        {% elif request.tenant.is_on_trial %}
-            <p class="text-muted small">You are currently on your 14-day free trial.</p>
-            <p class="fw-bold text-primary">Trial ends in: {{ request.tenant.trial_ends|timeuntil }}</p>
-            
-            <a href="{% url 'customers:create_checkout' %}" class="btn w-100 mt-auto">
-                Upgrade to Standard Plan
-            </a>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card-brand p-4 h-100 d-flex flex-column">
+                <h3 class="section-label mb-2">Subscription Plan</h3>
+                {% if request.tenant.is_active %}
+                    <p class="text-success small">Your Standard Plan is active.</p>
+                    <a href="{% url 'customers:customer_portal' %}" class="btn btn-outline-secondary w-100 mt-auto">Manage Billing</a>
+                {% elif request.tenant.is_on_trial %}
+                    <p class="text-muted small">You are currently on your 14-day free trial.</p>
+                    <p class="fw-bold text-primary">Trial ends in: {{ request.tenant.trial_ends|timeuntil }}</p>
+                    <a href="{% url 'customers:create_checkout' %}" class="btn btn-primary w-100 mt-auto">Upgrade to Standard Plan</a>
+                {% else %}
+                    <p class="text-danger small">Your trial has ended. Please upgrade to continue.</p>
+                    <a href="{% url 'customers:create_checkout' %}" class="btn btn-success w-100 mt-auto">Upgrade Now</a>
+                {% endif %}
+            </div>
+        </div>
 
-        {# 3. Trial ended and not active #}
-        {% else %}
-            <p class="text-danger small">Your trial has ended. Please upgrade to continue.</p>
-            <a href="{% url 'customers:create_checkout' %}" class="btn btn-success w-100 mt-auto">
-                Upgrade Now
-            </a>
-        {% endif %}
-    </div>
-</div>
-
-    <div class="col-md-6">
-        <div class="card-brand p-4 h-100 d-flex flex-column">
-            <h3 class="section-label mb-2">Your Website Address</h3>
-            <p class="text-muted small mb-4">This is the public address of your recruitment site.</p>
-            <div class="d-flex justify-content-between align-items-center mt-auto p-2 bg-light rounded">
-                <code class="endpoint-text text-primary">{{ request.get_host }}</code>
-                <a href="/" target="_blank" class="btn btn-link btn-sm text-decoration-none fw-bold p-0">
-                    Visit Site &rarr;
-                </a>
+        <div class="col-md-6">
+            <div class="card-brand p-4 h-100 d-flex flex-column">
+                <h3 class="section-label mb-2">Your Website Address</h3>
+                <p class="text-muted small mb-4">This is the public address of your recruitment site.</p>
+                <div class="d-flex justify-content-between align-items-center mt-auto p-2 bg-light rounded">
+                    <code class="endpoint-text text-primary">{{ request.get_host }}</code>
+                    <a href="/" target="_blank" class="btn btn-link btn-sm text-decoration-none fw-bold p-0">
+                        Visit Site &rarr;
+                    </a>
+                </div>
             </div>
         </div>
     </div>

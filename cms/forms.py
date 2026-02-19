@@ -44,7 +44,6 @@ class CompanyProfileForm(forms.ModelForm):
             'logo':                     'Max 10MB. Displayed in the navigation bar.',
             'team_photo':               'Max 10MB. Recommended 1200×800px.',
             'hero_image':               'Max 10MB. High resolution recommended.',
-            'homepage_body_text':       'A short paragraph shown below the hero section on your homepage.',
         }
 
         widgets = {
@@ -68,6 +67,9 @@ class CompanyProfileForm(forms.ModelForm):
         for field_name in optional_fields:
             if field_name in self.fields:
                 self.fields[field_name].required = False
+
+        if 'master_application_email' in self.fields:
+            self.fields['master_application_email'].required = True
 
     def clean_hero_title(self):
         value = self.cleaned_data.get('hero_title', '')
@@ -120,3 +122,10 @@ class JobForm(forms.ModelForm):
             'location': forms.TextInput(attrs={'class': 'form-control'}),
             'salary': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+
+class JobApplicationForm(forms.Form):
+    full_name = forms.CharField(max_length=100, required=False, label="Full Name")
+    email = forms.EmailField(required=False, label="Email Address")
+    phone = forms.CharField(max_length=20, required=False, label="Phone Number")
+    cv = forms.FileField(required=False, label="Upload CV")

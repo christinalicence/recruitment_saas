@@ -29,20 +29,36 @@
                         </div>
                     </div>
 
-                    <div class="apply-container p-4 rounded bg-light text-center">
-                        <h4 class="fw-bold mb-3">Interested in this role?</h4>
-                        <p class="mb-4">Click below to send your application directly to the recruitment team.</p>
-                        
-                        <form method="POST" action="{% url 'cms:apply_to_job' job.pk %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary btn-lg px-5">
-                                Apply for this position
-                            </button>
-                        </form>
+                    <div class="apply-container p-4 rounded bg-light mt-5">
+                            <h4 class="fw-bold mb-3 text-center">Interested in this role?</h4>
+                            <p class="mb-4 text-center text-muted small">Please provide your details below. All fields are optional.</p>
+                            
+                            <form method="POST" action="{% url 'cms:apply_to_job' job.pk %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <input type="text" name="full_name" class="form-control" placeholder="Full Name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="email" name="email" class="form-control" placeholder="Email Address">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" name="phone" class="form-control" placeholder="Phone Number">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="file" name="cv" class="form-control">
+                                    </div>
+                                    <div class="col-12 mt-4">
+                                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                                            Send Application
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
