@@ -46,23 +46,27 @@
     </div>
 <div class="row g-4">
     <div class="col-md-6">
-    <div class="card-brand p-4 h-100 d-flex flex-column">
-        <h3 class="h4 fw-bold mb-3">Subscription Status</h3>
-        
-        {# 1. Check if they have a Stripe ID. If they do, they are a paying customer #}
-        {% if request.tenant.stripe_customer_id %}
-            <p class="text-muted small">Your subscription is active. Billing is handled monthly.</p>
+    <div class="card-brand h-100 p-4 d-flex flex-column">
+    <h3 class="section-label mb-2">Subscription Plan</h3>
+    
+    <div class="mt-auto">
+        {# 1. ONLY show Manage if they are ACTIVE #}
+        {% if request.tenant.is_active %}
+            <p class="text-success small">Standard Plan Active</p>
             <a href="{% url 'customers:customer_portal' %}" class="btn btn-primary w-100 mt-auto">
                 Manage Subscription
             </a>
 
-        {# 2. If no Stripe ID, but is_on_trial is True, show trial info #}
+        {# 2. If NOT active but still ON TRIAL, show the Upgrade button #}
         {% elif request.tenant.is_on_trial %}
             <p class="text-muted small">You are currently on your 14-day free trial.</p>
             <p class="fw-bold text-primary">Trial ends in: {{ request.tenant.trial_ends|timeuntil }}</p>
-           <a href="{% url 'customers:create_checkout' %}" class="btn btn-success">
-            Subscribe Now</a>
-        {# 3. Fallback: Account is expired/inactive #}
+            
+            <a href="{% url 'customers:create_checkout' %}" class="btn w-100 mt-auto">
+                Upgrade to Standard Plan
+            </a>
+
+        {# 3. Trial ended and not active #}
         {% else %}
             <p class="text-danger small">Your trial has ended. Please upgrade to continue.</p>
             <a href="{% url 'customers:create_checkout' %}" class="btn btn-success w-100 mt-auto">
