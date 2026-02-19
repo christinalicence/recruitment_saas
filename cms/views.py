@@ -64,15 +64,23 @@ def about(request):
 
 @login_required
 def dashboard(request):
-    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    tenant = request.tenant
+    if request.method == 'POST' and 'master_email' in request.POST:
+        new_email = request.POST.get('master_email')
+        tenant.master_email = new_email
+        tenant.save()
+        messages.success(request, f"Master email updated to {new_email}")
+        return redirect('cms:dashboard')
+
+    profile = CompanyProfile.objects.filter(tenant_slug=tenant.schema_name).first()
     
     if not profile:
         profile = CompanyProfile.objects.create(
-            tenant_slug=request.tenant.schema_name,
+            tenant_slug=tenant.schema_name,
             **get_profile_defaults(request)
         )
 
-    jobs = Job.objects.all() 
+    jobs = Job.objects.filter(tenant=tenant)
     
     return render(request, 'cms/dashboard.html', {
         'profile': profile,
@@ -237,33 +245,27 @@ def public_job_detail(request, pk):
 def apply_to_job(request, pk):
     """Handles the application email trigger with safety checks."""
     job = get_object_or_404(Job, pk=pk)
-    # We keep the profile for the redirect/context, but use tenant for the email
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
 
     if request.method == 'POST':
-        # 1. Collect Data
         candidate_name = request.POST.get('full_name', 'Not provided')
         candidate_email = request.POST.get('email')
         candidate_phone = request.POST.get('phone', 'Not provided')
         cv_file = request.FILES.get('cv')
 
-        # 2. Determine Recipients (Job override -> Tenant Master)
         recipients = []
         if job.custom_recipient_1: 
             recipients.append(job.custom_recipient_1)
         if job.custom_recipient_2: 
             recipients.append(job.custom_recipient_2)
 
-        # FALLBACK: If job specific emails are blank, use the Dashboard Master Email
         if not recipients and request.tenant.master_email:
             recipients.append(request.tenant.master_email)
 
-        # 3. Validation: If STILL no recipients, we can't send
         if not recipients:
             messages.error(request, "Application failed: No recruiter email is configured for this site.")
             return redirect('cms:public_job_detail', pk=pk)
 
-        # 4. Construct Email
         email_body = (
             f"New Application for {job.title}\n\n"
             f"Name: {candidate_name}\n"
@@ -281,7 +283,6 @@ def apply_to_job(request, pk):
             reply_to=[candidate_email] if candidate_email else None
         )
 
-        # 5. Handle Attachment & Size Check
         if cv_file:
             if cv_file.size > 5 * 1024 * 1024:
                 messages.error(request, "File too large. Please upload a CV smaller than 5MB.")
@@ -289,7 +290,6 @@ def apply_to_job(request, pk):
             
             email_msg.attach(cv_file.name, cv_file.read(), cv_file.content_type)
 
-        # 6. Send with Error Handling
         try:
             email_msg.send(fail_silently=False)
             messages.success(request, "Your application has been sent successfully!")
@@ -297,6 +297,4 @@ def apply_to_job(request, pk):
             messages.error(request, "There was a technical glitch sending your application. Please try again later.")
 
         return redirect('cms:public_job_detail', pk=pk)
-
-    # If it's a GET request, just send them back to the detail page
     return redirect('cms:public_job_detail', pk=pk)

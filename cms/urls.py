@@ -11,6 +11,7 @@ urlpatterns = [
     # Dashboard & Site Editing
     path('dashboard/', views.dashboard, name='dashboard'),
     path('dashboard/edit/', views.edit_site, name='edit_site'),
+    path('dashboard/update-email/', views.dashboard, name='update_master_email'),
     
     # JOBS MANAGEMENT (Tenant Console)
     path('dashboard/jobs/', views.manage_jobs, name='manage_jobs'),
