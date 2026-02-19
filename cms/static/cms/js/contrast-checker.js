@@ -10,6 +10,26 @@ function getBrightness(hexcolor) {
 }
 
 /**
+Make appropriate text colour CSS variables based on brightness of the primary and secondary pickers.
+This allows us to have dynamic text colours on the homepage hero and throughout the site that automatically update to maintain contrast as users adjust their colours.
+ */
+function updateCSSColourVariables() {
+    const primaryInput   = document.querySelector('#id_primary_color');
+    const secondaryInput = document.querySelector('#id_secondary_color');
+    const root = document.documentElement;
+
+    if (primaryInput && primaryInput.value) {
+        const onPrimary = getBrightness(primaryInput.value) > 128 ? '#1a1a1a' : '#ffffff';
+        root.style.setProperty('--brand-computed-text', onPrimary);
+    }
+
+    if (secondaryInput && secondaryInput.value) {
+        const onSecondary = getBrightness(secondaryInput.value) > 128 ? '#1a1a1a' : '#ffffff';
+        root.style.setProperty('--brand-computed-hero-text', onSecondary);
+    }
+}
+
+/**
  * Updates a dynamic contrast status bar and friendly labels.
  */
 function validateContrast() {
@@ -44,16 +64,26 @@ function validateContrast() {
         statusBadge.innerText = 'Perfect';
         statusBadge.className = 'badge bg-success';
     }
+
+    // Keep CSS colour variables in sync with picker state
+    updateCSSColourVariables();
 }
 
 // Initializing listeners
 document.addEventListener('DOMContentLoaded', () => {
-    const primaryInput = document.querySelector('#id_primary_color');
-    const bgInput = document.querySelector('#id_background_color');
+    const primaryInput   = document.querySelector('#id_primary_color');
+    const bgInput        = document.querySelector('#id_background_color');
+    const secondaryInput = document.querySelector('#id_secondary_color');
 
     if (primaryInput && bgInput) {
         primaryInput.addEventListener('input', validateContrast);
         bgInput.addEventListener('input', validateContrast);
         validateContrast(); 
+    }
+
+    // Secondary picker doesn't affect the contrast bar, but does affect
+    // hero text colour on startup theme — listen independently
+    if (secondaryInput) {
+        secondaryInput.addEventListener('input', updateCSSColourVariables);
     }
 });

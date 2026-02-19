@@ -32,15 +32,11 @@
         </div>{# /container #}
     </section>
 
-    {# HOMEPAGE BODY TEXT #}
+   {# HOMEPAGE BODY TEXT #}
     {% if profile.homepage_body_text %}
-    <section class="py-5">
+    <section class="py-4">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <p class="lead text-muted">{{ profile.homepage_body_text|linebreaksbr }}</p>
-                </div>
-            </div>
+            <p class="mb-0">{{ profile.homepage_body_text|linebreaksbr }}</p>
         </div>
     </section>
     {% endif %}

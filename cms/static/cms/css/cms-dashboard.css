@@ -39,6 +39,10 @@
     padding: 1.5rem;
 }
 
+.editor-section {
+    padding-bottom: 0.5rem;
+}
+
 .section-label {
     font-weight: 700;
     text-transform: uppercase;
@@ -49,10 +53,39 @@
     display: block;
 }
 
+.back-link {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--muted-text);
+    text-decoration: none;
+    margin-bottom: 0.25rem;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: var(--primary-color);
+}
+
+.color-picker-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
 /* Picture classes */
 .logo-preview-img { max-height: 80px; margin-bottom: 10px; }
 .hero-preview-img { max-height: 150px; width: 100%; object-fit: cover; margin-bottom: 10px; }
 .team-preview-img { max-height: 120px; margin-bottom: 10px; }
+
+/* Character counter fields */
+.counted-field {
+    position: relative;
+}
+
+.char-counter {
+    font-size: 0.72rem;
+    color: var(--muted-text);
+}
 
 .logo-fallback-box {
     padding: 1.5rem;
@@ -64,7 +97,8 @@
     color: var(--muted-text);
 }
 
-.contrast-checker-box {
+.contrast-checker-box,
+.contrast-checker-card {
     padding: 1rem;
     background-color: var(--alt-bg);
     border: 1px solid var(--border-stroke);
@@ -78,6 +112,29 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 9999;
+}
+
+
+/* Preview panel layout */
+
+.preview-sticky-container {
+    position: sticky;
+    top: 90px;
+}
+
+.preview-toolbar {
+    padding: 0.5rem 0;
+}
+
+.preview-cta-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    border-bottom: 1px solid var(--border-stroke);
 }
 
 

@@ -1,66 +1,210 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
 
-/* css variables for tenant themes */
+
 :root {
-    --brand-primary: #1e3a8a;
-    --brand-secondary: #64748b;
-    --brand-bg: #ffffff;
+    --brand-primary:        #1e3a8a;
+    --brand-secondary:      #64748b;
+    --brand-bg:             #ffffff;
+    --brand-font:           'Inter', sans-serif;
+    --brand-text:           var(--brand-primary);   /* body text — derives from picker */
+    --brand-hero-bg:        var(--brand-primary);   /* hero bg — derives from picker */
+    --brand-hero-text:      var(--brand-computed-text, #ffffff); /* set by contrast-checker.js */
 }
 
+/* exec theme */
 .theme-executive {
-    --brand-primary: #0f172a; 
-    --brand-font: 'Inter', sans-serif;
+    --brand-primary:   #0f172a;
+    --brand-secondary: #334e68;
+    --brand-bg:        #ffffff;
+    --brand-font:      'Inter', sans-serif;
+    --brand-text:      var(--brand-primary);  /* dark navy body text — derives from picker */
+    --brand-hero-bg:   var(--brand-primary);  /* derives from picker */
+    --brand-hero-text: var(--brand-computed-text, #ffffff); /* set by contrast-checker.js */
 }
 
+/* startup theme */
 .theme-startup {
-    --brand-primary: #f97316; 
-    --brand-font: 'Plus Jakarta Sans', sans-serif;
+    --brand-primary:   #f97316;
+    --brand-secondary: #1c1917;
+    --brand-bg:        #ffffff;
+    --brand-font:      'Plus Jakarta Sans', sans-serif;
+    --brand-text:      var(--brand-secondary); /* near-black body text — derives from picker */
+    --brand-hero-bg:   var(--brand-secondary); /* dark hero uses secondary — derives from picker */
+    --brand-hero-text: var(--brand-computed-hero-text, #ffffff); /* set by contrast-checker.js */
 }
 
+/* boutique theme */
 .theme-boutique {
-    --brand-primary: #7f1d1d; 
-    --brand-font: 'Libre Baskerville', serif;
+    --brand-primary:   #7f1d1d;
+    --brand-secondary: #991b1b;
+    --brand-bg:        #faf7f4;
+    --brand-font:      'Libre Baskerville', serif;
+    --brand-text:      var(--brand-primary); /* dark red body text — derives from picker */
+    --brand-hero-bg:   var(--brand-primary); /* derives from picker */
+    --brand-hero-text: var(--brand-computed-text, #ffffff); /* set by contrast-checker.js */
 }
 
-/* global settings */
+
+/* agency site wrapper */
+
 .agency-site {
     background-color: var(--brand-bg);
     font-family: var(--brand-font);
-    color: var(--brand-primary); 
+    color: var(--brand-text);
     line-height: 1.6;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Force all standard text elements to inherit the tenant's primary color */
-.agency-site h1, .agency-site h2, .agency-site h3, 
-.agency-site h4, .agency-site h5, .agency-site h6,
-.agency-site p, .agency-site li, .agency-site .lead {
-    color: var(--brand-primary) !important;
+
+/* hero section */
+
+.agency-site .hero-section {
+    background-color: var(--brand-hero-bg) !important;
+    color: var(--brand-hero-text);
 }
 
-/* --- 4. NAVBAR & NAVIGATION FIXES --- */
+.agency-site .hero-section h1,
+.agency-site .hero-section h2,
+.agency-site .hero-section h3,
+.agency-site .hero-section h4,
+.agency-site .hero-section h5,
+.agency-site .hero-section h6,
+.agency-site .hero-section p,
+.agency-site .hero-section .lead,
+.agency-site .hero-section .hero-title,
+.agency-site .hero-section .hero-text,
+.agency-site .hero-section .display-3 {
+    color: var(--brand-hero-text) !important;
+}
+
+/* Outline buttons in hero — visible against dark background */
+.agency-site .hero-section .btn-outline-secondary,
+.agency-site .hero-section .btn-outline-dark {
+    border-color: rgba(255, 255, 255, 0.7);
+    color: var(--brand-hero-text);
+    background-color: transparent;
+}
+.agency-site .hero-section .btn-outline-secondary:hover,
+.agency-site .hero-section .btn-outline-dark:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: #ffffff;
+}
+
+/* Primary button in hero */
+.agency-site .hero-section .btn-primary {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: #ffffff;
+}
+
+/* Executive hero — btn uses secondary to lift off the primary hero bg */
+.theme-executive.agency-site .hero-section .btn-primary,
+.theme-executive .agency-site .hero-section .btn-primary {
+    background-color: var(--brand-secondary); /* derives from picker */
+    border-color: var(--brand-secondary);
+}
+
+/* Boutique hero — btn uses secondary to lift off the primary hero bg */
+.theme-boutique.agency-site .hero-section .btn-primary,
+.theme-boutique .agency-site .hero-section .btn-primary {
+    background-color: var(--brand-secondary); /* derives from picker */
+    border-color: var(--brand-secondary);
+}
+
+
+/* body text  */
+
+.agency-site section:not(.hero-section) h1,
+.agency-site section:not(.hero-section) h2,
+.agency-site section:not(.hero-section) h3,
+.agency-site section:not(.hero-section) h4,
+.agency-site section:not(.hero-section) h5,
+.agency-site section:not(.hero-section) h6,
+.agency-site section:not(.hero-section) p,
+.agency-site section:not(.hero-section) li,
+.agency-site section:not(.hero-section) .lead,
+.agency-site .card h1,
+.agency-site .card h2,
+.agency-site .card h3,
+.agency-site .card h4,
+.agency-site .card p {
+    color: var(--brand-text) !important;
+}
+
+/* Startup */
+.theme-startup.agency-site section:not(.hero-section) h2,
+.theme-startup .agency-site section:not(.hero-section) h2,
+.theme-startup.agency-site section:not(.hero-section) h3,
+.theme-startup .agency-site section:not(.hero-section) h3 {
+    color: var(--brand-text) !important;
+}
+
+/* Boutique */
+.theme-boutique.agency-site .bg-white,
+.theme-boutique .agency-site .bg-white {
+    background-color: #ffffff !important;
+}
+
+
+/* buttons, body */
+
+/* Startup orange buttons */
+.theme-startup .btn-primary,
+.theme-startup.agency-site .btn-primary {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: #ffffff;
+}
+.theme-startup .btn-outline-primary,
+.theme-startup.agency-site .btn-outline-primary {
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+    background-color: transparent;
+}
+.theme-startup .btn-outline-primary:hover,
+.theme-startup.agency-site .btn-outline-primary:hover {
+    background-color: var(--brand-primary);
+    color: #ffffff;
+}
+
+
+/* navbar */
+
 .agency-site .navbar {
     padding: 1.5rem 0;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .agency-site .navbar-brand {
     font-weight: 800;
     letter-spacing: -0.5px;
-    color: var(--brand-primary) !important;
+    color: var(--brand-text) !important;
 }
 
-/* picture and card styles */
+.agency-site .nav-link {
+    color: var(--brand-text);
+    opacity: 0.75;
+    transition: opacity 0.2s ease;
+}
+.agency-site .nav-link:hover {
+    opacity: 1;
+    color: var(--brand-text);
+}
+
+
+/* pictures */
 
 .hero-img-styled, .about-image, .preview-hero-img {
     width: 100%;
     height: auto;
     max-height: 500px;
     object-fit: cover;
+    display: block;
     border-radius: 8px;
 }
 
-.theme-boutique .hero-img-styled, 
+/* Boutique image framed*/
+.theme-boutique .hero-img-styled,
 .theme-boutique .about-image {
     border: 1px solid var(--brand-primary);
     padding: 12px;
@@ -69,17 +213,65 @@
     filter: sepia(15%) contrast(105%);
 }
 
-.hero-img-styled, .about-image {
-    width: 100%;
-    height: auto;
-    max-height: 500px; /* Prevents images from taking over the screen */
-    object-fit: cover;
-    display: block;
-    border-radius: 8px;
+
+/* about page */
+
+.agency-site .about-header {
+    padding: 4rem 0 2rem;
 }
 
+.agency-site .about-content-section {
+    padding: 3rem 0 5rem;
+}
+
+.agency-site .page-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--brand-text);
+    letter-spacing: -0.5px;
+}
+
+.agency-site .lead-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--brand-text);
+    margin-bottom: 2rem;
+}
+
+.agency-site .about-cta {
+    margin-top: 2rem;
+}
+
+.agency-site .about-image-placeholder {
+    width: 100%;
+    min-height: 300px;
+    background-color: color-mix(in srgb, var(--brand-primary) 8%, var(--brand-bg));
+    border: 1px solid color-mix(in srgb, var(--brand-primary) 20%, transparent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.agency-site .about-image-placeholder .placeholder-text {
+    color: var(--brand-text);
+    opacity: 0.4;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Boutique about — match the framed image aesthetic */
+.theme-boutique .about-image-placeholder {
+    border-radius: 0;
+    border-color: var(--brand-primary);
+}
+
+
+/* job cards */
+
 .job-card, .job-card-preview {
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
     transition: all 0.3s ease;
     height: 100%;
@@ -89,36 +281,88 @@
 .job-card:hover, .job-card-preview:hover {
     border-color: var(--brand-primary);
     transform: translateY(-3px);
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
-}
-/* PREVIEW SETTINGS */
-
-/* Scrollbar for the Iframe/Preview container */
-::-webkit-scrollbar {
-    width: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #f8fafc;
-}
-::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: var(--brand-primary);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
 }
 
-/* Preview Window Locks */
+/* Boutique — white cards pop against cream body bg */
+.theme-boutique .job-card,
+.theme-boutique .job-card-preview {
+    background: #ffffff;
+    border-color: color-mix(in srgb, var(--brand-primary) 20%, transparent); /* derives from picker */
+}
+.theme-boutique .job-card:hover,
+.theme-boutique .job-card-preview:hover {
+    border-color: var(--brand-primary);
+}
+
+/* Card headings use brand-text inside cards */
+.agency-site .job-card h3,
+.agency-site .job-card h4,
+.agency-site .job-card-preview h3,
+.agency-site .job-card-preview h4 {
+    color: var(--brand-text) !important;
+}
+
+/* card-brand — job list cards and job detail card */
+.agency-site .card-brand {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: var(--sharp-radius, 2px);
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.agency-site .card-brand:hover {
+    border-color: var(--brand-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.08);
+}
+
+/* Boutique card-brand — matches cream bg aesthetic */
+.theme-boutique .agency-site .card-brand,
+.theme-boutique.agency-site .card-brand {
+    border-color: color-mix(in srgb, var(--brand-primary) 20%, transparent);
+}
+
+/* job detail page */
+
+.agency-site .job-description-content {
+    padding-bottom: 1rem;
+}
+
+.agency-site .job-main-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--brand-text);
+}
+
+
+/* muted text */
+
+.agency-site .muted-text {
+    color: var(--brand-text) !important;
+    opacity: 0.6;
+}
+
+
+/* preview window */
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f8fafc; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-primary); }
+
 #preview-window, .preview-container, .preview-frame {
     height: calc(100vh - 120px);
     overflow-y: auto;
     display: block;
 }
 
-/* Mobile responsive padding fix */
+
+/* mobile */
+
 @media (max-width: 768px) {
     .agency-site {
-        padding-bottom: 150px; /* Extra space for fixed footer on mobile */
+        padding-bottom: 150px;
     }
     .hero-title {
         font-size: 2.25rem;

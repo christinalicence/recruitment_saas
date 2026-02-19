@@ -96,7 +96,6 @@ body.marketing-site {
     color: var(--main-bg);
 }
 
-/* Secondary/Muted Button (Outline) */
 .btn-outline-secondary {
     border: 1.5px solid var(--border-stroke);
     color: var(--secondary-color);
@@ -141,15 +140,6 @@ body.marketing-site {
     line-height: 1.1;
 }
 
-/* Template Specifics */
-.template-preview-img {
-    height: 160px;
-    width: 100%;
-    object-fit: cover;
-    border-radius: var(--sharp-radius);
-    border: 1px solid var(--border-stroke);
-}
-
 /* FORMS */
 .form-control {
     border: 1px solid var(--border-stroke);
@@ -162,13 +152,8 @@ body.marketing-site {
     box-shadow: none;
 }
 
-/* Success icon in signup */
-.success-icon {
-    color: var(--primary-color);
-    font-weight: 700;
-}
 
-/* About page layout */
+/* ABOUT PAGE */
 .about-container {
     max-width: 1100px;
 }
@@ -190,6 +175,15 @@ body.marketing-site {
 }
 
 /* PREVIEW PAGE */
+
+/* Template Specifics */
+.template-preview-img {
+    height: 160px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--sharp-radius);
+    border: 1px solid var(--border-stroke);
+}
 
 .job-card-preview {
     border: 1px solid var(--border-stroke);
@@ -223,6 +217,13 @@ body.marketing-site {
 }
 
 /* LOGIN & SIGNUP PAGES */
+
+/* Success icon in signup */
+.success-icon {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
 
 .login-max-width {
     max-width: 500px;
