@@ -57,12 +57,6 @@ class CompanyProfile(models.Model):
     contact_email = models.EmailField(max_length=200, blank=True, help_text="General enquiries email")
     contact_phone = models.CharField(max_length=50, blank=True, help_text="Main contact number")
     address = models.TextField(blank=True, help_text="Full office address for the footer")
-    master_application_email = models.EmailField(
-        null=True, 
-        blank=True, 
-        help_text="The default email for applications if a job doesn't have a specific recipient set."
-    )
-
     linkedin_url = models.URLField(max_length=200, blank=True)
     facebook_url = models.URLField(max_length=200, blank=True)
 

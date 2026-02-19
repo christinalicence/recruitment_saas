@@ -29,6 +29,7 @@ class Client(TenantMixin):
     is_active = models.BooleanField(default=False)
 
     # Notification Emails
+    master_email = models.EmailField(blank=True, null=True)
     notification_email_1 = models.EmailField(max_length=255, blank=True, null=True)
     notification_email_2 = models.EmailField(max_length=255, blank=True, null=True)
     

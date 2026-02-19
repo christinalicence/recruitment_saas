@@ -10,7 +10,6 @@
         </div>
         
         <div class="d-flex gap-3 align-items-center">
-            {# EXACT ORIGINAL LOGIC PRESERVED #}
             {% if request.tenant.is_active %}
                 {# No button here - as per your original file #}
             {% elif request.tenant.is_on_trial %}
@@ -89,6 +88,24 @@
                         Visit Site &rarr;
                     </a>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card-brand p-4 h-100 d-flex flex-column">
+                <h3 class="section-label mb-2">Contact Settings</h3>
+                <p class="text-muted small mb-4">Where should job applications be sent by default? Please ensure this is a valid email address.</p>
+                
+                <form method="POST" action="{% url 'cms:update_master_email' %}" class="mt-auto">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="email" name="master_email" 
+                            class="form-control form-control-sm" 
+                            value="{{ request.tenant.master_email|default:'' }}" 
+                            placeholder="recruiter@company.com">
+                        <button class="btn btn-primary btn-sm" type="submit">Save</button>
+                    </div>
+                    <small class="text-muted mt-2 d-block">This can be overridden per individual job post.</small>
+                </form>
             </div>
         </div>
     </div>

@@ -19,7 +19,6 @@ class CompanyProfileForm(forms.ModelForm):
         model = CompanyProfile
         fields = [
             'template_choice', 'display_name', 'logo',
-            'master_application_email',
             'primary_color', 'secondary_color', 'background_color',
             'hero_title', 'hero_text', 'hero_image',
             'homepage_body_text',
@@ -30,7 +29,6 @@ class CompanyProfileForm(forms.ModelForm):
         ]
 
         labels = {
-            'master_application_email': 'Main Email For Job Applications',
             'template_choice':          'Choose Your Site Style',
             'display_name':             'Company Name',
             'hero_title':               'Main Headline',
@@ -40,7 +38,6 @@ class CompanyProfileForm(forms.ModelForm):
         }
 
         help_texts = {
-            'master_application_email': 'Applications will be sent here unless a specific job has its own recipient set.',
             'logo':                     'Max 10MB. Displayed in the navigation bar.',
             'team_photo':               'Max 10MB. Recommended 1200×800px.',
             'hero_image':               'Max 10MB. High resolution recommended.',
