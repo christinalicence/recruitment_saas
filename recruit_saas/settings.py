@@ -89,6 +89,11 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 # middleware settings for cookies
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_DOMAIN = '.getpillarpost.com'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # --- DATABASE ---
 DATABASES = {
@@ -158,7 +163,6 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET')
 }
 
-# Use the modern STORAGES dictionary (Django 4.2+)
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
@@ -173,7 +177,7 @@ STORAGES = {
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-# Keep these local for your default/fallback images
+# fallback
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 

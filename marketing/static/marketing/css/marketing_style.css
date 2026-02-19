@@ -72,7 +72,6 @@ body.marketing-site {
     letter-spacing: 0.5px;
 }
 
-/* Primary Button: Solid Navy with White Text */
 .btn-primary {
     background-color: var(--primary-color);
     border: 1px solid var(--primary-color);
@@ -86,7 +85,6 @@ body.marketing-site {
     box-shadow: 0 4px 12px rgba(10, 37, 64, 0.15);
 }
 
-/* Secondary Button: Sharp Border with Navy Text */
 .btn-outline-primary {
     background-color: transparent;
     border: 1.5px solid var(--primary-color);
