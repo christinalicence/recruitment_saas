@@ -236,61 +236,57 @@ def public_job_detail(request, pk):
 
 
 def apply_to_job(request, pk):
+    """Handles the application email trigger with safety checks."""
     job = get_object_or_404(Job, pk=pk)
     profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    
+
     if request.method == 'POST':
-        form = JobApplicationForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Recipients logic (Bespoke Job Email vs Master Email)
-            recipients = []
-            if job.custom_recipient_1:
-                recipients.append(job.custom_recipient_1)
-            if job.custom_recipient_2:
-                recipients.append(job.custom_recipient_2)
-            if not recipients and profile and profile.master_application_email:
-                recipients.append(profile.master_application_email)
+        candidate_name = request.POST.get('full_name', 'Not provided')
+        candidate_email = request.POST.get('email')
+        candidate_phone = request.POST.get('phone', 'Not provided')
+        cv_file = request.FILES.get('cv')
 
-            if recipients:
-                candidate_name = form.cleaned_data.get('full_name') or "Anonymous"
-                candidate_email = form.cleaned_data.get('email')
-                candidate_phone = form.cleaned_data.get('phone') or "Not provided"
-                
-                # The Body
-                email_body = (
-                    f"You have a new application for: {job.title}\n"
-                    f"------------------------------------------\n"
-                    f"CANDIDATE DETAILS:\n"
-                    f"Name:  {candidate_name}\n"
-                    f"Email: {candidate_email or 'Not provided'}\n"
-                    f"Phone: {candidate_phone}\n\n"
-                    f"The candidate's CV is attached to this email.\n"
-                    f"------------------------------------------\n"
-                    f"NOTE: This is an automated notification. To contact the candidate, "
-                    f"simply hit 'Reply' to this email or use the details above."
-                )
+        recipients = []
+        if job.custom_recipient_1: recipients.append(job.custom_recipient_1)
+        if job.custom_recipient_2: recipients.append(job.custom_recipient_2)
+        if not recipients and profile and profile.master_application_email:
+            recipients.append(profile.master_application_email)
 
-                from django.core.mail import EmailMessage
-                email_msg = EmailMessage(
-                    subject=f"New Application: {job.title} - {candidate_name}",
-                    body=email_body,
-                    from_email=settings.DEFAULT_FROM_EMAIL,  # hello@getpillarpost.com
-                    to=recipients,
-                )
-
-                # reply-to logic: if candidate provided an email, set it as the reply-to address
-                if candidate_email:
-                    email_msg.reply_to = [candidate_email]
-
-                if request.FILES.get('cv'):
-                    cv_file = request.FILES['cv']
-                    email_msg.attach(cv_file.name, cv_file.read(), cv_file.content_type)
-
-                email_msg.send()
-                messages.success(request, "Your application has been sent successfully.")
-            else:
-                messages.error(request, "System Error: No recipient email is configured.")
-                
+        if not recipients:
+            messages.error(request, "Application failed: No recruiter email configured for this site.")
             return redirect('cms:public_job_detail', pk=pk)
-    
+
+        email_body = (
+            f"New Application for {job.title}\n\n"
+            f"Name: {candidate_name}\n"
+            f"Email: {candidate_email or 'Not provided'}\n"
+            f"Phone: {candidate_phone}\n\n"
+            f"The candidate's CV is attached."
+        )
+
+        from django.core.mail import EmailMessage
+        email_msg = EmailMessage(
+            subject=f"New Application: {job.title} - {candidate_name}",
+            body=email_body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=recipients,
+            reply_to=[candidate_email] if candidate_email else None
+        )
+
+        if cv_file:
+            if cv_file.size > 5 * 1024 * 1024:
+                messages.error(request, "File too large. Please upload a CV smaller than 5MB.")
+                return redirect('cms:public_job_detail', pk=pk)
+            
+            email_msg.attach(cv_file.name, cv_file.read(), cv_file.content_type)
+
+        try:
+            email_msg.send(fail_silently=False)
+            messages.success(request, "Your application has been sent successfully!")
+        except Exception as e:
+            messages.error(request, "There was a technical glitch sending your application. Please try again later.")
+
+        return redirect('cms:public_job_detail', pk=pk)
+
     return redirect('cms:public_job_detail', pk=pk)
+   

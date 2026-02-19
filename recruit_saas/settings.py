@@ -188,7 +188,7 @@ STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 SITE_URL = 'http://localhost:8000'  # for local dev
 
 
-# Email Settings (Brevo)
+# Email Settings (zoho)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-relay.brevo.com'
 EMAIL_PORT = 587
