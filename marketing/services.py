@@ -32,7 +32,8 @@ class TenantService:
                 template_choice=template_id,
                 plan=standard_plan,
                 notification_email_1=admin_email,
-                is_active=True
+                is_active=False
+
             )
             Domain.objects.create(domain=domain_name, tenant=tenant, is_primary=True)
             print(f"[DEBUG] Base records created for tenant ID: {tenant.id}")
@@ -58,7 +59,7 @@ class TenantService:
                         username=admin_email,
                         email=admin_email,
                         password=password,
-                        is_active=False
+                        is_active=True
                     )
                     print(f"[DEBUG] SUCCESS: User {user.email} created in schema {tenant.schema_name}")
                 else:

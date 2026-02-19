@@ -60,11 +60,8 @@
         {% elif request.tenant.is_on_trial %}
             <p class="text-muted small">You are currently on your 14-day free trial.</p>
             <p class="fw-bold text-primary">Trial ends in: {{ request.tenant.trial_ends|timeuntil }}</p>
-            
-            <a href="{% url 'customers:create_checkout' %}" class="btn btn-success w-100 mt-auto">
-                Upgrade to Standard Plan
-            </a>
-
+           <a href="{% url 'customers:create_checkout' %}" class="btn btn-success">
+            Subscribe Now</a>
         {# 3. Fallback: Account is expired/inactive #}
         {% else %}
             <p class="text-danger small">Your trial has ended. Please upgrade to continue.</p>
