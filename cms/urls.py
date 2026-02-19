@@ -21,6 +21,7 @@ urlpatterns = [
     path('jobs/', views.public_job_list, name='job_list'), 
     path('jobs/<int:pk>/', views.public_job_detail, name='public_job_detail'),
     path('jobs/<int:pk>/apply/', views.apply_to_job, name='apply_to_job'),
+    path('application-success/', views.application_success, name='application_success'),
 
     # Live Preview for Tenants
     path('preview/', views.live_preview, name='live_preview'),

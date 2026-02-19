@@ -261,6 +261,8 @@ def apply_to_job(request, pk):
 
         if not recipients and request.tenant.master_email:
             recipients.append(request.tenant.master_email)
+        
+        recipients = list(set(recipients))
 
         if not recipients:
             messages.error(request, "Application failed: No recruiter email is configured for this site.")
@@ -296,5 +298,8 @@ def apply_to_job(request, pk):
         except Exception as e:
             messages.error(request, "There was a technical glitch sending your application. Please try again later.")
 
-        return redirect('cms:public_job_detail', pk=pk)
-    return redirect('cms:public_job_detail', pk=pk)
+    return redirect('cms:application_success')
+
+
+def application_success(request):
+    return render(request, 'cms/application_success.html')
