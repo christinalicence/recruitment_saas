@@ -1,4 +1,4 @@
-/* --- EXISTING DASHBOARD STYLES --- */
+/* Dashboard styles */
 :root {
     --primary-color: #0A2540;
     --secondary-color: #334E68;
@@ -17,7 +17,7 @@
     padding-top: 1.5rem;
 }
 
-/* --- SITE EDITOR ARCHITECTURE --- */
+/* Editor classes */
 .editor-card-container {
     height: calc(100vh - 120px);
     border-radius: var(--sharp-radius);
@@ -49,33 +49,7 @@
     display: block;
 }
 
-/* --- PREVIEW & DEVICE SCALING --- */
-.preview-frame-wrapper {
-    background: white;
-    border-radius: var(--sharp-radius);
-    border: 1px solid var(--border-stroke);
-    margin: 0 auto;
-    position: relative;
-    overflow: hidden; 
-}
-
-#preview-frame {
-    border: none;
-    height: 1000px; 
-    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    transform-origin: top left;
-}
-
-.preview-frame-wrapper.desktop-mode { width: 840px; height: 600px; }
-.desktop-mode #preview-frame { width: 1400px; transform: scale(0.6); }
-
-.preview-frame-wrapper.tablet-mode { width: 768px; height: 800px; }
-.tablet-mode #preview-frame { width: 768px; transform: scale(1); }
-
-.preview-frame-wrapper.mobile-mode { width: 375px; height: 800px; }
-.mobile-mode #preview-frame { width: 375px; transform: scale(1); }
-
-/* --- EDITOR COMPONENT STYLING --- */
+/* Picture classes */
 .logo-preview-img { max-height: 80px; margin-bottom: 10px; }
 .hero-preview-img { max-height: 150px; width: 100%; object-fit: cover; margin-bottom: 10px; }
 .team-preview-img { max-height: 120px; margin-bottom: 10px; }
@@ -104,4 +78,63 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 9999;
+}
+
+
+/* Screen size adjustments */
+.preview-frame-wrapper {
+    background: white;
+    border-radius: var(--sharp-radius);
+    border: 1px solid var(--border-stroke);
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden; 
+}
+
+#preview-frame {
+    border: none;
+    height: 1000px; 
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transform-origin: top left;
+}
+
+.preview-frame-wrapper.desktop-mode { 
+    width: 840px; height: 600px; 
+}
+
+.desktop-mode #preview-frame { 
+    width: 1400px; 
+    transform: scale(0.6); 
+}
+
+.preview-frame-wrapper.tablet-mode { 
+    width: 768px; 
+    height: 800px; 
+}
+
+.tablet-mode #preview-frame { 
+    width: 768px; 
+    transform: scale(1); 
+}
+
+.preview-frame-wrapper.mobile-mode { 
+    width: 375px; 
+    height: 800px; 
+}
+
+.mobile-mode #preview-frame { 
+    width: 375px; 
+    transform: scale(1); 
+}
+
+/* Hiding preview on mobile */
+
+@media (max-width: 991.98px) {
+    #preview-container-root {
+        display: none !important;
+    }
+    #mobile-preview-warning {
+        display: block !important;
+        margin-top: 2rem;
+    }
 }

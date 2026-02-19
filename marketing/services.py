@@ -58,7 +58,7 @@ class TenantService:
                         username=admin_email,
                         email=admin_email,
                         password=password,
-                        is_active=True
+                        is_active=False
                     )
                     print(f"[DEBUG] SUCCESS: User {user.email} created in schema {tenant.schema_name}")
                 else:

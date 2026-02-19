@@ -7,6 +7,10 @@
 // Device toggle
 
 function setPreviewSize(size) {
+    // Check if the screen is actually wide enough
+    if (window.innerWidth < 992 && (size === 'desktop' || size === 'tablet')) {
+        return;
+    }
     const wrapper = document.getElementById('preview-wrapper');
     if (!wrapper) return;
 
@@ -71,7 +75,7 @@ function setupCharCounter(wrapperEl) {
     inputEl.addEventListener('input', update);
     update(); // show count immediately on page load
 }
-}
+
 
 // initialization
 
