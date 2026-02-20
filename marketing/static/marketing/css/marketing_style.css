@@ -235,9 +235,9 @@ footer {
     color: var(--muted-text);
 }
 
-.footer-email {
-    color: var(--secondary-color);
-    text-decoration: none;
+footer-email {
+    color: var(--secondary-color); 
+    text-decoration: none;        
     font-weight: 500;
     font-size: 0.95rem;
     transition: color 0.2s ease;
@@ -245,7 +245,7 @@ footer {
 
 .footer-email:hover {
     color: var(--primary-color);
-    text-decoration: underline;
+    text-decoration: underline;  
 }
 
 .footer-right p {

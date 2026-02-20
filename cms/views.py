@@ -295,10 +295,11 @@ def apply_to_job(request, pk):
         try:
             email_msg.send(fail_silently=False)
             messages.success(request, "Your application has been sent successfully!")
+            return redirect('cms:application_success')
         except Exception as e:
-            messages.error(request, "There was a technical glitch sending your application. Please try again later.")
-
-    return redirect('cms:application_success')
+            messages.error(request, "Technical glitch...")
+            return redirect('cms:public_job_detail', pk=pk)
+    return render(request, "cms/public_job_detail.html", {'job': job, 'profile': profile})
 
 
 def application_success(request):

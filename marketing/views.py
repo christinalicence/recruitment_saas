@@ -135,24 +135,22 @@ def template_preview(request, template_id):
 
 
 def portal_finder(request):
-    """Allows users to find their tenant portal by admin email."""
     found_tenants = []
-    email = None
+    # Normalize input to match what TenantService saved
+    email = request.POST.get('email', '').strip().lower() 
 
-    if request.method == "POST":
-        email = request.POST.get('email')
-        if email:
-            tenants = Client.objects.filter(notification_email_1__iexact=email)
-            for tenant in tenants:
-                domain = tenant.domains.filter(is_primary=True).first()
-                if domain:
-                    found_tenants.append({
-                        'name': tenant.name,
-                        'login_url': f"https://{domain.domain}/login/"
-                    })
-            
-            if not found_tenants:
-                messages.error(request, "No portals found for that email address.")
+    if request.method == "POST" and email:
+        tenants = Client.objects.filter(notification_email_1__iexact=email)
+        for tenant in tenants:
+            domain = tenant.domains.filter(is_primary=True).first()
+            if domain:
+                found_tenants.append({
+                    'name': tenant.name,
+                    'login_url': f"https://{domain.domain}/login/"
+                })
+        
+        if not found_tenants:
+            messages.error(request, "No portals found for that email address.")
 
     return render(request, "marketing/portal_finder.html", {
         'found_tenants': found_tenants,
