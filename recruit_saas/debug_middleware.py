@@ -7,15 +7,16 @@ from django.shortcuts import redirect
 
 class CustomTenantMiddleware(TenantMainMiddleware):
     def get_tenant(self, domain_model, hostname):
-        # Strip port for database lookup to prevent host mismatch errors
-        hostname_no_port = hostname.split(':')[0]
-        
-        try:
-            return domain_model.objects.select_related('tenant').get(
-                domain=hostname_no_port
-            ).tenant
-        except domain_model.DoesNotExist:
-            return super().get_tenant(domain_model, hostname)
+            hostname_no_port = hostname.split(':')[0]
+            try:
+                # Try to get the tenant
+                return domain_model.objects.select_related('tenant').get(
+                    domain=hostname_no_port
+                ).tenant
+            except (domain_model.DoesNotExist, Exception):
+                # If the table doesn't exist OR the domain isn't found, 
+                # force return the public schema so migrations can run.
+                return domain_model.objects.get(schema_name='public')
 
     def process_request(self, request):
         # 1. Let the parent find the tenant and set the schema
