@@ -161,7 +161,7 @@ def payment_cancel(request):
 @login_required
 def manage_jobs(request):
     """The private dashboard area where tenants see their list of jobs."""
-    jobs = Job.objects.filter(tenant=request.tenant).order_by('-created_at')
+    jobs = Job.objects.all().order_by('-created_at')
     return render(request, 'cms/manage_jobs.html', {'jobs': jobs})
 
 
@@ -177,7 +177,6 @@ def add_job(request):
         form = JobForm(request.POST)
         if form.is_valid():
             job = form.save(commit=False)
-            job.tenant = request.tenant # Link the job to the current tenant
             job.save()
             messages.success(request, "Job vacancy posted successfully!")
             return redirect('cms:manage_jobs')
@@ -189,7 +188,7 @@ def add_job(request):
 @login_required
 def edit_job(request, pk):
     """The form to edit an existing job."""
-    job = get_object_or_404(Job, pk=pk, tenant=request.tenant)
+    job = get_object_or_404(Job, pk=pk)
     if request.method == 'POST':
         form = JobForm(request.POST, instance=job)
         if form.is_valid():
@@ -204,7 +203,7 @@ def edit_job(request, pk):
 @login_required
 def delete_job(request, pk):
     """Simple view to delete a job."""
-    job = get_object_or_404(Job, pk=pk, tenant=request.tenant)
+    job = get_object_or_404(Job, pk=pk)
     if request.method == 'POST':
         job.delete()
         messages.success(request, "Job vacancy removed.")
@@ -222,7 +221,7 @@ def public_job_list(request):
             tenant_slug=request.tenant.schema_name,
             **get_profile_defaults(request)
         )
-    jobs = Job.objects.filter(tenant=request.tenant).order_by('-created_at')
+    jobs = Job.objects.all().order_by('-created_at')
     return render(request, "cms/job_list.html", {
         'profile': profile,
         'jobs': jobs
