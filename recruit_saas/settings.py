@@ -109,7 +109,7 @@ DATABASES['default']['TEST'] = {
 }
 
 
-DATABASE_ROUTERS = ("django_tenants.routers.TenantSyncRouter",)
+# DATABASE_ROUTERS = ("django_tenants.routers.TenantSyncRouter",)
 TENANT_MODEL = "customers.Client"
 TENANT_DOMAIN_MODEL = "customers.Domain"
 DEFAULT_SCHEMA_NAME = "public"
