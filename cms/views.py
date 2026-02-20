@@ -80,7 +80,7 @@ def dashboard(request):
             **get_profile_defaults(request)
         )
 
-    jobs = Job.objects.filter(tenant=tenant)
+    jobs = Job.objects.all()
     
     return render(request, 'cms/dashboard.html', {
         'profile': profile,
