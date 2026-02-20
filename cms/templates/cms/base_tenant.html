@@ -13,13 +13,11 @@
     <link rel="apple-touch-icon" href="{% static 'marketing/images/favicons/favicon.ico' %}">
     
    <style>
-        /* Overrides theme defaults in tenant_themes.css — targets body.theme-*
-           for specificity 0,1,1 which beats .theme-* class rules at 0,1,0 */
+        /* Overrides theme defaults  */
             body.theme-{{ profile.template_choice|default:'executive' }} {
-            --brand-primary: {{ profile.primary_color|default:"#1e3a8a" }};
-            --brand-secondary: {{ profile.secondary_color|default:"#64748b" }};
-            --brand-bg: {{ profile.background_color|default:"#ffffff" }};
-        }
+            --brand-primary:   {{ profile.primary_color|default:"#0f172a" }};
+            --brand-secondary: {{ profile.secondary_color|default:"#0f172a" }};
+            --brand-bg:        {{ profile.background_color|default:"#ffffff" }};
     </style>
 </head>
 <body class="theme-{{ profile.template_choice|default:'executive' }}">

@@ -3,6 +3,7 @@
 {% block title %}Application Received | {{ profile.display_name }}{% endblock %}
 
 {% block content %}
+<div class="theme-{{ profile.template_choice|default:'executive' }} agency-site">
 <div class="container py-5 text-center">
     <div class="py-5">
         <div class="mb-4">
@@ -15,5 +16,6 @@
             View More Jobs
         </a>
     </div>
+</div>
 </div>
 {% endblock %}

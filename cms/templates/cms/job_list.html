@@ -1,7 +1,7 @@
 {% extends "cms/base_tenant.html" %}
 
 {% block content %}
-<div class="theme-{{ profile.template_choice|default:'executive' }} py-5">
+<div class="theme-{{ profile.template_choice|default:'executive' }} agency-site py-5">
     <div class="container">
         <h1 class="display-5 fw-bold mb-5">{{ profile.jobs_header_text|default:"Current Vacancies" }}</h1>
         

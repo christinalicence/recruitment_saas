@@ -10,80 +10,80 @@ function getBrightness(hexcolor) {
 }
 
 /**
-Make appropriate text colour CSS variables based on brightness of the primary and secondary pickers.
-This allows us to have dynamic text colours on the homepage hero and throughout the site that automatically update to maintain contrast as users adjust their colours.
+ * Injects --brand-computed-hero-text onto :root.
+ * This is the text colour used inside the hero section.
+ * Computed from --brand-primary (the hero bg) brightness:
+ *   bright primary  → dark text (#1a1a1a)
+ *   dark primary    → white text (#ffffff)
+ *
+ * Threshold 128: midpoint of 0–255 luminosity scale.
  */
 function updateCSSColourVariables() {
-    const primaryInput   = document.querySelector('#id_primary_color');
-    const secondaryInput = document.querySelector('#id_secondary_color');
-    const root = document.documentElement;
-
+    const primaryInput = document.querySelector('#id_primary_color');
     if (primaryInput && primaryInput.value) {
-        const onPrimary = getBrightness(primaryInput.value) > 128 ? '#1a1a1a' : '#ffffff';
-        root.style.setProperty('--brand-computed-text', onPrimary);
-    }
-
-    if (secondaryInput && secondaryInput.value) {
-        const onSecondary = getBrightness(secondaryInput.value) > 128 ? '#1a1a1a' : '#ffffff';
-        root.style.setProperty('--brand-computed-hero-text', onSecondary);
+        const heroText = getBrightness(primaryInput.value) > 128 ? '#1a1a1a' : '#ffffff';
+        document.documentElement.style.setProperty('--brand-computed-hero-text', heroText);
     }
 }
 
 /**
- * Updates a dynamic contrast status bar and friendly labels.
+ * Updates the contrast status bar.
+ * Now checks secondary (text colour) vs background — the actual
+ * reading experience for candidates visiting the site.
  */
 function validateContrast() {
-    const primaryInput = document.querySelector('#id_primary_color');
-    const bgInput = document.querySelector('#id_background_color');
-    const statusBar = document.querySelector('#contrast-bar'); // Fixed naming mismatch
-    const statusText = document.querySelector('#contrast-status-text');
-    const statusBadge = document.querySelector('#contrast-status-badge');
+    const secondaryInput = document.querySelector('#id_secondary_color');
+    const bgInput        = document.querySelector('#id_background_color');
+    const statusBar      = document.querySelector('#contrast-bar');
+    const statusText     = document.querySelector('#contrast-status-text');
+    const statusBadge    = document.querySelector('#contrast-status-badge');
 
-    if (!primaryInput || !bgInput || !statusBar || !statusText) return;
+    if (!secondaryInput || !bgInput || !statusBar || !statusText) return;
 
-    const brightnessPrimary = getBrightness(primaryInput.value);
-    const brightnessBG = getBrightness(bgInput.value);
-    const diff = Math.abs(brightnessPrimary - brightnessBG);
+    const brightnessText = getBrightness(secondaryInput.value);
+    const brightnessBG   = getBrightness(bgInput.value);
+    const diff           = Math.abs(brightnessText - brightnessBG);
 
-    const score = Math.min(100, Math.round((diff / 125) * 50)); 
+    const score = Math.min(100, Math.round((diff / 125) * 50));
     statusBar.style.width = `${score}%`;
-    
+
     if (diff < 90) {
-        statusBar.className = 'progress-bar bg-danger';
-        statusText.innerText = 'Hard to read - try a darker primary or lighter background.';
+        statusBar.className  = 'progress-bar bg-danger';
+        statusText.innerText = 'Hard to read — try a darker text colour or lighter background.';
         statusBadge.innerText = 'Poor';
         statusBadge.className = 'badge bg-danger';
     } else if (diff < 150) {
-        statusBar.className = 'progress-bar bg-warning';
+        statusBar.className  = 'progress-bar bg-warning';
         statusText.innerText = 'Looks okay, but could be clearer.';
         statusBadge.innerText = 'Good';
         statusBadge.className = 'badge bg-warning text-dark';
     } else {
-        statusBar.className = 'progress-bar bg-success';
+        statusBar.className  = 'progress-bar bg-success';
         statusText.innerText = 'Great! Very easy for candidates to read.';
         statusBadge.innerText = 'Perfect';
         statusBadge.className = 'badge bg-success';
     }
 
-    // Keep CSS colour variables in sync with picker state
+    // Keep hero text colour in sync with primary picker
     updateCSSColourVariables();
 }
 
 // Initializing listeners
 document.addEventListener('DOMContentLoaded', () => {
     const primaryInput   = document.querySelector('#id_primary_color');
-    const bgInput        = document.querySelector('#id_background_color');
     const secondaryInput = document.querySelector('#id_secondary_color');
+    const bgInput        = document.querySelector('#id_background_color');
 
-    if (primaryInput && bgInput) {
-        primaryInput.addEventListener('input', validateContrast);
+    // Contrast bar watches secondary vs background
+    if (secondaryInput && bgInput) {
+        secondaryInput.addEventListener('input', validateContrast);
         bgInput.addEventListener('input', validateContrast);
-        validateContrast(); 
+        validateContrast();
     }
 
-    // Secondary picker doesn't affect the contrast bar, but does affect
-    // hero text colour on startup theme — listen independently
-    if (secondaryInput) {
-        secondaryInput.addEventListener('input', updateCSSColourVariables);
+    // Primary picker changes hero bg colour — recompute hero text independently
+    if (primaryInput) {
+        primaryInput.addEventListener('input', updateCSSColourVariables);
+        updateCSSColourVariables();
     }
 });
