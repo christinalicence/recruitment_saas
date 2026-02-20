@@ -7,6 +7,7 @@
     --brand-bg:        #ffffff;
     --brand-font:      'Inter', sans-serif;
     --brand-hero-text: var(--brand-computed-hero-text, #ffffff);
+    --brand-hero-bg:   var(--brand-primary);  /* alias — keeps old references working */
 }
 
 /* Executive — corporate navy */
@@ -16,6 +17,7 @@
     --brand-bg:        #ffffff;
     --brand-font:      'Inter', sans-serif;
     --brand-hero-text: var(--brand-computed-hero-text, #ffffff);
+    --brand-hero-bg:   var(--brand-primary);
 }
 
 /* Startup — bold modern */
@@ -25,6 +27,7 @@
     --brand-bg:        #ffffff;
     --brand-font:      'Plus Jakarta Sans', sans-serif;
     --brand-hero-text: var(--brand-computed-hero-text, #ffffff);
+    --brand-hero-bg:   var(--brand-primary);
 }
 
 /* Boutique */
@@ -34,6 +37,7 @@
     --brand-bg:        #faf7f4;
     --brand-font:      'Libre Baskerville', serif;
     --brand-hero-text: var(--brand-computed-hero-text, #ffffff);
+    --brand-hero-bg:   var(--brand-primary);
 }
 
 
@@ -359,15 +363,6 @@
 
 
 /* responsive */
-
-@media (max-width: 768px) {
-    .agency-site {
-        padding-bottom: 150px;
-    }
-    .hero-title {
-        font-size: 2.25rem;
-    }
-}
 
 @media (max-width: 768px) {
     .agency-site {
