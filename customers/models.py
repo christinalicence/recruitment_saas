@@ -35,7 +35,7 @@ class Client(TenantMixin):
     
     stripe_customer_id = models.CharField(max_length=100, blank=True)
 
-    auto_create_schema = True
+    auto_create_schema = False  # We will trigger schema creation manually in the service layer
 
     @property
     def is_on_trial(self):
