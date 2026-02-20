@@ -35,6 +35,9 @@ class CompanyProfileForm(forms.ModelForm):
             'hero_text':                'Hero Sub-text',
             'homepage_body_text':       'Homepage Body Text',
             'jobs_header_text':         'Job Page Heading & Intro',
+            'primary_color':            'Hero Background Colour',
+            'secondary_color':          'Text & Button Colour',
+            'background_color':         'Page Background Colour',
         }
 
         help_texts = {

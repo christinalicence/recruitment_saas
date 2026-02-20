@@ -12,15 +12,19 @@
     <link rel="icon" type="image/x-icon" href="{% static 'marketing/images/favicons/favicon.ico' %}">
     <link rel="apple-touch-icon" href="{% static 'marketing/images/favicons/favicon.ico' %}">
     
-   <style>
-        /* Overrides theme defaults  */
-            body.theme-{{ profile.template_choice|default:'executive' }} {
+    <style>
+        /* stylelint-disable */
+        /* primary = hero bg, secondary = body text, bg = page background
+           Targets body.theme-* for specificity 0,1,1 — beats .theme-* at 0,1,0 */
+        body.theme-{{ profile.template_choice|default:'executive' }} {
             --brand-primary:   {{ profile.primary_color|default:"#0f172a" }};
             --brand-secondary: {{ profile.secondary_color|default:"#0f172a" }};
             --brand-bg:        {{ profile.background_color|default:"#ffffff" }};
+        }
+        /* stylelint-enable */
     </style>
 </head>
-<body class="theme-{{ profile.template_choice|default:'executive' }}">
+<body class="theme-{{ profile.template_choice|default:'executive' }} agency-site">
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'cms:home' %}">
@@ -66,7 +70,13 @@
             
             {# Column 1: Brand & Socials #}
             <div class="col-md-4">
-                <h5 class="fw-bold mb-3" style="color: var(--brand-primary);">{{ profile.display_name }}</h5>
+                <a href="{% url 'cms:home' %}" class="d-inline-block mb-3 text-decoration-none">
+                    {% if profile.logo %}
+                        <img src="{{ profile.logo.url }}" alt="{{ profile.display_name }}" style="max-height: 36px;">
+                    {% else %}
+                        <span class="fw-bold" style="color: var(--brand-primary);">{{ profile.display_name }}</span>
+                    {% endif %}
+                </a>
                 <p class="small text-muted mb-4">Connecting talent with opportunity.</p>
                 
                 <div class="d-flex gap-2">
@@ -91,13 +101,13 @@
                 <h6 class="fw-bold mb-3 small text-uppercase text-muted" style="letter-spacing: 1px;">Contact</h6>
                 <ul class="list-unstyled small text-muted mb-0">
                     {% if profile.contact_email %}
-                        <li class="mb-2 d-flex align-items-center">
-                            <span class="me-2 text-primary opacity-75"> {{ profile.contact_email }}
+                        <li class="mb-2">
+                            <a href="mailto:{{ profile.contact_email }}" class="footer-contact-link">{{ profile.contact_email }}</a>
                         </li>
                     {% endif %}
                     {% if profile.contact_phone %}
-                        <li class="mb-2 d-flex align-items-center">
-                            <span class="me-2 text-primary opacity-75">{{ profile.contact_phone }}
+                        <li class="mb-2">
+                            {{ profile.contact_phone }}
                         </li>
                     {% endif %}
                     <li class="mt-3">

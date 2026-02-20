@@ -49,12 +49,12 @@ function validateContrast() {
 
     if (diff < 90) {
         statusBar.className  = 'progress-bar bg-danger';
-        statusText.innerText = 'Hard to read — try a darker text colour or lighter background.';
+        statusText.innerText = 'Hard to read — try more contrasting colours.';
         statusBadge.innerText = 'Poor';
         statusBadge.className = 'badge bg-danger';
     } else if (diff < 150) {
         statusBar.className  = 'progress-bar bg-warning';
-        statusText.innerText = 'Looks okay, but could be clearer.';
+        statusText.innerText = 'Slightly hard to read - try a more contrasting combination.';
         statusBadge.innerText = 'Good';
         statusBadge.className = 'badge bg-warning text-dark';
     } else {

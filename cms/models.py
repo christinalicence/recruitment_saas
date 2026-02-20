@@ -24,8 +24,8 @@ class CompanyProfile(models.Model):
         blank=True,
         help_text="Your logo (appears in navigation bar)"
     )
-    primary_color = models.CharField(max_length=7, default="#1e3a8a")
-    secondary_color = models.CharField(max_length=7, default="#64748b")
+    primary_color = models.CharField(max_length=7, default="#0f172a")
+    secondary_color = models.CharField(max_length=7, default="#0f172a")
     background_color = models.CharField(max_length=7, default="#ffffff")
     
     # Hero Section

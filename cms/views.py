@@ -18,8 +18,8 @@ def get_profile_defaults(request):
     """
     return {
         'display_name': request.tenant.name,
-        'primary_color': '#1e3a8a',  
-        'secondary_color': '#64748b', 
+        'primary_color': '#0f172a',
+        'secondary_color': '#0f172a',
         'background_color': '#ffffff',
         'hero_title': "Connecting Exceptional Talent with World-Class Teams",
         'hero_text': (
@@ -302,4 +302,5 @@ def apply_to_job(request, pk):
 
 
 def application_success(request):
-    return render(request, 'cms/application_success.html')
+    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    return render(request, 'cms/application_success.html', {'profile': profile})
