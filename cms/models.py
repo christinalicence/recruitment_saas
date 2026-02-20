@@ -103,14 +103,6 @@ class Job(models.Model):
     # For future LinkedIn sharing
     linkedin_post_id = models.CharField(max_length=100, blank=True, null=True)
     last_shared_date = models.DateTimeField(null=True, blank=True)
-    
-    tenant = models.ForeignKey(
-        'customers.Client', 
-        on_delete=models.CASCADE, 
-        related_name='jobs',
-        null=True,
-        blank=True
-    )
 
     class Meta:
         ordering = ['-created_at']
