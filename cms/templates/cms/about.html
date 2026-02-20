@@ -3,7 +3,7 @@
 {% block title %}About Us | {{ profile.display_name }}{% endblock %}
 
 {% block content %}
-<div class="theme-{{ profile.template_choice|default:'executive' }} agency-site">
+<div class="agency-site">
     
     <section class="about-header">
         <div class="container">
@@ -19,6 +19,10 @@
                     <div class="about-text-content">
                         <div class="lead-text">
                             {{ profile.about_content|linebreaks }}
+                        </div>
+
+                        <div class="about-cta">
+                            <a href="{% url 'cms:job_list' %}" class="btn btn-primary">View Current Roles</a>
                         </div>
                     </div>
                 </div>
