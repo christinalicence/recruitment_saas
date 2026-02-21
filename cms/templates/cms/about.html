@@ -7,7 +7,7 @@
     
     <section class="about-header">
         <div class="container">
-            <h1 class="page-title">{{ profile.about_title|default:"Our Story" }}</h1>
+            <h2 class="page-title">{{ profile.about_title|default:"Our Story" }}</h1>
         </div>
     </section>
 
@@ -30,7 +30,7 @@
                 <div class="col-lg-6 {% if profile.template_choice == 'boutique' %}order-1{% endif %}">
                     <div class="about-image-wrapper">
                         {% if profile.team_photo or profile.get_team_photo %}
-                            <img src="{{ profile.get_team_photo }}" class="about-image" alt="Our Team">
+                            <img src="{{ profile.get_team_photo }}" class="about-image" alt="{{ profile.display_name }} team and office culture photo">
                         {% else %}
                             <div class="about-image-placeholder">
                                 <span class="placeholder-text">Team Photo</span>

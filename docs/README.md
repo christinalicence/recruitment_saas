@@ -96,10 +96,11 @@ This is set up on the free tier, Django Tenants doesn't work with SQL Lite, so I
 
 Chosen because they have a good free tier (300 emails per day) and integrates well with heroku. It is used to send emails on sign up including the user's unique subdomain and emails related to payments. This has been combined with Zoho to run the inbox for hello@getpillarpost.com using a free tier.
 
-### Celery? 
+### Other choices 
 
-This allows different tasks to happen at the same time instead of waiting for server responses before continuing, speeding up the signup process.
+After some consideration I have decided not to use a Celery/Redis helper or similar at the moment. There is a risk at the moment that a user could spend longer than is ideal waiting for an error message if something goes wrong in the Stripe process or email processes, but I don't want to add the complexity to the the app at the moment. Having researched it sounds like it is quite difficult to get these things to work with a Django Tenants set up.
 
+This is something I might add later.
 
 Everything else is listed in my requirements.txt
 

@@ -258,7 +258,7 @@
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
 }
 
-/* Boutique override — use brand-bg so tenant background colour is respected */
+/* Boutique override */
 .theme-boutique .job-card,
 .theme-boutique .job-card-preview {
     background: var(--brand-bg);

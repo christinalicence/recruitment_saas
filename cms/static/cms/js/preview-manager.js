@@ -55,27 +55,49 @@ function setupImagePreview(inputId, previewId, fallbackId) {
 // character counters
 
 function setupCharCounter(wrapperEl) {
-    const max     = parseInt(wrapperEl.dataset.maxchars, 10);
     const inputEl = wrapperEl.querySelector('input, textarea');
-    if (!max || !inputEl) return;
+    if (!inputEl) return;
+
+    const max = parseInt(inputEl.getAttribute('data-maxchars'));
+    const recMin = parseInt(inputEl.getAttribute('data-recco-min'));
+    const recMax = parseInt(inputEl.getAttribute('data-recco-max'));
 
     const counter = document.createElement('div');
-    counter.className = 'char-counter text-end small mt-1 mb-2';
+    counter.className = 'char-counter small mt-1 mb-2';
     wrapperEl.appendChild(counter);
 
     function update() {
-        const len       = inputEl.value.length;
-        const remaining = max - len;
-        counter.textContent = `${len} / ${max}`;
-        counter.classList.toggle('text-danger', remaining < 0);
-        counter.classList.toggle('text-warning', remaining >= 0 && remaining < Math.round(max * 0.1));
-        counter.classList.toggle('text-muted',   remaining >= Math.round(max * 0.1));
+        const len = inputEl.value.length;
+        
+        // Update text content
+        counter.textContent = `${len} characters`;
+        if (recMin && recMax) {
+            counter.textContent += ` (Goal: ${recMin}-${recMax})`;
+        }
+
+        // Visual Feedback Logic
+        if (len > max) {
+            // Over the absolute hard limit
+            counter.className = 'char-counter text-danger fw-bold small mt-1 mb-2';
+        } else if (recMin && recMax) {
+            if (len >= recMin && len <= recMax) {
+                // Opimal length
+                counter.className = 'char-counter text-success fw-bold small mt-1 mb-2';
+            } else if (len > recMax) {
+                // Longer than recommended, but under hard limit
+                counter.className = 'char-counter text-warning small mt-1 mb-2';
+            } else {
+                // Too short
+                counter.className = 'char-counter text-muted small mt-1 mb-2';
+            }
+        } else {
+            counter.className = 'char-counter text-muted small mt-1 mb-2';
+        }
     }
 
     inputEl.addEventListener('input', update);
-    update(); // show count immediately on page load
+    update();
 }
-
 
 // initialization
 
