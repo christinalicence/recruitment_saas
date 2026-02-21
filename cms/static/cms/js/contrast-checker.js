@@ -80,3 +80,4 @@ document.addEventListener('DOMContentLoaded', () => {
         bgInput.addEventListener('input', validateContrast);
         validateContrast();
     }
+});

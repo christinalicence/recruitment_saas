@@ -386,3 +386,17 @@
         padding: 0.65rem 1.75rem;
     }
 }
+
+/* Mobile-specific Hero Padding */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 4rem 1.5rem !important; 
+        background-color: var(--brand-primary);
+        text-align: center;
+    }
+
+    .hero-section .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
