@@ -80,10 +80,3 @@ document.addEventListener('DOMContentLoaded', () => {
         bgInput.addEventListener('input', validateContrast);
         validateContrast();
     }
-
-    // Primary picker changes hero bg colour — recompute hero text independently
-    if (primaryInput) {
-        primaryInput.addEventListener('input', updateCSSColourVariables);
-        updateCSSColourVariables();
-    }
-});
