@@ -184,7 +184,11 @@
     transform: scale(1); 
 }
 
-/* Hiding preview on mobile */
+/* Hiding preview on mobile — warning shows instead */
+
+#mobile-preview-warning {
+    display: none;
+}
 
 @media (max-width: 991.98px) {
     #preview-container-root {

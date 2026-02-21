@@ -2,7 +2,7 @@
  * hero-contrast.js
  * Sets --brand-computed-hero-text on :root based on the hero background brightness.
  * Loaded on all tenant pages via base_tenant.html.
- * Uses the same YIQ formula as contrast-checker.js (which only runs on the editor).
+ * Uses the same YIQ formula as contrast-checker.js 
  */
 (function () {
     var el = document.documentElement;
