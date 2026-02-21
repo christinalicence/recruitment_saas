@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
 
 /* CSS variables and default colours for tenant themes */
 :root {
@@ -7,7 +7,7 @@
     --brand-bg:        #ffffff;
     --brand-font:      'Inter', sans-serif;
     --brand-hero-text: var(--brand-computed-hero-text, #ffffff);
-    --brand-hero-bg:   var(--brand-primary); 
+    --brand-hero-bg:   var(--brand-primary);  /* alias — keeps old references working */
 }
 
 /* Executive — corporate navy */
@@ -35,7 +35,7 @@
     --brand-primary:   #7f1d1d;
     --brand-secondary: #7f1d1d;
     --brand-bg:        #faf7f4;
-    --brand-font:      'Libre Baskerville', serif;
+    --brand-font:      'Playfair Display', serif;
     --brand-hero-text: var(--brand-computed-hero-text, #ffffff);
     --brand-hero-bg:   var(--brand-primary);
 }
@@ -59,13 +59,6 @@
     color: var(--brand-hero-text);
 }
 
-.agency-site .hero-section .btn {
-    padding: 0.75rem 2rem;
-}
-.agency-site .hero-section .btn-lg {
-    padding: 0.9rem 2.5rem;
-}
-
 .agency-site .hero-section h1,
 .agency-site .hero-section h2,
 .agency-site .hero-section h3,
@@ -77,7 +70,7 @@
 .agency-site .hero-section .hero-title,
 .agency-site .hero-section .hero-text,
 .agency-site .hero-section .display-3 {
-    color: var(--brand-hero-text);
+    color: var(--brand-hero-text) !important;
 }
 
 .agency-site .hero-section .btn-primary {
@@ -120,39 +113,33 @@
 .agency-site .card h3,
 .agency-site .card h4,
 .agency-site .card p {
-    color: var(--brand-secondary);
+    color: var(--brand-secondary) !important;
 }
 
 
-/* buttons non-hero — primary colour bg, hero text colour for contrast */
+/* buttons non-hero */
 
 .agency-site .btn-primary {
-    background-color: var(--brand-primary);
-    border-color: var(--brand-primary);
-    color: var(--brand-hero-text);
+    background-color: var(--brand-secondary);
+    border-color: var(--brand-secondary);
+    color: var(--brand-bg);
 }
 .agency-site .btn-primary:hover {
-    background-color: var(--brand-primary);
-    border-color: var(--brand-primary);
-    color: var(--brand-hero-text);
+    background-color: var(--brand-secondary);
+    border-color: var(--brand-secondary);
     opacity: 0.88;
 }
 
 .agency-site .btn-outline-primary {
-    border-color: var(--brand-primary);
-    color: var(--brand-primary);
+    border-color: var(--brand-secondary);
+    color: var(--brand-secondary);
     background-color: transparent;
 }
 .agency-site .btn-outline-primary:hover {
-    background-color: var(--brand-primary);
-    color: var(--brand-hero-text);
+    background-color: var(--brand-secondary);
+    color: var(--brand-bg);
 }
 
-/* Boutique override */
-.theme-boutique.agency-site .bg-white,
-.theme-boutique .agency-site .bg-white {
-    background-color: #ffffff;
-}
 
 
 /* navbar */
@@ -165,7 +152,7 @@
 .agency-site .navbar-brand {
     font-weight: 800;
     letter-spacing: -0.5px;
-    color: var(--brand-secondary);
+    color: var(--brand-secondary) !important;
 }
 
 .agency-site .nav-link {
@@ -196,7 +183,7 @@
     border: 1px solid var(--brand-primary);
     padding: 12px;
     background: #fff;
-    border-radius: 0;
+    border-radius: 0 !important;
     filter: sepia(15%) contrast(105%);
 }
 
@@ -271,10 +258,10 @@
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
 }
 
-/* Boutique override */
+/* Boutique override — use brand-bg so tenant background colour is respected */
 .theme-boutique .job-card,
 .theme-boutique .job-card-preview {
-    background: #ffffff;
+    background: var(--brand-bg);
     border-color: color-mix(in srgb, var(--brand-primary) 20%, transparent);
 }
 .theme-boutique .job-card:hover,
@@ -287,7 +274,7 @@
 .agency-site .job-card h4,
 .agency-site .job-card-preview h3,
 .agency-site .job-card-preview h4 {
-    color: var(--brand-secondary);
+    color: var(--brand-secondary) !important;
 }
 
 /* card-brand — job list cards and job detail card */
@@ -325,7 +312,7 @@
 
 
 .agency-site .muted-text {
-    color: var(--brand-secondary);
+    color: var(--brand-secondary) !important;
     opacity: 0.6;
 }
 
@@ -342,26 +329,6 @@
     overflow-y: auto;
     display: block;
 }
-
-/* footer — all text secondary colour */
-
-.agency-site footer {
-    color: var(--brand-secondary);
-}
-.agency-site footer h5,
-.agency-site footer h6,
-.agency-site footer p,
-.agency-site footer li,
-.agency-site footer span,
-.agency-site footer small,
-.agency-site footer .text-muted {
-    color: var(--brand-secondary) !important;
-    opacity: 0.75;
-}
-.agency-site footer .border-top {
-    border-color: color-mix(in srgb, var(--brand-secondary) 15%, transparent);
-}
-
 
 /* Links */
 
@@ -399,14 +366,6 @@
     .hero-title {
         font-size: 2.25rem;
     }
-    /* hero buttons — more generous padding on mobile */
-    .agency-site .hero-section .btn {
-        padding: 0.85rem 2rem;
-    }
-    .agency-site .hero-section .btn-lg {
-        padding: 1rem 2.5rem;
-    }
-    /* non-hero buttons — slightly smaller on mobile */
     .agency-site .btn {
         font-size: 0.875rem;
         padding: 0.5rem 1.25rem;
@@ -414,18 +373,6 @@
     .agency-site .btn-lg {
         font-size: 0.95rem;
         padding: 0.6rem 1.5rem;
-    }
-    /* footer — reduce height on mobile */
-    .agency-site footer {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-        margin-top: 2rem;
-    }
-    .agency-site footer .row {
-        gap: 1.5rem 0;
-    }
-    .agency-site footer .mt-5 {
-        margin-top: 1.5rem;
     }
 }
 
@@ -437,14 +384,5 @@
     .agency-site .btn-lg {
         font-size: 1rem;
         padding: 0.65rem 1.75rem;
-    }
-    /* footer — slightly less tall on tablet */
-    .agency-site footer {
-        padding-top: 2.5rem;
-        padding-bottom: 2.5rem;
-        margin-top: 2.5rem;
-    }
-    .agency-site footer .mt-5 {
-        margin-top: 2rem;
     }
 }
