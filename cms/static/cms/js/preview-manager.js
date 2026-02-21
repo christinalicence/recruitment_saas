@@ -69,27 +69,19 @@ function setupCharCounter(wrapperEl) {
     function update() {
         const len = inputEl.value.length;
         
-        // Update text content
-        counter.textContent = `${len} characters`;
-        if (recMin && recMax) {
-            counter.textContent += ` (Goal: ${recMin}-${recMax})`;
-        }
+        // Show current count and the goal range
+        counter.textContent = `${len} characters (Goal: ${recMin}-${recMax})`;
 
-        // Visual Feedback Logic
         if (len > max) {
-            // Over the absolute hard limit
+            // too long - over the hard limit
             counter.className = 'char-counter text-danger fw-bold small mt-1 mb-2';
-        } else if (recMin && recMax) {
-            if (len >= recMin && len <= recMax) {
-                // Opimal length
-                counter.className = 'char-counter text-success fw-bold small mt-1 mb-2';
-            } else if (len > recMax) {
-                // Longer than recommended, but under hard limit
-                counter.className = 'char-counter text-warning small mt-1 mb-2';
-            } else {
-                // Too short
-                counter.className = 'char-counter text-muted small mt-1 mb-2';
-            }
+            counter.textContent = `${len} / ${max} - Too long!`;
+        } else if (len >= recMin && len <= recMax) {
+            // perfect length
+            counter.className = 'char-counter text-success fw-bold small mt-1 mb-2';
+        } else if (len > recMax) {
+            // a bit long - over the recommended max but under the hard limit
+            counter.className = 'char-counter text-warning small mt-1 mb-2';
         } else {
             counter.className = 'char-counter text-muted small mt-1 mb-2';
         }

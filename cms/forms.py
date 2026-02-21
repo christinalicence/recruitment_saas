@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 CHAR_LIMITS = {
     'hero_title':          100,
     'hero_text':           300,
-    'homepage_body_text':  800, 
+    'homepage_body_text':  1200, 
     'about_title':         100,
     'about_content':      1500,
     'jobs_header_text':    250,
@@ -44,12 +44,12 @@ class CompanyProfileForm(forms.ModelForm):
             'logo':                     'Max 10MB. Displayed in the navigation bar.',
             'team_photo':               'Max 10MB. Recommended 1200×800px.',
             'hero_image':               'Max 10MB. High resolution recommended.',
-            'hero_title': 'Recommended: 40-70 characters for best impact.',
-            'hero_text': 'Recommended: 120-200 characters.',
-            'homepage_body_text': 'Recommended: 350-600 characters for a balanced layout.',
-            'about_title': 'Recommended: 30-60 characters.',
-            'about_content': 'Recommended: 600-1000 characters.',
-            'jobs_header_text': 'Recommended: 100-180 characters.',
+            'hero_title':               'Recommended: 40-70 characters for best impact.',
+            'hero_text':                'Recommended: 120-200 characters.',
+            'homepage_body_text':       'Recommended: 700-850 characters, maximum 1200.',
+            'about_title':              'Recommended: 30-60 characters.',
+            'about_content':            'Recommended: 600-1000 characters.',
+            'jobs_header_text':         'Recommended: 100-180 characters.',
         }
 
         widgets = {
