@@ -5,6 +5,7 @@ from django_tenants.utils import schema_context
 from customers.models import Client, Domain, Plan
 from django.contrib.auth import get_user_model
 
+
 class TenantService:
     @staticmethod
     def create_onboarding_tenant(company_name, admin_email, password, template_id='executive'):
@@ -48,14 +49,15 @@ class TenantService:
                         password=password,
                         is_active=True
                     )
-                
+
                 from cms.models import CompanyProfile
-                if not CompanyProfile.objects.exists():
-                    CompanyProfile.objects.create(
-                        tenant_slug=tenant_slug,
-                        display_name=company_name,
-                        template_choice=template_id, # THIS keeps the theme locked in
-                    )
+                CompanyProfile.objects.update_or_create(
+                    tenant_slug=schema_name,
+                    defaults={
+                        'display_name': company_name,
+                        'template_choice': template_id,
+                    }
+                )
 
             return tenant, domain_name
 
@@ -63,5 +65,4 @@ class TenantService:
             connection.set_schema_to_public()
             with connection.cursor() as cursor:
                 cursor.execute(f"DROP SCHEMA IF EXISTS {schema_name} CASCADE;")
-            print(f"Cleanup successful after error: {e}")
             return None, None

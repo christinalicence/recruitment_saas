@@ -23,7 +23,7 @@ def landing_page(request):
 
 def tenant_signup(request):
     """Public signup - refactored to use TenantService while preserving all logic."""
-    template_id = request.GET.get('template', 'executive')
+    template_id = request.POST.get('template_choice') or request.GET.get('template', 'executive')
     name_from_url = request.GET.get('company_name', '').strip()
 
     initial_data = {}

@@ -62,53 +62,48 @@
         {% block content %}{% endblock %}
     </main>
 
-<footer class="footer py-5 mt-auto">
+<footer class="footer py-5 mt-auto border-top">
     <div class="container">
         <div class="row g-4">
-            
-            {# Column 1: Brand & Socials #}
-            <div class="col-md-6">
-                <div class="mb-3">
+            <div class="col-md-4">
+                <div class="mb-3 d-none d-md-block">
                     <h5 class="fw-bold mb-2">{{ profile.display_name }}</h5>
-                    {# Hero text removed to keep it tidy #}
-                </div>
-                
-                {# Social Row - Using the exact model fields you provided #}
-                <div class="d-flex gap-3 fs-4">
+                </div>    
+                {# Social Icons #}
+                <div class="d-flex gap-3 fs-4 mb-2">
                     {% if profile.linkedin_url %}
                         <a href="{{ profile.linkedin_url }}" class="text-muted" target="_blank"><i class="bi bi-linkedin"></i></a>
                     {% endif %}
                     {% if profile.facebook_url %}
                         <a href="{{ profile.facebook_url }}" class="text-muted" target="_blank"><i class="bi bi-facebook"></i></a>
                     {% endif %}
-                    {% if profile.contact_email %}
-                        <a href="mailto:{{ profile.contact_email }}" class="text-muted"><i class="bi bi-envelope-fill"></i></a>
-                    {% endif %}
                 </div>
+                {% if profile.contact_email %}
+                    <div class="small">
+                        <a href="mailto:{{ profile.contact_email }}" class="text-muted text-decoration-none">
+                            <i class="bi bi-envelope-fill me-1"></i> {{ profile.contact_email }}
+                        </a>
+                    </div>
+                {% endif %}
             </div>
-
-            {# Column 2: Contact Details (Aligned Right on Desktop) #}
-            <div class="col-md-6 text-md-end">
-                <h6 class="fw-bold mb-3 small text-uppercase" style="letter-spacing: 1px;">Contact Us</h6>
+            <div class="col-md-4 text-md-center">
+                <h6 class="fw-bold mb-3 small text-uppercase" style="letter-spacing: 1px;">Contact</h6>
                 <div class="text-muted small">
                     {% if profile.address %}
                         <div class="mb-2">{{ profile.address|linebreaksbr }}</div>
                     {% endif %}
-                    
                     {% if profile.contact_phone %}
-                        <div class="mb-1"><i class="bi bi-telephone-fill me-1"></i> {{ profile.contact_phone }}</div>
-                    {% endif %}
-
-                    {% if profile.contact_email %}
-                        <div><i class="bi bi-envelope-at me-1"></i> {{ profile.contact_email }}</div>
+                        <div><i class="bi bi-telephone-fill me-1"></i> {{ profile.contact_phone }}</div>
                     {% endif %}
                 </div>
             </div>
+            <div class="col-md-4 text-md-end d-flex flex-column justify-content-end">
+                <div class="text-muted small">
+                    <p class="mb-0">&copy; {{ profile.display_name }} {% now "Y" %}.</p>
+                    <p class="mb-0">All rights reserved.</p>
+                </div>
+            </div>
 
-        </div>
-
-        <div class="mt-5 pt-4 border-top text-center text-muted small">
-            &copy; {{ profile.display_name }} {% now "Y" %}.
         </div>
     </div>
 </footer>
