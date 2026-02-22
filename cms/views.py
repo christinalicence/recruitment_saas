@@ -24,12 +24,12 @@ def get_profile_defaults(request):
             'bg': '#ffffff',
         },
         'startup': {
-            'primary': '#2563eb',
-            'bg': '#f8fafc',
+            'primary': '#334155',
+            'bg': '#f1f5f9',
         },
         'boutique': {
-            'primary': '#166534',
-            'bg': '#fffcf5',
+            'primary': '#3f6212',
+            'bg': '#fafaf9',
         }
     }
 

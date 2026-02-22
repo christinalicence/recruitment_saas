@@ -64,14 +64,14 @@ class CompanyProfile(models.Model):
         """Returns uploaded hero or the specific default for the chosen theme."""
         if self.hero_image:
             return self.hero_image.url
-        filename = f'marketing/images/default_{self.template_choice}.jpg'
+        filename = f'marketing/images/default_{self.template_choice}.webp'
         return static(filename)
 
     def get_team_photo(self):
         """Returns uploaded team photo or the default about image."""
         if self.team_photo:
             return self.team_photo.url
-        return static('marketing/images/default_about.jpg')
+        return static('marketing/images/default_about.webp')
 
     def __str__(self):
         return self.display_name

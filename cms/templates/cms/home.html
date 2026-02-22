@@ -1,7 +1,7 @@
 {% extends "cms/base_tenant.html" %}
-{% load static %}
+{% load static %}\
 
-{% block title %}{{ profile.display_name }} | Careers{% endblock %}
+{% block title %}{{ profile.display_name }} Home Page {% endblock %}
 
 {% block content %}
 <div class="agency-site">
@@ -16,6 +16,7 @@
                     flex-row-reverse
                 {% endif %}">
 
+                {# Column 1: Text Content #}
                 <div class="col-12 col-lg-7">
                     <div class="hero-content">
                         <h1 class="hero-title">{{ profile.hero_title }}</h1>
@@ -27,35 +28,19 @@
                     </div>
                 </div>
 
-       <div class="col-12 col-lg-5 mb-5 mb-lg-0">
-            <div class="hero-image-wrapper">
-                {% if profile.hero_image %}
-                    {# 1. If the user uploaded an image to Cloudinary, use that #}
-                    <img src="{{ profile.hero_image.url }}" 
-                        class="hero-img-styled" 
-                        alt="{{ profile.display_name }} hero image">
-                {% else %}
-                    {# 2. Otherwise, use your specific local files from your MacBook folders #}
-                    {% if profile.template_choice == 'startup' %}
-                        <img src="{% static 'marketing/images/default_startup.jpg' %}" 
-                            class="hero-img-styled" 
-                            alt="Startup tech workspace">
-                    {% elif profile.template_choice == 'boutique' %}
-                        <img src="{% static 'marketing/images/default_boutique.jpg' %}" 
-                            class="hero-img-styled" 
-                            alt="Boutique creative studio">
-                    {% else %}
-                        <img src="{% static 'marketing/images/default_executive.jpg' %}" 
-                            class="hero-img-styled" 
-                            alt="Professional executive office">
-                    {% endif %}
-                {% endif %}
-            </div>
-        </div>
+                {# Column 2: Image Content #}
+                <div class="col-12 col-lg-5 mb-5 mb-lg-0">
+                    <div class="hero-image-wrapper">
+                        {# The model method now handles all the logic #}
+                        <img src="{{ profile.get_hero_image }}" 
+                             class="hero-img-styled" 
+                             alt="{{ profile.display_name }} hero image">
+                    </div>
+                </div>
 
-            </div>{# /row #}
-        </div>{# /container #}
-    </section>
+            </div>{# Closes the Row #}
+        </div>{# Closes the Container #}
+    </section>{# Closes the Section #}
 
    {# HOMEPAGE BODY TEXT #}
     {% if profile.homepage_body_text %}
