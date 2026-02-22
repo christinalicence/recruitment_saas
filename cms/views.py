@@ -17,27 +17,16 @@ def get_profile(request):
 
 
 def home(request):
-    """The main public landing page for the tenant site."""
-    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    
-    if not profile:
-        profile = CompanyProfile.objects.create(
-            tenant_slug=request.tenant.schema_name,
-            **get_profile_defaults(request)
-        )
-    return render(request, "cms/home.html", {'profile': profile})
+    profile = get_profile(request)
+    latest_jobs = Job.objects.all().order_by('-created_at')[:3]
+    return render(request, "cms/home.html", {
+        'profile': profile, 
+        'latest_jobs': latest_jobs
+    })
 
 
 def about(request):
-    """Safety-proofed about page with proper profile lookup."""
-    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    
-    if not profile:
-        profile = CompanyProfile.objects.create(
-            tenant_slug=request.tenant.schema_name,
-            **get_profile_defaults(request)
-        )
-        
+    profile = get_profile(request)
     return render(request, "cms/about.html", {'profile': profile})
 
 
@@ -50,20 +39,12 @@ def dashboard(request):
         tenant.save()
         messages.success(request, f"Master email updated to {new_email}")
         return redirect('cms:dashboard')
-
-    profile = CompanyProfile.objects.filter(tenant_slug=tenant.schema_name).first()
-    
-    if not profile:
-        profile = CompanyProfile.objects.create(
-            tenant_slug=tenant.schema_name,
-            **get_profile_defaults(request)
-        )
-
-    jobs = Job.objects.all()
-    
+    profile = get_profile(request)
+    jobs = Job.objects.all() 
+        
     return render(request, 'cms/dashboard.html', {
         'profile': profile,
-        'jobs': jobs, 
+        'jobs': jobs,
     })
 
 
@@ -101,29 +82,19 @@ def edit_site(request):
     })
 
 
-@login_required
 @xframe_options_exempt
+@login_required
 def live_preview(request):
-    profile, _ = CompanyProfile.objects.get_or_create(
-        tenant_slug=request.tenant.schema_name,
-        defaults={
-            'tenant_slug': request.tenant.schema_name,
-            'display_name': request.tenant.name,
-            **get_profile_defaults(request)
-        }
-    )
-
-    profile.template_choice = request.GET.get('template_choice', profile.template_choice)
-    profile.display_name = request.GET.get('display_name', profile.display_name)
-    profile.primary_color = request.GET.get('primary_color', profile.primary_color)
-    profile.secondary_color = request.GET.get('secondary_color', profile.secondary_color)
-    profile.background_color = request.GET.get('background_color', profile.background_color)
-    profile.hero_title = request.GET.get('hero_title', profile.hero_title)
-    profile.hero_text = request.GET.get('hero_text', profile.hero_text)
-
-    return render(request, "cms/home.html", {
+    profile = get_profile(request)
+    for field in ['template_choice', 'display_name', 'primary_color', 'secondary_color']:
+        val = request.GET.get(field)
+        if val:
+            setattr(profile, field, val)
+    
+    return render(request, 'cms/home.html', {
         'profile': profile,
-        'latest_jobs': Job.objects.all()[:3]
+        'latest_jobs': latest_jobs,
+        'is_preview': True
     })
 
 

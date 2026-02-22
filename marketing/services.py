@@ -39,12 +39,9 @@ class TenantService:
                     is_primary=True
                 )
 
-            # 2. Create the physical database schema
             tenant.create_schema(check_if_exists=True, verbosity=1)
             
-            # 3. Populate the new Tenant's database
             with schema_context(tenant.schema_name):
-                # Create the Admin User
                 User = get_user_model()
                 if not User.objects.filter(email=admin_email).exists():
                     User.objects.create_user(
@@ -76,7 +73,6 @@ class TenantService:
                     tenant_slug=schema_name,
                     defaults={
                         'display_name': company_name,
-                        'template_choice': template_id,
                         'primary_color': vibe['primary'],
                         'secondary_color': vibe['primary'],
                         'background_color': vibe['bg'],
@@ -84,34 +80,31 @@ class TenantService:
                         'hero_title': "Connecting Exceptional Talent with World-Class Teams",
                         'hero_text': (
                             "We specialize in finding the perfect match between industry leaders "
-                            "and top-tier professionals. Our rigorous selection process ensures "
-                            "that only the most qualified candidates are presented to our clients."
-                        ),
-                        
-                        'about_title': "Our Story",
-                        'about_content': (
-                            f"Founded with a vision to transform recruitment, {company_name} "
-                            "is dedicated to excellence in talent acquisition and career growth. "
-                            "We believe that the right person in the right role can change the "
-                            "trajectory of a business."
+                            "and top-tier professionals."
                         ),
                         
                         'homepage_body_text': (
-                            f"Welcome to {company_name}. We are a premier recruitment agency "
-                            "dedicated to bridging the gap between ambitious professionals and "
-                            "innovative companies. With decades of combined experience, our "
-                            "team uses a data-driven approach to identify talent that doesn't "
-                            "just fill a role, but drives long-term success."
+                            "Whether you're a business looking for your next key hire or a professional ready for a new challenge, "
+                            "we're here to make the right introduction. Our consultants bring deep sector knowledge and a "
+                            "personal approach to every search, ensuring that we don't just fill roles, but build lasting "
+                            "professional partnerships. By combining rigorous candidate screening with an intuitive understanding "
+                            "of company culture, we help organizations scale with confidence while guiding talented individuals "
+                            "toward the career-defining opportunities they deserve.\n\n"
+                            "We believe that recruitment is about more than just matching a CV to a job description; "
+                            "it is about recognizing potential and fostering growth. In today’s competitive landscape, "
+                            "finding the right fit requires a partner who listens as much as they search. From the initial "
+                            "consultation to the final placement, we remain committed to transparency, integrity, and the "
+                            "long-term success of both our clients and our candidates."
                         ),
                         
+                        'about_title': "Expertise. Integrity. Results.",
+                        'about_content': "With over a decade of experience in specialized recruitment...",
                         'jobs_header_text': "Current Vacancies",
                     }
-                )
 
             return tenant, domain_name
 
         except Exception as e:
-            # Emergency Cleanup: If anything fails, wipe the schema so they can try again
             connection.set_schema_to_public()
             with connection.cursor() as cursor:
                 cursor.execute(f"DROP SCHEMA IF EXISTS {schema_name} CASCADE;")
