@@ -170,6 +170,15 @@ A key point in the ethos of the site is to retain as little data as possible.
 
 Things we need are customer data - the data about who they are, and the data about the sites they have designed.
 
+This site uses seperate schemas for each tenant to try and maintain the best security and stabiltiy.
+ 
+There is a model for each client/tenant. This holds information about payment and trials etc.
+
+Within their schema there is a company profile model, which holds information for their webiste (ie pictures, text etc that they have created.)
+
+Within their schema there is also a model for each job. This holds information about the individual jobs they post as adverts.
+
+The way they are linked is slightly different to a standard Django app because the job and profile model's only exist within the company's individual schemas. This took a while for me to really understand and lead to a persistent - I had put a pk for the client in the job model which wasn't necessary and caused my tests to crash because they couldn't delete the jobs and caused me to have issues when trying to tidy up my database as I couldn't delete clients (because Djangp needed the jobs to be attached to something, the cascade feature didn't work)
 
 ## Persistant Bugs and Challenged
 

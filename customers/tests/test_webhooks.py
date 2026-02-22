@@ -20,7 +20,6 @@ class StripeWebhookTests(TenantTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # Fix for the "cms_job" relation error
         pass
 
     def setUp(self):

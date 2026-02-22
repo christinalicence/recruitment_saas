@@ -16,6 +16,11 @@ class PreviewFrameTest(TenantTestCase):
         domain.domain = 'preview-test.localhost'
         return domain
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.tenant.create_schema(check_if_exists=True)
+
     def setUp(self):
         clear_url_caches()
         with schema_context(self.tenant.schema_name):
@@ -38,4 +43,4 @@ class PreviewFrameTest(TenantTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        pass
+        super().tearDownClass()

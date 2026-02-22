@@ -38,15 +38,12 @@ class MarketingPagesTest(TestCase):
 
     def test_pages_load(self):
         """Verify marketing pages return 200 and contain expected branding."""
-        # Test Landing Page
         response = self.client.get('/', HTTP_HOST="testserver")
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Pillar & Post") # Check branding
-
-        # Test Template Selection
+        self.assertContains(response, "Pillar & Post")
         response = self.client.get('/choose-template/', HTTP_HOST="testserver")
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "The Executive") # Check data from view
+        self.assertContains(response, "The Executive")
 
     def test_tenant_signup_creates_client(self):
         """Verify that the signup form triggers tenant creation via TenantService."""
@@ -80,7 +77,7 @@ def test_tenant_domain_mapping(self):
         self.assertEqual(domain.domain, "green-recruitment.getpillarpost.com")
         self.assertTrue(domain.is_primary)
 
-    def test_tenant_signup_redirects_to_subdomain(self):
+def test_tenant_signup_redirects_to_subdomain(self):
         """Verify signup redirects to the new tenant subdomain."""
         data = {
             'company_name': 'Blue Agency',
@@ -88,12 +85,10 @@ def test_tenant_domain_mapping(self):
             'password': 'SecurePassword123!',
         }
         response = self.client.post('/signup/', data, HTTP_HOST="testserver")
-        
-        # Check for the expected redirect URL (slugified name + base domain)
         expected_url = "https://blue-agency.getpillarpost.com/login/"
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, expected_url)
 
-    def tearDown(self):
+def tearDown(self):
         set_urlconf(None)
         clear_url_caches()

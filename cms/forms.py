@@ -56,7 +56,12 @@ class CompanyProfileForm(forms.ModelForm):
             'primary_color':     forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
             'secondary_color':   forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
             'background_color':  forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
-            'homepage_body_text': forms.Textarea(attrs={'rows': 5, 'data-maxchars': CHAR_LIMITS['homepage_body_text'], 'data-recco-min': 350, 'data-recco-max': 600}),
+            'homepage_body_text': forms.Textarea(attrs={
+                'rows': 6, 
+                'data-maxchars': 1200, 
+                'data-recco-min': 700, 
+                'data-recco-max': 850
+            }),
             'about_content': forms.Textarea(attrs={'rows': 8, 'data-maxchars': CHAR_LIMITS['about_content'], 'data-recco-min': 600, 'data-recco-max': 1000}),
             'address':           forms.Textarea(attrs={'rows': 3, 'placeholder': 'e.g. 123 Recruiter Way,\nLondon,\nNW1 1AA'}),
             'jobs_header_text': forms.Textarea(attrs={'rows': 2, 'data-maxchars': CHAR_LIMITS['jobs_header_text'], 'data-recco-min': 100, 'data-recco-max': 180}),

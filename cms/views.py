@@ -13,27 +13,58 @@ from cloudinary.exceptions import BadRequest
 
 def get_profile_defaults(request):
     """
-    Centralized helper to provide professional recruitment content 
-    and set initial defaults for new tenants.
+    Sets unique initial vibes for each theme without hardcoding CSS.
+    These are only saved once at signup; the tenant can override them anytime.
     """
+    template_id = request.tenant.template_choice
+    
+    configs = {
+        'executive': {
+            'primary': '#0f172a',
+            'bg': '#ffffff',
+        },
+        'startup': {
+            'primary': '#2563eb',
+            'bg': '#f8fafc',
+        },
+        'boutique': {
+            'primary': '#166534',
+            'bg': '#fffcf5',
+        }
+    }
+
+    vibe = configs.get(template_id, configs['executive'])
+
     return {
         'display_name': request.tenant.name,
-        'primary_color': '#0f172a',
-        'secondary_color': '#0f172a',
-        'background_color': '#ffffff',
+        'primary_color': vibe['primary'],
+        'secondary_color': vibe['primary'],
+        'background_color': vibe['bg'],
+        
+
         'hero_title': "Connecting Exceptional Talent with World-Class Teams",
         'hero_text': (
-            "We specialize in finding the perfect match between high-growth companies "
-            "and industry-leading professionals."
+            "We specialize in finding the perfect match between industry leaders "
+            "and top-tier professionals."
         ),
+        
         'homepage_body_text': (
-            "Whether you're a business looking for your next key hire, or a professional "
-            "ready for a new challenge, we're here to make the right introduction. "
-            "Our consultants bring deep sector knowledge and a personal approach to every search."
+            "Whether you're a business looking for your next key hire or a professional ready for a new challenge, "
+            "we're here to make the right introduction. Our consultants bring deep sector knowledge and a "
+            "personal approach to every search, ensuring that we don't just fill roles, but build lasting "
+            "professional partnerships. By combining rigorous candidate screening with an intuitive understanding "
+            "of company culture, we help organizations scale with confidence while guiding talented individuals "
+            "toward the career-defining opportunities they deserve.\n\n"
+            "We believe that recruitment is about more than just matching a CV to a job description; "
+            "it is about recognizing potential and fostering growth. In today’s competitive landscape, "
+            "finding the right fit requires a partner who listens as much as they search. From the initial "
+            "consultation to the final placement, we remain committed to transparency, integrity, and the "
+            "long-term success of both our clients and our candidates."
         ),
+        
         'about_title': "Expertise. Integrity. Results.",
         'about_content': "With over a decade of experience in specialized recruitment...",
-        'jobs_header_text': "Explore our current openings.",
+        'jobs_header_text': "Current Vacancies",
     }
 
 
@@ -240,6 +271,7 @@ def public_job_detail(request, pk):
         'job': job,
         'profile': profile
     })
+
 
 def apply_to_job(request, pk):
     """Handles the application email trigger with safety checks."""
