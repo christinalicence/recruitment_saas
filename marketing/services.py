@@ -101,6 +101,7 @@ class TenantService:
                         'about_content': "With over a decade of experience in specialized recruitment...",
                         'jobs_header_text': "Current Vacancies",
                     }
+                )
 
             return tenant, domain_name
 
