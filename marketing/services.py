@@ -5,7 +5,6 @@ from django_tenants.utils import schema_context
 from customers.models import Client, Domain, Plan
 from django.contrib.auth import get_user_model
 
-
 class TenantService:
     @staticmethod
     def create_onboarding_tenant(company_name, admin_email, password, template_id='executive'):
@@ -15,6 +14,7 @@ class TenantService:
         schema_name = tenant_slug.replace('-', '_')
 
         try:
+            # 1. Setup in Public Schema
             connection.set_schema_to_public() 
             stripe_id = os.getenv('price_id_standard')
             standard_plan, _ = Plan.objects.get_or_create(
@@ -39,10 +39,12 @@ class TenantService:
                     is_primary=True
                 )
 
+            # 2. Create the physical database schema
             tenant.create_schema(check_if_exists=True, verbosity=1)
             
+            # 3. Populate the new Tenant's database
             with schema_context(tenant.schema_name):
-                # 1. Create User
+                # Create the Admin User
                 User = get_user_model()
                 if not User.objects.filter(email=admin_email).exists():
                     User.objects.create_user(
@@ -52,7 +54,7 @@ class TenantService:
                         is_active=True
                     )
                 
-                # 2. Defaults from Views (Meticulously Checked)
+                # Branding Configurations (Restored)
                 configs = {
                     'executive': {
                         'primary': '#0f172a',
@@ -109,6 +111,7 @@ class TenantService:
             return tenant, domain_name
 
         except Exception as e:
+            # Emergency Cleanup: If anything fails, wipe the schema so they can try again
             connection.set_schema_to_public()
             with connection.cursor() as cursor:
                 cursor.execute(f"DROP SCHEMA IF EXISTS {schema_name} CASCADE;")
