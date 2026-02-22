@@ -61,11 +61,9 @@ class CompanyProfile(models.Model):
     facebook_url = models.URLField(max_length=200, blank=True)
 
     def get_hero_image(self):
-        """Returns uploaded hero or the specific default for the chosen theme."""
         if self.hero_image:
             return self.hero_image.url
-        filename = f'marketing/images/default_{self.template_choice}.webp'
-        return static(filename)
+        return static(f'marketing/images/default_{self.template_choice}.webp')
 
     def get_team_photo(self):
         """Returns uploaded team photo or the default about image."""

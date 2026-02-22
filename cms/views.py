@@ -23,9 +23,9 @@ def get_profile_defaults(request):
             'primary': '#0f172a',
             'bg': '#ffffff',
         },
-        'startup': {
-            'primary': '#334155',
-            'bg': '#f1f5f9',
+'       startup': {
+            'primary': '#4a5d5e',   
+            'bg': '#f0f4f4',         
         },
         'boutique': {
             'primary': '#3f6212',

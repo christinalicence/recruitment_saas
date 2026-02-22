@@ -1,18 +1,15 @@
 {% extends "cms/base_tenant.html" %}
-{% load static %}\
+{% load static %}
 
-{% block title %}{{ profile.display_name }} Home Page {% endblock %}
+{% block title %}{{ profile.display_name }} | Careers{% endblock %}
 
 {% block content %}
 <div class="agency-site">
 
-    {# HERO SECTION #}
     <section class="hero-section">
         <div class="container">
             <div class="row align-items-center 
                 {% if profile.template_choice == 'startup' %}
-                    flex-column-reverse flex-lg-row
-                {% elif profile.template_choice == 'boutique' %}
                     flex-row-reverse
                 {% endif %}">
 
@@ -31,18 +28,16 @@
                 {# Column 2: Image Content #}
                 <div class="col-12 col-lg-5 mb-5 mb-lg-0">
                     <div class="hero-image-wrapper">
-                        {# The model method now handles all the logic #}
                         <img src="{{ profile.get_hero_image }}" 
                              class="hero-img-styled" 
                              alt="{{ profile.display_name }} hero image">
                     </div>
                 </div>
 
-            </div>{# Closes the Row #}
-        </div>{# Closes the Container #}
-    </section>{# Closes the Section #}
+            </div>
+        </div>
+    </section>
 
-   {# HOMEPAGE BODY TEXT #}
     {% if profile.homepage_body_text %}
     <section class="py-4">
         <div class="container">
