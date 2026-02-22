@@ -17,12 +17,9 @@ def get_profile(request):
 
 
 def home(request):
+    """The main public landing page."""
     profile = get_profile(request)
-    latest_jobs = Job.objects.all().order_by('-created_at')[:3]
-    return render(request, "cms/home.html", {
-        'profile': profile, 
-        'latest_jobs': latest_jobs
-    })
+    return render(request, "cms/home.html", {'profile': profile})
 
 
 def about(request):
@@ -82,19 +79,17 @@ def edit_site(request):
     })
 
 
-@xframe_options_exempt
 @login_required
+@xframe_options_exempt
 def live_preview(request):
+    """
+    Renders the site using the latest SAVED data.
+    Removed Job queries to match the streamlined home.html.
+    """
     profile = get_profile(request)
-    for field in ['template_choice', 'display_name', 'primary_color', 'secondary_color']:
-        val = request.GET.get(field)
-        if val:
-            setattr(profile, field, val)
-    
-    return render(request, 'cms/home.html', {
+    return render(request, "cms/home.html", {
         'profile': profile,
-        'latest_jobs': latest_jobs,
-        'is_preview': True
+        'is_preview': True  
     })
 
 
@@ -164,16 +159,10 @@ def delete_job(request, pk):
 # --- PUBLIC FACING VIEWS ---
 
 def public_job_list(request):
-    """The public page where candidates browse all jobs."""
-    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    if not profile:
-        profile = CompanyProfile.objects.create(
-            tenant_slug=request.tenant.schema_name,
-            **get_profile_defaults(request)
-        )
-    jobs = Job.objects.all().order_by('-created_at')
+    profile = get_profile(request)
+    jobs = Job.objects.all().order_by('-created_at') 
     return render(request, "cms/job_list.html", {
-        'profile': profile,
+        'profile': profile, 
         'jobs': jobs
     })
 
