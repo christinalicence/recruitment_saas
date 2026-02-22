@@ -7,13 +7,12 @@
     <title>{% block title %}{{ profile.display_name }}{% endblock %}</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{% static 'cms/css/tenant_themes.css' %}">
     <link rel="icon" type="image/x-icon" href="{% static 'marketing/images/favicons/favicon.ico' %}">
     <link rel="apple-touch-icon" href="{% static 'marketing/images/favicons/favicon.ico' %}">
     
     <style>
-        /* stylelint-disable */
         /* primary = hero bg, secondary = body text, bg = page background
            Targets body.theme-* for specificity 0,1,1 — beats .theme-* at 0,1,0 */
         body.theme-{{ profile.template_choice|default:'executive' }} {
@@ -21,7 +20,6 @@
             --brand-secondary: {{ profile.secondary_color|default:"#0f172a" }};
             --brand-bg:        {{ profile.background_color|default:"#ffffff" }};
         }
-        /* stylelint-enable */
     </style>
 </head>
 <body class="theme-{{ profile.template_choice|default:'executive' }} agency-site">
@@ -64,42 +62,53 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer py-5 mt-auto">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    {# Hidden on mobile (d-none), shown on desktop (d-md-block) #}
-                    <div class="d-none d-md-block mb-3">
-                        <h5 class="fw-bold mb-2">{{ profile.display_name }}</h5>
-                        {# Displays first 20 words of hero text as a pitch #}
-                        <p class="text-muted small">{{ profile.hero_text|truncatewords:20 }}</p>
-                    </div>
-                    <div class="d-flex gap-3 fs-5">
-                        {% if profile.linkedin_url %}
-                            <a href="{{ profile.linkedin_url }}" class="text-muted" target="_blank"><i class="bi bi-linkedin"></i></a>
-                        {% endif %}
-                        {% if profile.facebook_url %}
-                            <a href="{{ profile.facebook_url }}" class="text-muted" target="_blank"><i class="bi bi-facebook"></i></a>
-                        {% endif %}
-                        {% if profile.contact_email %}
-                            <a href="mailto:{{ profile.contact_email }}" class="text-muted"><i class="bi bi-envelope-fill"></i></a>
-                        {% endif %}
-                    </div>
+<footer class="footer py-5 mt-auto">
+    <div class="container">
+        <div class="row g-4">
+            
+            {# Column 1: Brand & Socials #}
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <h5 class="fw-bold mb-2">{{ profile.display_name }}</h5>
+                    {# Hero text removed to keep it tidy #}
                 </div>
+                
+                {# Social Row - Using the exact model fields you provided #}
+                <div class="d-flex gap-3 fs-4">
+                    {% if profile.linkedin_url %}
+                        <a href="{{ profile.linkedin_url }}" class="text-muted" target="_blank"><i class="bi bi-linkedin"></i></a>
+                    {% endif %}
+                    {% if profile.facebook_url %}
+                        <a href="{{ profile.facebook_url }}" class="text-muted" target="_blank"><i class="bi bi-facebook"></i></a>
+                    {% endif %}
+                    {% if profile.contact_email %}
+                        <a href="mailto:{{ profile.contact_email }}" class="text-muted"><i class="bi bi-envelope-fill"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Column 2: Contact Details (Aligned Right on Desktop) #}
             <div class="col-md-6 text-md-end">
                 <h6 class="fw-bold mb-3 small text-uppercase" style="letter-spacing: 1px;">Contact Us</h6>
                 <div class="text-muted small">
                     {% if profile.address %}
                         <div class="mb-2">{{ profile.address|linebreaksbr }}</div>
                     {% endif %}
+                    
                     {% if profile.contact_phone %}
-                        <div>{{ profile.contact_phone }}</div>
+                        <div class="mb-1"><i class="bi bi-telephone-fill me-1"></i> {{ profile.contact_phone }}</div>
+                    {% endif %}
+
+                    {% if profile.contact_email %}
+                        <div><i class="bi bi-envelope-at me-1"></i> {{ profile.contact_email }}</div>
                     {% endif %}
                 </div>
             </div>
+
         </div>
+
         <div class="mt-5 pt-4 border-top text-center text-muted small">
-            &copy; {{ profile.display_name }} {% now "Y" %}. All rights reserved.
+            &copy; {{ profile.display_name }} {% now "Y" %}.
         </div>
     </div>
 </footer>

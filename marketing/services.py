@@ -15,16 +15,12 @@ class TenantService:
 
         try:
             connection.set_schema_to_public() 
-            
-            # Re-checking Stripe logic: pulls from env as before
             stripe_id = os.getenv('price_id_standard')
             standard_plan, _ = Plan.objects.get_or_create(
                 name="Standard",
                 defaults={'stripe_price_id': stripe_id}
             )
             
-            # STEP A: Create records in Public. 
-            # We keep this atomic to ensure Client + Domain exist together
             with transaction.atomic(using='default'):
                 tenant = Client.objects.create(
                     schema_name=schema_name,
@@ -42,12 +38,7 @@ class TenantService:
                     is_primary=True
                 )
 
-            # STEP B: Manual Schema Creation.
-            # This is OUTSIDE the atomic block to prevent the "Pending Trigger" lock.
-            # This requires 'auto_create_schema = False' in models.py.
             tenant.create_schema(check_if_exists=True, verbosity=1)
-
-            # STEP C: Create User in the new schema
             with schema_context(tenant.schema_name):
                 User = get_user_model()
                 if not User.objects.filter(email=admin_email).exists():
@@ -57,12 +48,19 @@ class TenantService:
                         password=password,
                         is_active=True
                     )
+                
+                from cms.models import CompanyProfile
+                if not CompanyProfile.objects.exists():
+                    CompanyProfile.objects.create(
+                        tenant_slug=tenant_slug,
+                        display_name=company_name,
+                        template_choice=template_id, # THIS keeps the theme locked in
+                    )
 
             return tenant, domain_name
 
         except Exception as e:
             connection.set_schema_to_public()
-            # If the schema was created but User creation failed, we nuke it
             with connection.cursor() as cursor:
                 cursor.execute(f"DROP SCHEMA IF EXISTS {schema_name} CASCADE;")
             print(f"Cleanup successful after error: {e}")
