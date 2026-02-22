@@ -143,3 +143,8 @@ def payment_success(request):
     """The view for the post-Stripe redirection."""
     profile = get_profile(request)
     return render(request, 'cms/payment_success.html', {'profile': profile})
+
+def payment_cancel(request):
+    """The view for when a user cancels the Stripe checkout process."""
+    profile = get_profile(request)
+    return render(request, 'cms/payment_cancel.html', {'profile': profile})
