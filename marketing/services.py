@@ -40,7 +40,9 @@ class TenantService:
                 )
 
             tenant.create_schema(check_if_exists=True, verbosity=1)
+            
             with schema_context(tenant.schema_name):
+                # 1. Create User
                 User = get_user_model()
                 if not User.objects.filter(email=admin_email).exists():
                     User.objects.create_user(
@@ -49,6 +51,23 @@ class TenantService:
                         password=password,
                         is_active=True
                     )
+                
+                # 2. Defaults from Views (Meticulously Checked)
+                configs = {
+                    'executive': {
+                        'primary': '#0f172a',
+                        'bg': '#ffffff',
+                    },
+                    'startup': {
+                        'primary': '#4a5d5e',   
+                        'bg': '#f0f4f4',         
+                    },
+                    'boutique': {
+                        'primary': '#3f6212',
+                        'bg': '#fafaf9',
+                    }
+                }
+                vibe = configs.get(template_id, configs['executive'])
 
                 from cms.models import CompanyProfile
                 CompanyProfile.objects.update_or_create(
@@ -56,6 +75,34 @@ class TenantService:
                     defaults={
                         'display_name': company_name,
                         'template_choice': template_id,
+                        'primary_color': vibe['primary'],
+                        'secondary_color': vibe['primary'],
+                        'background_color': vibe['bg'],
+                        
+                        'hero_title': "Connecting Exceptional Talent with World-Class Teams",
+                        'hero_text': (
+                            "We specialize in finding the perfect match between industry leaders "
+                            "and top-tier professionals. Our rigorous selection process ensures "
+                            "that only the most qualified candidates are presented to our clients."
+                        ),
+                        
+                        'about_title': "Our Story",
+                        'about_content': (
+                            f"Founded with a vision to transform recruitment, {company_name} "
+                            "is dedicated to excellence in talent acquisition and career growth. "
+                            "We believe that the right person in the right role can change the "
+                            "trajectory of a business."
+                        ),
+                        
+                        'homepage_body_text': (
+                            f"Welcome to {company_name}. We are a premier recruitment agency "
+                            "dedicated to bridging the gap between ambitious professionals and "
+                            "innovative companies. With decades of combined experience, our "
+                            "team uses a data-driven approach to identify talent that doesn't "
+                            "just fill a role, but drives long-term success."
+                        ),
+                        
+                        'jobs_header_text': "Current Vacancies",
                     }
                 )
 
@@ -65,4 +112,5 @@ class TenantService:
             connection.set_schema_to_public()
             with connection.cursor() as cursor:
                 cursor.execute(f"DROP SCHEMA IF EXISTS {schema_name} CASCADE;")
+            print(f"Cleanup successful after error: {e}")
             return None, None
