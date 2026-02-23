@@ -73,6 +73,7 @@ class TenantService:
                     tenant_slug=schema_name,
                     defaults={
                         'display_name': company_name,
+                        'template_choice': template_id,
                         'primary_color': vibe['primary'],
                         'secondary_color': vibe['primary'],
                         'background_color': vibe['bg'],

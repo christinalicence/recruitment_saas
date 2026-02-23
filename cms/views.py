@@ -51,13 +51,7 @@ def edit_site(request):
     Site Editor: Maintains all preview logic, prevents MultipleObjectsReturned,
     and catches Cloudinary 'File Too Large' errors.
     """
-    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    
-    if not profile:
-        profile = CompanyProfile.objects.create(
-            tenant_slug=request.tenant.schema_name,
-            **get_profile_defaults(request)
-        )
+    profile = get_profile(request)
 
     if request.method == 'POST':
         form = CompanyProfileForm(request.POST, request.FILES, instance=profile)
@@ -89,7 +83,7 @@ def live_preview(request):
     profile = get_profile(request)
     return render(request, "cms/home.html", {
         'profile': profile,
-        'is_preview': True  
+        'is_preview': True
     })
 
 
@@ -169,12 +163,7 @@ def public_job_list(request):
 
 def public_job_detail(request, pk):
     job = get_object_or_404(Job, pk=pk)
-    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-    if not profile:
-        profile = CompanyProfile.objects.create(
-            tenant_slug=request.tenant.schema_name,
-            **get_profile_defaults(request)
-        )
+    profile = get_profile(request)
     return render(request, "cms/public_job_detail.html", {
         'job': job,
         'profile': profile
@@ -184,7 +173,7 @@ def public_job_detail(request, pk):
 def apply_to_job(request, pk):
     """Handles the application email trigger with safety checks."""
     job = get_object_or_404(Job, pk=pk)
-    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    profile = get_profile(request)
 
     if request.method == 'POST':
         candidate_name = request.POST.get('full_name', 'Not provided')
@@ -242,5 +231,5 @@ def apply_to_job(request, pk):
 
 
 def application_success(request):
-    profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
+    profile = get_profile(request)
     return render(request, 'cms/application_success.html', {'profile': profile})
