@@ -1,9 +1,8 @@
 import stripe
-import os
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.contrib import messages
 from .models import Client
 from django.core.mail import send_mail
@@ -11,8 +10,7 @@ from django.core.mail import send_mail
 
 def create_checkout_session(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
-    client = request.tenant
-    
+    client = request.tenant 
     if not client.stripe_customer_id:
         customer = stripe.Customer.create(
             email=request.user.email,
@@ -24,8 +22,7 @@ def create_checkout_session(request):
 
     # Determine protocol based on environment, keep local development on http
     protocol = "https" if not settings.DEBUG else "http"
-    current_host = request.get_host() 
-    
+    current_host = request.get_host()
     session = stripe.checkout.Session.create(
         customer=client.stripe_customer_id,
         payment_method_types=['card'],
@@ -35,7 +32,6 @@ def create_checkout_session(request):
         cancel_url=f"{protocol}://{current_host}/billing/cancel/",
         metadata={'tenant_id': client.id}
     )
-    
     return redirect(session.url, code=303)
 
 
@@ -55,6 +51,7 @@ def customer_portal(request):
         messages.error(request, f"Stripe Portal Error: {str(e)}")
         return redirect('cms:dashboard')
 
+
 @csrf_exempt
 def stripe_webhook(request):
     """Handle incoming Stripe webhooks to update tenant subscription status."""
@@ -66,12 +63,10 @@ def stripe_webhook(request):
     try:
         event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
     except Exception:
-        return HttpResponse(status=400)
-    
+        return HttpResponse(status=400)   
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        tenant_id = session.get('metadata', {}).get('tenant_id')
-        
+        tenant_id = session.get('metadata', {}).get('tenant_id')   
         if tenant_id:
             client = Client.objects.get(id=tenant_id)
             client.is_active = True
@@ -93,14 +88,12 @@ def stripe_webhook(request):
 
     elif event['type'] == 'invoice.payment_failed':
         session = event['data']['object']
-        customer_id = session.get('customer')
-        
+        customer_id = session.get('customer')   
         if customer_id:
             try:
                 client = Client.objects.get(stripe_customer_id=customer_id)
                 client.is_active = False 
-                client.save()
-                
+                client.save()   
                 try:
                     send_mail(
                         subject="Action Required: Payment Failed",

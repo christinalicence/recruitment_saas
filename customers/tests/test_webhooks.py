@@ -4,7 +4,7 @@ from django.test import RequestFactory
 from django_tenants.test.cases import TenantTestCase
 from django_tenants.utils import schema_context, get_public_schema_name
 from customers.views import stripe_webhook
-from customers.models import Client
+
 
 class StripeWebhookTests(TenantTestCase):
     @classmethod
@@ -15,12 +15,12 @@ class StripeWebhookTests(TenantTestCase):
 
     @classmethod
     def setup_domain(cls, domain):
-        domain.domain = 'testserver' 
+        domain.domain = 'webhook-test.localhost'
         return domain
 
     @classmethod
     def tearDownClass(cls):
-        pass
+        super().tearDownClass()
 
     def setUp(self):
         super().setUp()
@@ -43,14 +43,13 @@ class StripeWebhookTests(TenantTestCase):
         }
 
         request = self.factory.post(
-            '/customers/stripe-webhook/', 
-            data=json.dumps(payload), 
+            '/customers/stripe-webhook/',
+            data=json.dumps(payload),
             content_type="application/json"
         )
         mock_webhook.return_value = payload
         response = stripe_webhook(request)
         self.assertEqual(response.status_code, 200)
-        
         with schema_context(get_public_schema_name()):
             self.tenant.refresh_from_db()
             self.assertTrue(self.tenant.is_active)
@@ -67,17 +66,13 @@ class StripeWebhookTests(TenantTestCase):
         }
 
         request = self.factory.post(
-            '/customers/stripe-webhook/', 
-            data=json.dumps(payload), 
+            '/customers/stripe-webhook/',
+            data=json.dumps(payload),
             content_type="application/json"
         )
-        
         mock_webhook.return_value = payload
-
         response = stripe_webhook(request)
-        
         self.assertEqual(response.status_code, 200)
-        
         with schema_context(get_public_schema_name()):
             self.tenant.refresh_from_db()
             self.assertFalse(self.tenant.is_active)

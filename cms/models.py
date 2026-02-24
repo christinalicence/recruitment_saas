@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 from django.templatetags.static import static
 
 
@@ -10,13 +9,13 @@ class CompanyProfile(models.Model):
         ('startup', 'The Startup'),
         ('boutique', 'The Boutique'),
     ]
-    
+
     # Identity & Branding
     template_choice = models.CharField(
         max_length=20, 
         choices=TEMPLATE_CHOICES, 
         default='executive')
-    
+
     display_name = models.CharField(max_length=255) 
     logo = models.ImageField(
         upload_to='logos/', 
@@ -27,21 +26,21 @@ class CompanyProfile(models.Model):
     primary_color = models.CharField(max_length=7, default="#0f172a")
     secondary_color = models.CharField(max_length=7, default="#0f172a")
     background_color = models.CharField(max_length=7, default="#ffffff")
-    
+
     # Hero Section
     hero_title = models.CharField(max_length=200, default="Great Careers Await")
     hero_text = models.TextField(blank=True, help_text="The main pitch to candidates")
     hero_image = models.ImageField(upload_to='hero/', null=True, blank=True)
     homepage_body_text = models.TextField(
-    blank=True,
-    help_text="Short paragraph shown below the hero section on the homepage."
-)
-    
+        blank=True,
+        help_text="Short paragraph shown below the hero section on the homepage."
+    )
+
     # About Us
     about_title = models.CharField(max_length=200, default="Our Story", blank=True)
     team_photo = models.ImageField(upload_to='team/', null=True, blank=True)
     about_content = models.TextField(blank=True)
-    
+
     # Jobs Section
     jobs_header_text = models.TextField(blank=True, default="Explore our current openings.")
     featured_job = models.ForeignKey(
@@ -52,7 +51,7 @@ class CompanyProfile(models.Model):
         related_name='featured_in_profile',
         help_text="Choose a job to feature on your homepage"
     )
-    
+
     # Contact & Social
     contact_email = models.EmailField(max_length=200, blank=True, help_text="General enquiries email")
     contact_phone = models.CharField(max_length=50, blank=True, help_text="Main contact number")
@@ -97,14 +96,14 @@ class Job(models.Model):
         blank=True, 
         help_text="Optional: A second email to receive applications for this job."
     )
-    
+
     # For future LinkedIn sharing
     linkedin_post_id = models.CharField(max_length=100, blank=True, null=True)
     last_shared_date = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ['-created_at']
-    
+
     def __str__(self):
         return f"{self.title} - {self.location}"
 
@@ -112,6 +111,6 @@ class Job(models.Model):
 class Page(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
-    
+
     def __str__(self):
         return self.title

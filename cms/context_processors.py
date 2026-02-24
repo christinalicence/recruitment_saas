@@ -1,11 +1,11 @@
 from cms.models import CompanyProfile
 
+
 def tenant_profile(request):
     profile = None
     if hasattr(request, 'tenant') and request.tenant.schema_name != 'public':
         # Filter and .first() is the secret sauce to stop the "Multiple" errors
         profile = CompanyProfile.objects.filter(tenant_slug=request.tenant.schema_name).first()
-        
     return {
         'profile': profile,
         'tenant': request.tenant if hasattr(request, 'tenant') else None

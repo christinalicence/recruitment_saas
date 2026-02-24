@@ -1,7 +1,7 @@
 from django.test import override_settings
 from django.urls import reverse, clear_url_caches
-from django_tenants.utils import schema_context, get_public_schema_name
 from django_tenants.test.cases import TenantTestCase
+
 
 class DashboardAccessTest(TenantTestCase):
     @classmethod
@@ -16,7 +16,6 @@ class DashboardAccessTest(TenantTestCase):
 
     def setUp(self):
         clear_url_caches()
-
 
     @override_settings(ROOT_URLCONF='recruit_saas.urls_tenant')
     def test_dashboard_requires_login(self):

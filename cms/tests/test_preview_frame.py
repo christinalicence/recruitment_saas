@@ -5,6 +5,7 @@ from django_tenants.utils import schema_context
 from cms.models import CompanyProfile
 from django_tenants.test.cases import TenantTestCase
 
+
 class PreviewFrameTest(TenantTestCase):
     @classmethod
     def setup_tenant(cls, tenant):

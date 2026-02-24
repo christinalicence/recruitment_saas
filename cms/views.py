@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.contrib import messages
 from django.conf import settings
-from django.core.mail import send_mail
 
 from .models import CompanyProfile, Job
 from .forms import CompanyProfileForm, JobForm
@@ -37,8 +36,7 @@ def dashboard(request):
         messages.success(request, f"Master email updated to {new_email}")
         return redirect('cms:dashboard')
     profile = get_profile(request)
-    jobs = Job.objects.all() 
-        
+    jobs = Job.objects.all()       
     return render(request, 'cms/dashboard.html', {
         'profile': profile,
         'jobs': jobs,
@@ -189,7 +187,6 @@ def apply_to_job(request, pk):
 
         if not recipients and request.tenant.master_email:
             recipients.append(request.tenant.master_email)
-        
         recipients = list(set(recipients))
 
         if not recipients:
@@ -217,7 +214,6 @@ def apply_to_job(request, pk):
             if cv_file.size > 5 * 1024 * 1024:
                 messages.error(request, "File too large. Please upload a CV smaller than 5MB.")
                 return redirect('cms:public_job_detail', pk=pk)
-            
             email_msg.attach(cv_file.name, cv_file.read(), cv_file.content_type)
 
         try:

@@ -2,7 +2,9 @@ from django import template
 from django.urls import reverse, set_urlconf, get_urlconf
 from django.conf import settings
 
-register = template.Library()
+register = template.Library()\
+
+
 
 @register.simple_tag
 def public_url(view_name, *args, **kwargs):

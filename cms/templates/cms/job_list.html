@@ -9,7 +9,7 @@
             {% for job in jobs %}
             <div class="col-md-6 col-lg-4">
                 <div class="card-brand h-100 bg-white shadow-sm border-0 p-4">
-                    <h2 class="h5 fw-bold">{{ job.title }}</h3>
+                    <h2 class="h5 fw-bold">{{ job.title }}</h2>
                     <p class="text-muted small">{{ job.location }} |{{ job.salary }}</p>
                     <p class="card-text">{{ job.summary }}</p>
                     <a href="{% url 'cms:public_job_detail' job.pk %}" class="btn btn-outline-primary btn-sm mt-3">View Details</a>

@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django_tenants.utils import schema_context
-from .models import Client, Domain, Plan
+from .models import Client
 from cms.models import Job 
+
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):

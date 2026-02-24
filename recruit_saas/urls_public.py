@@ -10,7 +10,6 @@ urlpatterns = [
     path('signup/', views.tenant_signup, name='tenant_signup'),
     path('find-portal/', views.portal_finder, name='portal_finder'),
     path('about/', views.company_about, name='about'),
-    
     # Root page - must be last
     path('', views.landing_page, name='landing'),
 ]

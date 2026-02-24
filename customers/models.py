@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from datetime import date, timedelta
 import uuid
 
+
 class Plan(models.Model):
     """The 'Standard' plan for the MVP."""
     name = models.CharField(max_length=50, default="Standard")
@@ -13,6 +14,7 @@ class Plan(models.Model):
     def __str__(self):
         return self.name
 
+
 class Client(TenantMixin):
     TEMPLATE_CHOICES = [
         ('executive', 'The Executive'),
@@ -21,20 +23,16 @@ class Client(TenantMixin):
     ]
     name = models.CharField(max_length=100)
     template_choice = models.CharField(max_length=50, choices=TEMPLATE_CHOICES, default='executive')
-    
     # Subscription tracking
     plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, null=True, blank=True)
     created_on = models.DateField(default=date.today)
     trial_ends = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
-
     # Notification Emails
     master_email = models.EmailField(blank=True, null=True)
     notification_email_1 = models.EmailField(max_length=255, blank=True, null=True)
     notification_email_2 = models.EmailField(max_length=255, blank=True, null=True)
-    
     stripe_customer_id = models.CharField(max_length=100, blank=True)
-
     auto_create_schema = False  # triggered in servies
 
     @property
@@ -46,8 +44,7 @@ class Client(TenantMixin):
 
     def save(self, *args, **kwargs):
         if not self.trial_ends:
-            self.trial_ends = date.today() + timedelta(days=14)
-            
+            self.trial_ends = date.today() + timedelta(days=14)     
         if not self.schema_name:
             base_slug = slugify(self.name)
             if Client.objects.filter(schema_name=base_slug).exists():

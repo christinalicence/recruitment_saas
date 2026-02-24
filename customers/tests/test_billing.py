@@ -2,7 +2,7 @@ import json
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from unittest.mock import patch
-from customers.models import Client, Plan
+from customers.models import Plan
 from customers.views import create_checkout_session, stripe_webhook
 from django_tenants.utils import schema_context, get_public_schema_name
 from django_tenants.test.cases import TenantTestCase

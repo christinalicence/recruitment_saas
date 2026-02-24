@@ -5,12 +5,12 @@ from django.core.exceptions import ValidationError
 
 # Character limits for key fields to maintain design integrity across themes.
 CHAR_LIMITS = {
-    'hero_title':          100,
-    'hero_text':           300,
-    'homepage_body_text':  1200, 
-    'about_title':         100,
-    'about_content':      1500,
-    'jobs_header_text':    250,
+    'hero_title': 100,
+    'hero_text': 300,
+    'homepage_body_text': 1200, 
+    'about_title': 100,
+    'about_content': 1500,
+    'jobs_header_text': 250,
 }
 
 
@@ -29,33 +29,33 @@ class CompanyProfileForm(forms.ModelForm):
         ]
 
         labels = {
-            'template_choice':          'Choose Your Site Style',
-            'display_name':             'Company Name',
-            'hero_title':               'Main Headline',
-            'hero_text':                'Hero Sub-text',
-            'homepage_body_text':       'Homepage Body Text',
-            'jobs_header_text':         'Job Page Heading & Intro',
-            'primary_color':            'Hero Background Colour',
-            'secondary_color':          'Text & Button Colour',
-            'background_color':         'Page Background Colour',
+            'template_choice': 'Choose Your Site Style',
+            'display_name': 'Company Name',
+            'hero_title': 'Main Headline',
+            'hero_text': 'Hero Sub-text',
+            'homepage_body_text': 'Homepage Body Text',
+            'jobs_header_text': 'Job Page Heading & Intro',
+            'primary_color': 'Hero Background Colour',
+            'secondary_color': 'Text & Button Colour',
+            'background_color': 'Page Background Colour',
         }
 
         help_texts = {
-            'logo':                     'Max 10MB. Displayed in the navigation bar.',
-            'team_photo':               'Max 10MB. Recommended 1200×800px.',
-            'hero_image':               'Max 10MB. High resolution recommended.',
-            'hero_title':               'Recommended: 40-70 characters for best impact.',
-            'hero_text':                'Recommended: 120-200 characters.',
-            'homepage_body_text':       'Recommended: 700-850 characters, maximum 1200.',
-            'about_title':              'Recommended: 30-60 characters.',
-            'about_content':            'Recommended: 600-1000 characters.',
-            'jobs_header_text':         'Recommended: 100-180 characters.',
+            'logo': 'Max 10MB. Displayed in the navigation bar.',
+            'team_photo': 'Max 10MB. Recommended 1200×800px.',
+            'hero_image': 'Max 10MB. High resolution recommended.',
+            'hero_title': 'Recommended: 40-70 characters for best impact.',
+            'hero_text': 'Recommended: 120-200 characters.',
+            'homepage_body_text': 'Recommended: 700-850 characters, maximum 1200.',
+            'about_title': 'Recommended: 30-60 characters.',
+            'about_content': 'Recommended: 600-1000 characters.',
+            'jobs_header_text': 'Recommended: 100-180 characters.',
         }
 
         widgets = {
-            'primary_color':     forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
-            'secondary_color':   forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
-            'background_color':  forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
+            'primary_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
+            'secondary_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
+            'background_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color w-100'}),
             'homepage_body_text': forms.Textarea(attrs={
                 'rows': 6, 
                 'data-maxchars': 1200, 
@@ -63,7 +63,7 @@ class CompanyProfileForm(forms.ModelForm):
                 'data-recco-max': 850
             }),
             'about_content': forms.Textarea(attrs={'rows': 8, 'data-maxchars': CHAR_LIMITS['about_content'], 'data-recco-min': 600, 'data-recco-max': 1000}),
-            'address':           forms.Textarea(attrs={'rows': 3, 'placeholder': 'e.g. 123 Recruiter Way,\nLondon,\nNW1 1AA'}),
+            'address': forms.Textarea(attrs={'rows': 3, 'placeholder': 'e.g. 123 Recruiter Way,\nLondon,\nNW1 1AA'}),
             'jobs_header_text': forms.Textarea(attrs={'rows': 2, 'data-maxchars': CHAR_LIMITS['jobs_header_text'], 'data-recco-min': 100, 'data-recco-max': 180}),
             'hero_title': forms.TextInput(attrs={'data-maxchars': CHAR_LIMITS['hero_title'], 'data-recco-min': 40, 'data-recco-max': 70}),
             'hero_text': forms.Textarea(attrs={'rows': 3, 'data-maxchars': CHAR_LIMITS['hero_text'], 'data-recco-min': 120, 'data-recco-max': 200}),
@@ -113,7 +113,7 @@ class CompanyProfileForm(forms.ModelForm):
         if value and len(value) > CHAR_LIMITS['jobs_header_text']:
             raise ValidationError(f"Jobs header text must be under {CHAR_LIMITS['jobs_header_text']} characters.")
         return value
-    
+
 
 class JobForm(forms.ModelForm):
     class Meta:

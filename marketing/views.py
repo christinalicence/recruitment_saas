@@ -1,15 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.models import User
-from django.utils.text import slugify
 from django_tenants.utils import schema_context
 from django.templatetags.static import static
-from customers.models import Client, Domain, Plan
+from customers.models import Client
 from .forms import TenantSignupForm, TenantLoginForm
 from django.core.mail import send_mail
 from django.conf import settings
 from .services import TenantService
+
 
 def company_about(request):
     """The main marketing about page for Pillar & Post (getpillarpost.com)"""
@@ -28,8 +27,7 @@ def tenant_signup(request):
 
     initial_data = {}
     if name_from_url:
-        initial_data['company_name'] = name_from_url
-        
+        initial_data['company_name'] = name_from_url     
     form = TenantSignupForm(request.POST or None, initial=initial_data)
 
     if request.method == "POST" and form.is_valid():
@@ -53,7 +51,6 @@ def tenant_signup(request):
                 'form': form, 
                 'template_id': template_id
             })
-        
         portal_url = f"https://{domain_name}/login/"
         try:
             send_mail(
@@ -79,17 +76,14 @@ def tenant_signup(request):
 def tenant_login(request):
     email_hint = request.GET.get('email', '')
     form = TenantLoginForm(request.POST or None, initial={'email': email_hint})
-    
     if request.method == "POST" and form.is_valid():
         email = form.cleaned_data['email'] 
         password = form.cleaned_data['password']
         with schema_context(request.tenant.schema_name):
-            user = authenticate(request, username=email, password=password)
-            
+            user = authenticate(request, username=email, password=password)     
             if user and user.is_active:
                 login(request, user)
-                return redirect('cms:dashboard')
-        
+                return redirect('cms:dashboard')   
         messages.error(request, "Invalid email or password.")
     return render(request, "marketing/login.html", {'form': form})
 
@@ -103,16 +97,18 @@ def tenant_logout(request):
         return redirect(f"https://www.{base_domain}/")
     return redirect('/')
 
+
 def template_select(request):
     templates = [
         {'id': 'executive', 'name': 'The Executive', 'description': 'Clean, sharp, and corporate.'},
-        {'id': 'startup', 'name': 'The Startup', 'description': 'Bold colors and modern typography.'},
+        {'id': 'startup', 'name': 'The Startup', 'description': 'Bold colors and modern.'},
         {'id': 'boutique', 'name': 'The Boutique', 'description': 'Elegant and focused on content.'},
     ]
     return render(request, "marketing/template_select.html", {'templates': templates})
 
+
 def template_preview(request, template_id):
-    """Logic kept exactly as originally provided"""
+    """make defaults"""
     name = request.GET.get('company_name', 'Your Company')
     stock_images = {
         'executive': 'marketing/images/default_executive.jpg',
@@ -125,7 +121,6 @@ def template_preview(request, template_id):
         {'title': 'Creative Account Manager', 'location': 'New York', 'salary': '$90k - $120k', 'summary': 'Bridging the gap between design and clients...'}
     ]
     image_filename = stock_images.get(template_id, stock_images['executive'])
-    
     return render(request, "marketing/preview_main.html", {
         'template_id': template_id,
         'company_name': name,
@@ -147,8 +142,7 @@ def portal_finder(request):
                 found_tenants.append({
                     'name': tenant.name,
                     'login_url': f"https://{domain.domain}/login/"
-                })
-        
+                }) 
         if not found_tenants:
             messages.error(request, "No portals found for that email address.")
 

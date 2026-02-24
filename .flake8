@@ -1,0 +1,8 @@
+[flake8]
+# E501 = Line too long
+# W291 = Trailing whitespace (end of lines)
+# W391 = Blank line at end of file
+# F841 = Local variable assigned but never used (e.g. in tests)
+ignore = E501, W291, W391, F841
+max-line-length = 120
+exclude = .git,__pycache__,migrations,venv

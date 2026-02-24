@@ -28,7 +28,6 @@ class ClientModelTest(TenantTestCase):
         with schema_context(get_public_schema_name()):
             Client.objects.create(name="Collision Test")
             tenant2 = Client.objects.create(name="Collision Test")
-     
         self.assertTrue(tenant2.schema_name.startswith("collision-test-"))
         self.assertNotEqual(tenant2.schema_name, "collision-test")
 
