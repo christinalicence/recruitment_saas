@@ -5,6 +5,8 @@ from django.conf import settings
 register = template.Library()\
 
 
+# Custom template tag to generate URLs using the public schema's URL configuration.
+
 
 @register.simple_tag
 def public_url(view_name, *args, **kwargs):

@@ -69,6 +69,6 @@ class SubscriptionGuardMiddleware:
         return self.get_response(request)
 
     def process_request(self, request):
-        # This method is optional and used for debug
+        # This method is used for debug
         if hasattr(request, 'tenant') and request.tenant and request.tenant.schema_name != 'public':
             pass

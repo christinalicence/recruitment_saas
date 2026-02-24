@@ -125,6 +125,15 @@ This site was built using Bootstrap grids and navbars, so it naturally worked re
 
 The site editor didn't work brilliantly on mobile, so it is hidden on smaller screen formats and a message is shown to the user
 
+![Mobile Warning for site editor](docs-images/editor_warning.png)
+
+Below are links of the marketing site being responsive
+
+[Landing Page Reponsive](docs-images/responsive-shots/responsive_landing.png)
+[About Page Reponsive](docs-images/responsive-shots/about_responsive.png)
+[Templates Page Reponsive](docs-images/responsive-shots/templates_responsive.png)
+
+
 ## Accessibility
 
 ### Lighthouse

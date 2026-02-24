@@ -6,6 +6,7 @@ from customers.models import Client, Domain, Plan
 from django.contrib.auth import get_user_model
 
 
+# Service class to handle tenant creation and onboarding logic.
 class TenantService:
     @staticmethod
     def create_onboarding_tenant(company_name, admin_email, password, template_id='executive'):

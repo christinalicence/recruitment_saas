@@ -12,7 +12,7 @@
         <div class="row g-4 justify-content-center">
             {% for template in templates %}
         <div class="col-md-4">
-            <div class="template-card theme-{{ template.id }}">
+            <div class="template-card theme-{{ template.id }} h-100">
                 <img src="{% static 'marketing/images/preview_'|add:template.id|add:'.webp' %}" 
                     class="img-fluid rounded mb-3 shadow-sm" 
                     alt="{{ template.name }}">

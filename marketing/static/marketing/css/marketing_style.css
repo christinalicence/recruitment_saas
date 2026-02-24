@@ -176,7 +176,22 @@ body.marketing-site {
 
 /* PREVIEW PAGE */
 
-/* Template Specifics */
+.template-card {
+    padding: 1.5rem;
+    border: 1px solid var(--border-stroke);
+    border-radius: var(--sharp-radius);
+    background: var(--main-bg);
+    display: flex;
+    flex-direction: column;
+}
+
+.template-card p {
+    flex-grow: 1;
+}
+
+.template-card .btn {
+    margin-top: auto;
+}
 .template-preview-img {
     height: 160px;
     width: 100%;
