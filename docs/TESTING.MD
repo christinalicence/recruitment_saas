@@ -109,9 +109,22 @@ This text editor changes the sub hero text
 
 The text it renders
 
-![The text it renders](docs-images/sub_hero_text.png)
+![The text the editor renders](docs-images/sub_hero_text.png)
 
 ### Maunal Stripe Checks
+
+Stripe paymeents are handled successfully
+
+![The payment success message in the tenant's dashboard](docs-images/payment_sucess.png)
+
+The 200 in the logs showing the webhook worked
+
+![The logs while the payment is running](docs-images/payment_logs.png)
+
+The Stripe dashboard showing the payment
+
+![The stripe dashboard details](docs-images/stripe_success.png)
+
 
 ### Email Checks
 
@@ -160,7 +173,20 @@ All pages have also been checked with Lighthouse and Wave.
 
 ### Lighthouse
 
-### Wave
+Most of the Lighthouse reports were strong passes
+
+![Lighthouse report for template selector](docs-images/lighthouse_template_choice.png)
+
+But it did bring up a couple of points. I needed to add specific height and width to the images on my Landing page and About page on the marketing site to improve performance.
+
+![Lighthouse report for landing page before improvements](docs-images/landing_lighthouse.png)
+
+These were fixed when I did this.
+
+It's worth noting that Cloudinary does resize pictures when the tenants upload them, but I'm not sure if this is a complete fix for never getting Lighthouse errors.
+
+### Wave Testing
+
 
 ## User Testing
 
@@ -180,9 +206,34 @@ The second round of user testing went well, with no particular feedback.
 
 I have tried to be as thorough as possible with automated testing, mainly to future proof the site. I ran in to lots of issues with the domain routing which meant that tests were harder to write, but through persistance I am happy with the coverage.
 
-### Testing for Data Security
+These are the automated tests that haven't been described elsewhere. They mostly deal with data security.
 
-One of the key focuses for automated testing was data security.
+| Test | File | What It Tests | Result |
+|------|------|---------------|--------|
+| test_authenticated_user_can_access_own_dashboard | test_dasboard_security.py | An authenticated user receives a 200 response on their own tenant's dashboard | PASS |
+| test_unauthenticated_request_is_blocked | test_dasboard_security.py | An unauthenticated request to the dashboard is redirected to login (302) and not served | PASS |
+| test_sessions_are_scoped_to_tenant_schema | test_dasboard_security.py | A session created in tenant A's schema cannot be read in tenant B's schema — the core cross-tenant isolation mechanism | PASS |
+| test_dashboard_requires_login | test_dashboard_access.py | An unauthenticated request to the dashboard URL returns a 302 redirect | PASS |
+| test_firm_data_isolation | test_tenant_isolation.py | Jobs and profile data created in one tenant's schema cannot be queried from another tenant's schema | PASS |
+| test_auto_schema_name_generation | test_tenant_models.py | A new tenant automatically generates a schema name from the company name | PASS |
+| test_unique_slug_collision_handling | test_tenant_models.py | If a schema name already exists, a unique suffix is appended to avoid collisions | PASS |
+| test_checkout_session_redirection | test_billing.py | Initiating checkout creates a Stripe session and redirects to the Stripe payment URL | PASS |
+| test_webhook_payment_success_activates_client | test_billing.py | A valid checkout.session.completed webhook sets the tenant's is_active flag to True | PASS |
+| test_webhook_payment_failure_deactivates_client | test_billing.py | A valid invoice.payment_failed webhook sets the tenant's is_active flag to False | PASS |
+| test_signup_sends_welcome_email | test_emails.py | A welcome email containing the tenant's unique portal URL is sent to the admin email on signup | PASS |
+| test_payment_success_sends_confirmation_email | test_emails.py | A confirmation email is sent to the tenant's notification email after a successful payment | PASS |
+| test_payment_failure_sends_alert_email | test_emails.py | An alert email is sent to the tenant's notification email when a payment fails | PASS |
+| test_portal_found_by_exact_email | test_portal_finder.py | Submitting a matching email returns the tenant's login URL | PASS |
+| test_portal_not_found_shows_error | test_portal_finder.py | Submitting an unknown email renders an error message rather than crashing | PASS |
+| test_email_lookup_is_case_insensitive | test_portal_finder.py | Portal finder returns the correct result regardless of email case | PASS |
+| test_post_with_empty_email_does_not_crash | test_portal_finder.py | Submitting an empty email renders the form cleanly without an error | PASS |
+| test_get_request_renders_form | test_portal_finder.py | A GET request to the portal finder renders the form with a 200 | PASS |
+| test_email_with_leading_trailing_whitespace_still_finds_portal | test_portal_finder.py | Whitespace around the submitted email is stripped before querying | PASS |
+
+At this point I haven't written tests for trial.
+
+![All the tests passing](docs-images/test_passing.png)
+
 
 ## Test Driven Development
 
