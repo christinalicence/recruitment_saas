@@ -26,7 +26,7 @@
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'cms:home' %}">
                     {% if profile.logo %}
-                        <img src="{{ profile.logo.url }}" alt="{{ profile.display_name }}" style="max-height: 40px;">
+                        <img src="{{ profile.logo.url }}" alt="{{ profile.display_name }} home" style="max-height: 40px;">
                     {% endif %}
                     <span class="brand-text">  {{ profile.display_name|upper }}</span>
             </a>
@@ -65,7 +65,7 @@
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="mb-3 d-none d-md-block">
-                    <h5 class="fw-bold mb-2">{{ profile.display_name }}</h5>
+                    <h2 class="footer-heading"></h2>{{ profile.display_name }}</h2>
                 </div>    
                 {# Social Icons #}
                 <div class="d-flex gap-3 fs-4 mb-2">
@@ -85,7 +85,7 @@
                 {% endif %}
             </div>
             <div class="col-md-4 text-md-center">
-                <h6 class="fw-bold mb-3 small text-uppercase" style="letter-spacing: 1px;">Contact</h6>
+                <h2 class="footer-heading">Contact</h2>
                 <div class="text-muted small">
                     {% if profile.address %}
                         <div class="mb-2">{{ profile.address|linebreaksbr }}</div>

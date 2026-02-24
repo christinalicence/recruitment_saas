@@ -419,7 +419,7 @@ I also changed my thinking on aesthetics quite seriously from the beginning of d
 
 ### Premium Tier
 
-The intention is to introduce 3 tiers. A fairly cheap minimal one where people use their Pillar & Post subdomain. A standard tier where people use their own domain and have their own favicons, but with a limit of 6 jobs. A premium tier with unlimited jobs and a search function on that page. I'm also considering building an AI helper for recruiters to help them write their job adverts. The company profile model is ready for new plans to be added — at the moment everyone starts on trial and there is a standard plan.
+The intention is to introduce 3 tiers. A fairly cheap minimal one where people use their Pillar & Post subdomain. A standard tier where people use their own domain and have their own favicons (different favicons cause broswer issues when they are all user a P&P subdomain), but with a limit of 6 jobs. A premium tier with unlimited jobs and a search function on that page. I'm also considering building an AI helper for recruiters to help them write their job adverts. The company profile model is ready for new plans to be added — at the moment everyone starts on trial and there is a standard plan.
 
 ### Data Structure Requirements
 

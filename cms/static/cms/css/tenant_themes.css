@@ -355,6 +355,16 @@
     color: inherit;
 }
 
+/* Footer Heading Styling */
+.footer-heading {
+    font-size: 0.875rem;  
+    font-weight: 700;          
+    text-transform: uppercase; 
+    letter-spacing: 1px;     
+    margin-bottom: 1.5rem;   
+    color: inherit;           
+}
+
 
 /* responsive */
 

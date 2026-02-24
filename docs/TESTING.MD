@@ -133,8 +133,30 @@ Below are links of the marketing site being responsive
 [About Page Reponsive](docs-images/responsive-shots/about_responsive.png)
 [Templates Page Reponsive](docs-images/responsive-shots/templates_responsive.png)
 
+Here are the tenant dashboard pages
+
+[Tenant Dashboard Page Reponsive](docs-images/responsive-shots/dashboard_responsive.png)
+[Edit Site Page Reponsive](docs-images/responsive-shots/site_editor_responsive.png)
+[Job Editor Page Reponsive](docs-images/responsive-shots/job-editor-responsive.png)
+
+And here are the tenant live sites
+
+[Tenant Home Page Reponsive](docs-images/responsive-shots/tenant_home_responsive.png)
+[Tenant About Page Reponsive](docs-images/responsive-shots/tenant_about_responsive.png)
+[Tenant Jobs Page Reponsive](docs-images/responsive-shots/tenant_jobs_responsive.png)
+
 
 ## Accessibility
+
+Accessibility is difficult to maintain when you are giving tenants control of their own colour scheme. There are 2 gaurds in place to help. There is the javascript function which toggles the hero text between black and white in order to contrast with the primary colour
+
+![Hero text](docs-images/hero_text.png)
+
+There is also the colour contrast checker
+
+![Contrast checker](docs-images/contrast_checker.png)
+
+All pages have also been checked with Lighthouse and Wave.
 
 ### Lighthouse
 
