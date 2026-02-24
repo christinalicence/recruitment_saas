@@ -89,6 +89,7 @@
                                 <div class="mb-3">
                                     <img id="id_hero_image-preview"
                                          src="{% if profile.hero_image %}{{ profile.hero_image.url }}{% endif %}"
+                                         alt="company hero image preview"
                                          class="img-thumbnail hero-preview-img {% if not profile.hero_image %}d-none{% endif %}">
                                 </div>
                             </div>
@@ -124,6 +125,7 @@
                                 <div class="mb-3">
                                     <img id="team_photo-preview"
                                          src="{% if profile.team_photo %}{{ profile.team_photo.url }}{% endif %}"
+                                         alt="company team photo preview"
                                          class="img-thumbnail team-preview-img {% if not profile.team_photo %}d-none{% endif %}">
                                 </div>
                             </div>
@@ -177,7 +179,7 @@
                         </div>
                     </div>
 
-                    <div id="preview-wrapper" class="preview-frame-wrapper desktop-mode shadow-sm mx-auto">
+                    <div id="preview-wrapper" title="Live preview of your website changes" class="preview-frame-wrapper desktop-mode shadow-sm mx-auto">
                         <iframe src="{% url 'cms:live_preview' %}" id="preview-frame"></iframe>
                     </div>
 

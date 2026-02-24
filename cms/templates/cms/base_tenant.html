@@ -13,8 +13,7 @@
     <link rel="apple-touch-icon" href="{% static 'marketing/images/favicons/favicon.ico' %}">
     
     <style>
-        /* primary = hero bg, secondary = body text, bg = page background
-           Targets body.theme-* for specificity 0,1,1 — beats .theme-* at 0,1,0 */
+        /* This code allows the colour picker to work */
         body.theme-{{ profile.template_choice|default:'executive' }} {
             --brand-primary: {{ profile.primary_color|default:"#0f172a" }};
             --brand-secondary: {{ profile.secondary_color|default:"#0f172a" }};
@@ -26,8 +25,10 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'cms:home' %}">
-                    <img src="{{ profile.logo.url }}" alt="{{ profile.display_name }}" style="max-height: 40px;">
-                    <span class="brand-text">{{ profile.display_name|upper }}</span>
+                    {% if profile.logo %}
+                        <img src="{{ profile.logo.url }}" alt="{{ profile.display_name }}" style="max-height: 40px;">
+                    {% endif %}
+                    <span class="brand-text">  {{ profile.display_name|upper }}</span>
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
@@ -69,16 +70,16 @@
                 {# Social Icons #}
                 <div class="d-flex gap-3 fs-4 mb-2">
                     {% if profile.linkedin_url %}
-                        <a href="{{ profile.linkedin_url }}" class="text-muted" target="_blank"><i class="bi bi-linkedin"></i></a>
+                        <a href="{{ profile.linkedin_url }}" class="text-muted" target="_blank"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
                     {% endif %}
                     {% if profile.facebook_url %}
-                        <a href="{{ profile.facebook_url }}" class="text-muted" target="_blank"><i class="bi bi-facebook"></i></a>
+                        <a href="{{ profile.facebook_url }}" class="text-muted" target="_blank"><i class="bi bi-facebook" aria-hidden="true"></i></a>
                     {% endif %}
                 </div>
                 {% if profile.contact_email %}
                     <div class="small">
                         <a href="mailto:{{ profile.contact_email }}" class="text-muted text-decoration-none">
-                            <i class="bi bi-envelope-fill me-1"></i> {{ profile.contact_email }}
+                            <i class="bi bi-envelope-fill me-1" aria-hidden="true"></i> {{ profile.contact_email }}
                         </a>
                     </div>
                 {% endif %}
@@ -90,7 +91,7 @@
                         <div class="mb-2">{{ profile.address|linebreaksbr }}</div>
                     {% endif %}
                     {% if profile.contact_phone %}
-                        <div><i class="bi bi-telephone-fill me-1"></i> {{ profile.contact_phone }}</div>
+                        <div><i class="bi bi-telephone-fill me-1" aria-hidden="true"></i> {{ profile.contact_phone }}</div>
                     {% endif %}
                 </div>
             </div>

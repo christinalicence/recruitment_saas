@@ -79,17 +79,45 @@ exclude = .git,__pycache__,migrations,venv
 This is allowing me longer lines, which I find easier to work with and allowing local variables, which I had in testing and would cause problems if I removed. I did include blank lines at the end of the files and trialing whitespace, but I have gone through the file and fixed all of those errors.
 
 
-### Features Testing
+## Features Testing
+
+| Feature | Category | Method | Test Case / Logic | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| 3 Selectable Templates | UI/UX | Automated | test_pages_load.py confirms views resolve correctly for different template paths. | PASS |
+| Colour Picker + Contrast | Accessibility | Manual | Background/Text contrast checked using hero-contrast.js and manual visual inspection. | PASS |
+| Text & Image Editors | Content | Manual | Verified that CompanyProfile model updates successfully save and render on the tenant site. | PASS |
+| Job Editor (Limit 6) | Logic | Automated | test_firm_data_isolation.py ensures jobs are correctly associated and restricted by tenant. | PASS |
+| Tenant Dashboard | Security | Automated | test_dashboard_requires_login.py ensures unauthorized users cannot access tenant settings. | PASS |
+| Subdomain Routing | Infrastructure | Automated | test_pages_load.py verifies the public vs. tenant middleware routing logic. | PASS |
+| Stripe Integration | Billing | Manual | Checked webhook responses and Client model status updates after successful Stripe checkout. | PASS |
+| Schema Isolation | Security | Automated | test_firm_data_isolation.py verifies that SQL queries are restricted to the active schema only. | PASS |
+| Application Emails | Communication | Manual | Sent test applications to verify Brevo routes to custom_recipient_1 when specified. | PASS |
+
+### Colour Picker Test
+
+These pictures show the primary/hero colour changer working
+
+![Colour Picker](docs-images/colour_picker.png)
+
+![Hero section](docs-images/hero_text.png)
+
+### Text & Image updaters
+
+
+
+### Maunal Stripe Checks
+
+### Email Checks
 
 ### Responsiveness
 
-### Accessibility
+## Accessibility
 
-#### Lighthouse
+### Lighthouse
 
-#### Wave
+### Wave
 
-### User Testing
+## User Testing
 
 The first round of user testing found a few bugs. 
 
@@ -105,9 +133,11 @@ The second round of user testing went well, with no particular feedback.
 
 ## Automated Testing
 
-### Django Testing
-
 I have tried to be as thorough as possible with automated testing, mainly to future proof the site. I ran in to lots of issues with the domain routing which meant that tests were harder to write, but through persistance I am happy with the coverage.
+
+### Testing for Data Security
+
+One of the key focuses for automated testing was data security.
 
 ## Test Driven Development
 

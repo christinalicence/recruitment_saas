@@ -32,7 +32,7 @@ class CompanyProfileForm(forms.ModelForm):
             'template_choice': 'Choose Your Site Style',
             'display_name': 'Company Name',
             'hero_title': 'Main Headline',
-            'hero_text': 'Hero Sub-text',
+            'hero_text': 'Sub-Headline',
             'homepage_body_text': 'Homepage Body Text',
             'jobs_header_text': 'Job Page Heading & Intro',
             'primary_color': 'Hero Background Colour',
@@ -65,7 +65,7 @@ class CompanyProfileForm(forms.ModelForm):
             'about_content': forms.Textarea(attrs={'rows': 8, 'data-maxchars': CHAR_LIMITS['about_content'], 'data-recco-min': 600, 'data-recco-max': 1000}),
             'address': forms.Textarea(attrs={'rows': 3, 'placeholder': 'e.g. 123 Recruiter Way,\nLondon,\nNW1 1AA'}),
             'jobs_header_text': forms.Textarea(attrs={'rows': 2, 'data-maxchars': CHAR_LIMITS['jobs_header_text'], 'data-recco-min': 100, 'data-recco-max': 180}),
-            'hero_title': forms.TextInput(attrs={'data-maxchars': CHAR_LIMITS['hero_title'], 'data-recco-min': 40, 'data-recco-max': 70}),
+            'hero_title': forms.TextInput(attrs={'rows': 2, 'data-maxchars': CHAR_LIMITS['hero_title'], 'data-recco-min': 40, 'data-recco-max': 70}),
             'hero_text': forms.Textarea(attrs={'rows': 3, 'data-maxchars': CHAR_LIMITS['hero_text'], 'data-recco-min': 120, 'data-recco-max': 200}),
             'about_title': forms.TextInput(attrs={'data-maxchars': CHAR_LIMITS['about_title'], 'data-recco-min': 30, 'data-recco-max': 60}),
         }
