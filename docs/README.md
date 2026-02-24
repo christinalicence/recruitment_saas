@@ -330,6 +330,8 @@ This opens the client's live site on their P&P subdomain in a new tab, so they d
 
 Emails are sent when people sign up, which includes their unique URL for login. Emails are also sent when subscriptions are set up or when a payment fails.
 
+![Email sent on signup](docs-images/subscribe_email.png)
+
 ### A Note on File Setup
 
 Making a multi-tenant app means that the file setup is a bit different from standard Django. There are 3 base.html files — one for the marketing site, one dashboard base for when a tenant is signed in, and one tenant base for the sites they design. The CSS files mirror this setup and are stored in the appropriate Django apps. There are 3 apps: marketing (for the marketing site), CMS which handles everything for clients when they are logged in, and the customers app which handles payment and management information for the owner of Pillar & Post.

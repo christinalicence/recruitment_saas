@@ -103,13 +103,27 @@ These pictures show the primary/hero colour changer working
 
 ### Text & Image updaters
 
+This text editor changes the sub hero text
 
+![One of the text editors](docs-images/text-edit.png)
+
+The text it renders
+
+![The text it renders](docs-images/sub_hero_text.png)
 
 ### Maunal Stripe Checks
 
 ### Email Checks
 
+I have tested the email for subscription, payment and applications manually. This is the sign up email.
+
+![The email sent on sign up](docs-images/subscribe_email.png)
+
 ### Responsiveness
+
+This site was built using Bootstrap grids and navbars, so it naturally worked responsivley. This is also true for the tenant's live sites. One of the feautures of the site editor is that the tenants can see how their sites work on desktops, tablets and mobiles.
+
+The site editor didn't work brilliantly on mobile, so it is hidden on smaller screen formats and a message is shown to the user
 
 ## Accessibility
 
