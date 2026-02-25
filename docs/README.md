@@ -48,7 +48,7 @@ Recruitment companies are often launched by people working on their own or in a 
 | US1 | As a recruiter launching a new agency, I want to choose from professional templates so that I can quickly create a credible website which fits my client's industry. | Fast website launch without design skills. | 3 selectable templates | Must Have | Complete |
 | US2 | As a recruiter, I want to customise colours so that my website reflects my brand identity. | An individual looking website | Colour picker + contrast checker | Must Have | Complete |
 | US3 | As a recruiter, I want to edit website text and images so that I align with our company ethos | Personalised and credible content. | Text editors + image uploaders | Must Have | Complete |
-| US4 | As a recruiter, I want to upload and edit job adverts easilyand quickly. | Accurate and competitive job postings. | Job editor (limit 6) | Must Have | Complete |
+| US4 | As a recruiter, I want to upload and edit job adverts easily and quickly. | Accurate and competitive job postings. | Job editor (limit 6) | Must Have | Complete |
 | US5 | As a recruiter, I want a dashboard to manage my site and subscription so that I don’t need technical knowledge. | An easy to use central dashboard | Tenant dashboard | Must Have | Complete |
 | US6 | As a recruiter, I want secure login tied to my subdomain so that my data remains isolated. | Websites built on seperate schemas. | Subdomain routing + authentication | Must Have | Complete |
 | US7 | As a recruiter, I want candidate applications forwarded via email only so that I minimise GDPR risk. | No candidate data stored in database. | Email forwarding system | Must Have | Complete |
@@ -205,7 +205,7 @@ This is set up on the free tier, Django Tenants doesn't work with SQL Lite, so I
 
 ### Brevo for Email Provider
 
-Chosen because they have a good free tier (300 emails per day) and integrates well with heroku. It is used to send emails on sign up including the user's unique subdomain and emails related to payments. This has been combined with Zoho to run the inbox for hello@getpillarpost.com using a free tier.
+Chosen because they have a good free tier (300 emails per day) and integrates well with Heroku. It is used to send emails on sign up including the user's unique subdomain and emails related to payments. This has been combined with Zoho to run the inbox for hello@getpillarpost.com using a free tier.
 
 ### Other choices 
 
@@ -422,7 +422,7 @@ I also changed my thinking on aesthetics quite seriously from the beginning of d
 
 ### Premium Tier
 
-The intention is to introduce 3 tiers. A fairly cheap minimal one where people use their Pillar & Post subdomain. A standard tier where people use their own domain and have their own favicons (different favicons cause broswer issues when they are all user a P&P subdomain), but with a limit of 6 jobs. A premium tier with unlimited jobs and a search function on that page. I'm also considering building an AI helper for recruiters to help them write their job adverts. The company profile model is ready for new plans to be added — at the moment everyone starts on trial and there is a standard plan.
+The intention is to introduce 3 tiers. A fairly cheap minimal one where people use their Pillar & Post subdomain. A standard tier where people use their own domain and have their own favicons (different favicons cause browser issues when they are all using a P&P subdomain), but with a limit of 6 jobs. A premium tier with unlimited jobs and a search function on that page. I'm also considering building an AI helper for recruiters to help them write their job adverts. The company profile model is ready for new plans to be added — at the moment everyone starts on trial and there is a standard plan.
 
 ### Data Structure Requirements
 
@@ -517,10 +517,10 @@ git add .
 git commit -m 'commit message'
 git push
 ```
-My heroku is currently set to automatically deploy when code is pushed, but you can also use the command 
+My Heroku is currently set to automatically deploy when code is pushed, but you can also use the command 
 
 ```
-git push heroku main
+git push Heroku main
 ```
 to deploy to the live site.
 
