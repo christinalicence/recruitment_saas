@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 
 
 class CustomTenantMiddleware(TenantMainMiddleware):
+    """Custom Tenant Middleware that ensures the correct URLconf is used based on the tenant."""
     def get_tenant(self, domain_model, hostname):
         hostname_no_port = hostname.split(':')[0]
         try:
@@ -30,7 +31,9 @@ class CustomTenantMiddleware(TenantMainMiddleware):
         set_urlconf(request.urlconf)
 
     def process_response(self, request, response):
+        # Ensure the 'Host' header is included in the Vary header for caching purposes
         patch_vary_headers(response, ('Host',))
+        # For local dev 
         if settings.DEBUG and hasattr(request, 'tenant'):
             tenant_name = getattr(request.tenant, 'name', 'Public')
         return response

@@ -47,13 +47,14 @@
             <div class="col-md-6">
                 <form method="post" action="{% public_url 'portal_finder' %}" class="d-flex gap-2">
                     {% csrf_token %}
-                    <input 
-                        type="email" 
-                        name="email" 
-                        class="form-control form-control-lg" 
-                        placeholder="Enter your email"
-                        required
-                    >
+                    <div class="input-group">
+                            <label for="portal-email" class="visually-hidden">Enter your email to find your site</label>
+                            
+                            <input type="email" id="portal-email" name="email" 
+                                class="form-control" placeholder="Enter your email..." required>
+                            
+                            <button class="btn btn-primary" type="submit">Find My Site</button>
+                        </div>
                     <button type="submit" class="btn btn-primary btn-lg">Find Portal</button>
                 </form>
                 <p class="small text-muted mt-2 mb-0">We'll locate all portals associated with your email address</p>

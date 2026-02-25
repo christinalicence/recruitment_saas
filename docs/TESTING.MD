@@ -2,6 +2,22 @@
 
 ![The Landing Page](docs-images/landing_page.png)
 
+## Contents
+
+- [Testing Objectives Against User Stories](#testing-objectives-against-user-stories)
+- [Manual Testing](#manual-testing)
+  - [Code Validators](#code-validators)
+  - [Features Testing](#features-testing)
+  - [Manual Stripe Checks](#manual-stripe-checks)
+  - [Email Checks](#email-checks)
+  - [Responsiveness](#responsiveness)
+- [Accessibility](#accessibility)
+  - [Lighthouse](#lighthouse)
+  - [Wave Testing](#wave-testing)
+- [User Testing](#user-testing)
+- [Automated Testing](#automated-testing)
+- [Test Driven Development](#test-driven-development)
+
 ## Testing Objectives Against User Stories
 
 I have tried to test all the parts of the website that are fundamental to data privacy or functioning through automated testing. I have used manual testing to test the aesthetic touches.
@@ -27,7 +43,7 @@ I have tried to test all the parts of the website that are fundamental to data p
 
 #### HTML Validator
 
-With Django htmls it is easier to enter the urls at the [W3C](https://validator.w3.org/) validator. It has trouble reading the tags if you put the whole files in. 
+With Django HTML files it is easier to enter the URLs at the [W3C](https://validator.w3.org/) validator. It has trouble reading the tags if you put the whole files in.
 
 It gave me 1 warning on the landing page
 
@@ -46,7 +62,7 @@ My tenant sites had a small issue, one left over tag and a warning about header 
 I fixed these issues, then everything passed.
 
 
-#### CSS VAlidator
+#### CSS Validator
 
 I passed all 3 CSS files through the [W3C](https://jigsaw.w3.org/css-validator/validator) validator. There is 1 in the marketing app and 2 in the cms app.
 
@@ -55,9 +71,9 @@ All of them passed with no issues.
 ![Marketing css validator pass](docs-images/marketing_css_validator.png)
 
 
-#### Javascript Linter
+#### JavaScript Linter
 
-I used [JSHint](https://jshint.com/) to test all my javascript files. It had some warnings, but they were all to do with using more modern javascript and safe to ignore.
+I used [JSHint](https://jshint.com/) to test all my JavaScript files. It had some warnings, but they were all to do with using more modern JavaScript and safe to ignore.
 
 ![JSHint warnings](docs-images/jshint.png)
 
@@ -68,6 +84,7 @@ I have used Flake8 to help me keep my Python code inline with PEP8 standards.
 
 I have used a few helpers to get my code through, there is a .flake8 file in my base with the following code
 
+```
 # E501 = Line too long
 # W291 = Trailing whitespace (end of lines)
 # W391 = Blank line at end of file
@@ -75,8 +92,9 @@ I have used a few helpers to get my code through, there is a .flake8 file in my 
 ignore = E501, W291, W391, F841
 max-line-length = 120
 exclude = .git,__pycache__,migrations,venv
+```
 
-This is allowing me longer lines, which I find easier to work with and allowing local variables, which I had in testing and would cause problems if I removed. I did include blank lines at the end of the files and trialing whitespace, but I have gone through the file and fixed all of those errors.
+This is allowing me longer lines, which I find easier to work with and allowing local variables, which I had in testing and would cause problems if I removed. I did include blank lines at the end of the files and trailing whitespace, but I have gone through the file and fixed all of those errors.
 
 
 ## Features Testing
@@ -87,7 +105,7 @@ This is allowing me longer lines, which I find easier to work with and allowing 
 | Colour Picker + Contrast | Accessibility | Manual | Background/Text contrast checked using hero-contrast.js and manual visual inspection. | PASS |
 | Text & Image Editors | Content | Manual | Verified that CompanyProfile model updates successfully save and render on the tenant site. | PASS |
 | Job Editor (Limit 6) | Logic | Automated | test_firm_data_isolation.py ensures jobs are correctly associated and restricted by tenant. | PASS |
-| Tenant Dashboard | Security | Automated | test_dashboard_requires_login.py ensures unauthorized users cannot access tenant settings. | PASS |
+| Tenant Dashboard | Security | Automated | test_dashboard_requires_login.py ensures unauthorised users cannot access tenant settings. | PASS |
 | Subdomain Routing | Infrastructure | Automated | test_pages_load.py verifies the public vs. tenant middleware routing logic. | PASS |
 | Stripe Integration | Billing | Manual | Checked webhook responses and Client model status updates after successful Stripe checkout. | PASS |
 | Schema Isolation | Security | Automated | test_firm_data_isolation.py verifies that SQL queries are restricted to the active schema only. | PASS |
@@ -111,11 +129,11 @@ The text it renders
 
 ![The text the editor renders](docs-images/sub_hero_text.png)
 
-### Maunal Stripe Checks
+### Manual Stripe Checks
 
-Stripe paymeents are handled successfully
+Stripe payments are handled successfully
 
-![The payment success message in the tenant's dashboard](docs-images/payment_sucess.png)
+![The payment success message in the tenant's dashboard](docs-images/payment_success.png)
 
 The 200 in the logs showing the webhook worked
 
@@ -134,7 +152,7 @@ I have tested the email for subscription, payment and applications manually. Thi
 
 ### Responsiveness
 
-This site was built using Bootstrap grids and navbars, so it naturally worked responsivley. This is also true for the tenant's live sites. One of the feautures of the site editor is that the tenants can see how their sites work on desktops, tablets and mobiles.
+This site was built using Bootstrap grids and navbars, so it naturally worked responsively. This is also true for the tenant's live sites. One of the features of the site editor is that the tenants can see how their sites work on desktops, tablets and mobiles.
 
 The site editor didn't work brilliantly on mobile, so it is hidden on smaller screen formats and a message is shown to the user
 
@@ -142,26 +160,32 @@ The site editor didn't work brilliantly on mobile, so it is hidden on smaller sc
 
 Below are links of the marketing site being responsive
 
-[Landing Page Reponsive](docs-images/responsive-shots/responsive_landing.png)
-[About Page Reponsive](docs-images/responsive-shots/about_responsive.png)
-[Templates Page Reponsive](docs-images/responsive-shots/templates_responsive.png)
+[Landing Page Responsive](docs-images/responsive-shots/responsive_landing.png)
+
+[About Page Responsive](docs-images/responsive-shots/about_responsive.png)
+
+[Templates Page Responsive](docs-images/responsive-shots/templates_responsive.png)
 
 Here are the tenant dashboard pages
 
-[Tenant Dashboard Page Reponsive](docs-images/responsive-shots/dashboard_responsive.png)
-[Edit Site Page Reponsive](docs-images/responsive-shots/site_editor_responsive.png)
-[Job Editor Page Reponsive](docs-images/responsive-shots/job-editor-responsive.png)
+[Tenant Dashboard Page Responsive](docs-images/responsive-shots/dashboard_responsive.png)
+
+[Edit Site Page Responsive](docs-images/responsive-shots/site_editor_responsive.png)
+
+[Job Editor Page Responsive](docs-images/responsive-shots/job-editor-responsive.png)
 
 And here are the tenant live sites
 
-[Tenant Home Page Reponsive](docs-images/responsive-shots/tenant_home_responsive.png)
-[Tenant About Page Reponsive](docs-images/responsive-shots/tenant_about_responsive.png)
-[Tenant Jobs Page Reponsive](docs-images/responsive-shots/tenant_jobs_responsive.png)
+[Tenant Home Page Responsive](docs-images/responsive-shots/tenant_home_responsive.png)
+
+[Tenant About Page Responsive](docs-images/responsive-shots/tenant_about_responsive.png)
+
+[Tenant Jobs Page Responsive](docs-images/responsive-shots/tenant_jobs_responsive.png)
 
 
 ## Accessibility
 
-Accessibility is difficult to maintain when you are giving tenants control of their own colour scheme. There are 2 gaurds in place to help. There is the javascript function which toggles the hero text between black and white in order to contrast with the primary colour
+Accessibility is difficult to maintain when you are giving tenants control of their own colour scheme. There are 2 guards in place to help. There is the JavaScript function which toggles the hero text between black and white in order to contrast with the primary colour
 
 ![Hero text](docs-images/hero_text.png)
 
@@ -187,6 +211,11 @@ It's worth noting that Cloudinary does resize pictures when the tenants upload t
 
 ### Wave Testing
 
+[Wave](https://wave.webaim.org/) uncovered a couple of issues, I needed to put an aria label on my navbar buttons and a special visually hidden label for my portal finder so that screen readers can see it.
+
+![Wave report showing improvements](docs-images/wave_report.png)
+
+I fixed both of these.
 
 ## User Testing
 
@@ -204,33 +233,18 @@ The second round of user testing went well, with no particular feedback.
 
 ## Automated Testing
 
-I have tried to be as thorough as possible with automated testing, mainly to future proof the site. I ran in to lots of issues with the domain routing which meant that tests were harder to write, but through persistance I am happy with the coverage.
+I have tried to be as thorough as possible with automated testing, mainly to future proof the site. I ran into lots of issues with the domain routing which meant that tests were harder to write, but through persistence I am happy with the coverage.
 
-These are the automated tests that haven't been described elsewhere. They mostly deal with data security.
+These are the automated tests that focus on data security and cross-tenant isolation, which are vital for the site.
 
 | Test | File | What It Tests | Result |
 |------|------|---------------|--------|
 | test_authenticated_user_can_access_own_dashboard | test_dasboard_security.py | An authenticated user receives a 200 response on their own tenant's dashboard | PASS |
 | test_unauthenticated_request_is_blocked | test_dasboard_security.py | An unauthenticated request to the dashboard is redirected to login (302) and not served | PASS |
 | test_sessions_are_scoped_to_tenant_schema | test_dasboard_security.py | A session created in tenant A's schema cannot be read in tenant B's schema — the core cross-tenant isolation mechanism | PASS |
-| test_dashboard_requires_login | test_dashboard_access.py | An unauthenticated request to the dashboard URL returns a 302 redirect | PASS |
+| test_dashboard_requires_login | test_dashboard_acess.py | An unauthenticated request to the dashboard URL returns a 302 redirect | PASS |
 | test_firm_data_isolation | test_tenant_isolation.py | Jobs and profile data created in one tenant's schema cannot be queried from another tenant's schema | PASS |
-| test_auto_schema_name_generation | test_tenant_models.py | A new tenant automatically generates a schema name from the company name | PASS |
-| test_unique_slug_collision_handling | test_tenant_models.py | If a schema name already exists, a unique suffix is appended to avoid collisions | PASS |
-| test_checkout_session_redirection | test_billing.py | Initiating checkout creates a Stripe session and redirects to the Stripe payment URL | PASS |
-| test_webhook_payment_success_activates_client | test_billing.py | A valid checkout.session.completed webhook sets the tenant's is_active flag to True | PASS |
-| test_webhook_payment_failure_deactivates_client | test_billing.py | A valid invoice.payment_failed webhook sets the tenant's is_active flag to False | PASS |
-| test_signup_sends_welcome_email | test_emails.py | A welcome email containing the tenant's unique portal URL is sent to the admin email on signup | PASS |
-| test_payment_success_sends_confirmation_email | test_emails.py | A confirmation email is sent to the tenant's notification email after a successful payment | PASS |
-| test_payment_failure_sends_alert_email | test_emails.py | An alert email is sent to the tenant's notification email when a payment fails | PASS |
-| test_portal_found_by_exact_email | test_portal_finder.py | Submitting a matching email returns the tenant's login URL | PASS |
-| test_portal_not_found_shows_error | test_portal_finder.py | Submitting an unknown email renders an error message rather than crashing | PASS |
-| test_email_lookup_is_case_insensitive | test_portal_finder.py | Portal finder returns the correct result regardless of email case | PASS |
-| test_post_with_empty_email_does_not_crash | test_portal_finder.py | Submitting an empty email renders the form cleanly without an error | PASS |
-| test_get_request_renders_form | test_portal_finder.py | A GET request to the portal finder renders the form with a 200 | PASS |
-| test_email_with_leading_trailing_whitespace_still_finds_portal | test_portal_finder.py | Whitespace around the submitted email is stripped before querying | PASS |
 
-At this point I haven't written tests for trial.
 
 ![All the tests passing](docs-images/test_passing.png)
 
@@ -240,4 +254,3 @@ At this point I haven't written tests for trial.
 I found this far more challenging with the subdomain environment and found that I was rewriting my tests often through the development process, but I do find this a valuable tool in terms of understanding my code and seeing potential future issues with it. 
 
 A bug that I encountered when testing was persistent database issues - the tests couldn't run because the databases already existed, Django tries to clean the database automatically before each test run if this happens, but I kept being told there was an active user on the database and deleting it was impossible. This turned out to be an issue with having my Neon Postgres DB pooled, which means that it keeps connections open. When I changed it to unpooled this issue was fixed.
- 

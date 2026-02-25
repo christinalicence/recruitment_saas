@@ -373,10 +373,15 @@ Initially I had created the job model with a PK to the company. This is unnecess
 ## Credits, Articles and Blogs
 
 https://testdriven.io/blog/django-multi-tenant/
+
 https://django-tenants.readthedocs.io/en/latest/install.html 
+
 https://github.com/django-tenants/django-tenants/issues/28 
+
 https://pypi.org/project/Django-Subdomain-Middleware/
+
 https://lincolnloop.com/blog/user-generated-themes-django-css/
+
 https://www.youtube.com/watch?v=_wefsc8X5VQ
 
 
@@ -405,6 +410,8 @@ Colour scheme diagrams created by [ChatGPT](https://chatgpt.com/)
 Wireframes made on [Excalidraw](https://excalidraw.com/)
 
 Data diagrams made on [draw.io](https://www.drawio.com/)
+
+Responsive mockups made with [responsively.app](https://responsively.app/)
 
 
 ## Notes on Development
@@ -440,6 +447,10 @@ This is never ending, but I believe I have produced a minimum viable product.
 ### Error Pages
 
 At the moment the project is set up to use 404 and 500 error pages with minimal styling, which is set inline. This is because at the moment the same pages appear for the marketing site and the tenant live sites. Having researched I can create tenant specific ones and will update this in the future.
+
+### Adding users per company
+
+It would be good to be able to add multiple login emails per company. At the moment the code doesn't allow that, you can't do 2 seperate sign ups with the same company name as it would create the company twice (and this is blocked because it makes the same slug/company identity). There would need to be a facility to add users once logged in.
 
 
 ## Deployment Steps
@@ -508,10 +519,16 @@ Once all these are set you can deploy by syncing to GitHub using the commands:
 ```
 git add .
 git commit -m 'commit message'
+git push
+```
+My heroku is currently set to automatically deploy when code is pushed, but you can also use the command 
+
+```
 git push heroku main
 ```
+to deploy to the live site.
 
-Or you can deploy via the Heroku app, which you need to link to the GitHub repo.
+ You can also deploy via the Heroku app, which you need to link to the GitHub repo.
 
 ### Cloning Code from the Repo
 
